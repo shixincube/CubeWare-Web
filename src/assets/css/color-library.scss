@@ -1,0 +1,91 @@
+/* text color */
+$T1: #001300;
+$T2: #4493FA;
+$T3: #ffffff;
+$T4: #999999;
+$T5: #666666;
+$T6: #CCCCCC;
+$T7: #F43737;
+$T8: #26252A;
+/* background color */
+$BG1: #F5F5F5;
+$BG2: #FAFAFA;
+$BG3: #000000;
+$BG4: #2883fa;
+$BG5: #ffffff;
+$BG6: #EAF3FF;
+$BG7: #4090fa;
+$BG8: #333333;
+$BG9: #222222;
+$BG10: #062041;
+$BG11: #FC605B;
+$BG12: #BBBBBB;
+$BG13: #ECF2F9;
+$BG14: #3B90FF;
+$BG15: #FF923C;
+$BG16: #31A221;
+$BG17: #051B37;
+$BG18: #0b5fcd;
+$BG19: #D95555;
+$BG20: #F9F9F9 ;
+$BG21: #4487f1;
+$BG22: #4493FA;
+$BG23: #f4f4f4;
+/* border color */
+$BD1: #dddddd;
+$BD2: #ffffff;
+$BD3: #F2F2F2;
+$BD4: #0E70F1;
+$BD5: #CCCCCC;
+$BD6: #EBF1FB;
+$BD7: #E6f3ff;
+
+// 侧边栏背景样式
+@mixin whiteboard-n {
+    background: url("./../assets/img/nav_whiteboard_n.png") no-repeat;
+    background-size: 100% 100%;
+}
+@mixin whiteboard-s {
+    background: url("./../assets/img/nav_whiteboard_s.png") no-repeat;
+    background-size: 100% 100%;
+}	
+@mixin audioCall-n {
+    background: url("./../assets/img/nav_sound_n.png") no-repeat;
+    background-size: 100% 100%;
+}
+@mixin audioCall-s {
+    background: url("./../assets/img/nav_sound_s.png") no-repeat;
+    background-size: 100% 100%;
+}	
+@mixin shareScreen-n {
+    background: url("./../assets/img/nav_share_n.png") no-repeat;
+    background-size: 100% 100%;
+}
+@mixin shareScreen-s {
+    background: url("./../assets/img/nav_share_s.png") no-repeat;
+    background-size: 100% 100%;
+}	
+
+@mixin hoverLeft{
+    .cp-ln-img[type=whiteboard]{
+        @include whiteboard-s
+    }
+    .cp-ln-img[type=whiteboard] + p{
+        color: #4493FA;
+        opacity: 1;
+    }
+    .cp-ln-img[type=audioCall]{
+        @include audioCall-s
+    }
+    .cp-ln-img[type=audioCall] + p{
+        color: #4493FA;
+        opacity: 1;
+    }
+    .cp-ln-img[type=shareScreen]{
+        @include shareScreen-s
+    }
+    .cp-ln-img[type=shareScreen] + p{
+        color: #4493FA;
+        opacity: 1;
+    }
+}
