@@ -152,7 +152,6 @@
 		},
 		mounted() {
 			this.queryConferences();
-			this.timePickerOptions();
 		},
 		methods: {
 			focus(){

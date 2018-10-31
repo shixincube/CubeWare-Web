@@ -56,12 +56,14 @@
 				list.map((member)=>{
 					has[member.cubeId] = true;
 				})
+				
 				for(let item of this.addList) {
 					if(has[item.cubeId]){
 						continue;
 					}
 					list.push(item);
 				}
+				this.addName(list)
 				return list
 			}
 		},
@@ -79,6 +81,13 @@
 
         },
         methods: {
+			// 添加昵稱
+			addName(list){
+				list.forEach(item => {
+					let displayName = this.dataCenter.getNameByCube(item.cubeId)
+					item['displayName'] = displayName
+				});
+			},
 			addMember() {
 				this.showInviteDialog = true;
 			},

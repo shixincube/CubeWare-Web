@@ -45,7 +45,7 @@
 		height: 40px;
 		line-height: 40px;
 		font-size: 16px;
-		z-index: 11;
+		z-index: 1111;
 		background-color: $BG20;
 		> p {
 			width: 100%;

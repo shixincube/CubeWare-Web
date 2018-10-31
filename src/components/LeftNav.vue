@@ -19,7 +19,7 @@
 						<img class="cp-ln-img"
 							 src="./../assets/img/nav_chat_s.png"
 							 v-show="select == 0">
-						<span class="overflow allUnread" v-if='$store.state.allUnread>0'>{{$store.state.allUnread}}</span>
+						<span class="overflow allUnread" v-if='$store.state.allUnread>0'>{{$store.state.allUnread >99 ? 99 : $store.state.allUnread}}</span>
 						<p :style="{ color: select == 0 ? '#4493FA' : '#26252A',
 									 opacity: select == 0 ? '1' : '0.2'}">消息</p>
 					</router-link>
@@ -298,7 +298,7 @@
 					1502: typeName + "失败",
 					1702: "未检测到设备",
 					1510: "没有找到" + typeName,
-					1520: typeName + "超过限定人数"
+					1520: '太早进入' + typeName ,
 				};
 
 				let errMsg = errMsgMap[res.error.code]
@@ -329,6 +329,7 @@
 				this.$bus.on('onVoiceInvited', this.receiveInvite);
 				this.$bus.on('onShareInvited', this.receiveInvite);
 				this.$bus.on('onWhiteboardInvited', this.receiveInviteWB);
+				this.$bus.on('onWhiteboardRejectInvited', this.receiveInviteWB);
 				this.$bus.on('onCall', this.receiveCall);
 				this.$bus.on('onGroupVideoInvited', this.receiveInvite);
 				this.$bus.on('onConferenceFailed', this.onConferenceFailed);
@@ -341,6 +342,8 @@
 				this.$bus.off('onVoiceInvited', this.receiveInvite);
 				this.$bus.off('onShareInvited', this.receiveInvite);
 				this.$bus.off('onWhiteboardInvited', this.receiveInviteWB);
+				this.$bus.off('onWhiteboardRejectInvited', this.receiveInviteWB);
+
 				this.$bus.off('onCall', this.receiveCall);
 				this.$bus.off('onGroupVideoInvited', this.receiveInvite);
 				this.$bus.off('onConferenceFailed', this.onConferenceFailed);
