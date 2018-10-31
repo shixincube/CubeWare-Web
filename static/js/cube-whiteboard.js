@@ -1594,9 +1594,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _WhiteboardService2 = __webpack_require__(165);
 
-var _WhiteboardListener = __webpack_require__(66);
+var _WhiteboardListener = __webpack_require__(63);
 
-var _Whiteboard = __webpack_require__(67);
+var _Whiteboard = __webpack_require__(64);
 
 var _WhiteboardSlide = __webpack_require__(167);
 
@@ -2618,7 +2618,7 @@ var FileAction = exports.FileAction = {
 "use strict";
 
 
-var _WhiteboardListener = __webpack_require__(66);
+var _WhiteboardListener = __webpack_require__(63);
 
 var _WhiteboardServiceWorker = __webpack_require__(103);
 
@@ -2626,7 +2626,7 @@ var _cubeWhiteboardCore = __webpack_require__(102);
 
 var WhiteboardCore = _interopRequireWildcard(_cubeWhiteboardCore);
 
-var _Whiteboard = __webpack_require__(67);
+var _Whiteboard = __webpack_require__(64);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -3385,6 +3385,7 @@ var FileHttp = exports.FileHttp = function () {
                     action: this.createHttp + _FileAction.FileAction.Uploader
                 }, success, errCallback);
             } else {
+                //如果是秒传文件，则将上传文件置为空，否则大文件服务器关闭流会花和上传时间一样的时间
                 var fileBlob = processFile.secondUpload ? new Blob() : processFile.file.slice(processFile.progress, processFile.file.size);
                 fileBlob.name = processFile.name;
                 var xhr = this._sendFile(_FileAction.FileAction.Uploader, {
@@ -3815,7 +3816,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 /***/ }),
 
-/***/ 66:
+/***/ 63:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4064,7 +4065,7 @@ var WhiteboardListener = exports.WhiteboardListener = function (_CubeListener) {
 
 /***/ }),
 
-/***/ 67:
+/***/ 64:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -818,7 +818,7 @@ import {ReceiptMessage} from "./service/entity/message/ReceiptMessage";
     global.CubeFileMessage = FileMessage;
     global.CubeTextMessage = TextMessage;
     global.CubeReplyMessage = ReplyMessage;
-    global.CubeHiststory = HistoryMessage;
+    global.CubeHistoryMessage = HistoryMessage;
     global.CubeWhiteboardMessage = WhiteboardMessage;
     global.CubeRichContentMessage = RichContentMessage;
     global.CubeLocationMessage = LocationMessage;
@@ -1909,6 +1909,202 @@ import {ConferenceConfig} from './conference/service/entity/ConferenceConfig.js'
     global.CubeConferenceListener = ConferenceListener;
     global.CubeConferenceType = ConferenceType;
     global.CubeConferenceConfig = ConferenceConfig;
+
+
+    window.getScreenId = function(callback, custom_parameter) {
+        if(navigator.userAgent.indexOf('Edge') !== -1 && (!!navigator.msSaveOrOpenBlob || !!navigator.msSaveBlob)) {
+            // microsoft edge => navigator.getDisplayMedia(screen_constraints).then(onSuccess, onFailure);
+            callback({
+                video: true
+            });
+            return;
+        }
+
+        // for Firefox:
+        // sourceId == 'firefox'
+        // screen_constraints = {...}
+        if (!!navigator.mozGetUserMedia) {
+            callback(null, 'firefox', {
+                video: {
+                    mozMediaSource: 'window',
+                    mediaSource: 'window'
+                }
+            });
+            return;
+        }
+
+        window.addEventListener('message', onIFrameCallback);
+
+        function onIFrameCallback(event) {
+            if (!event.data) return;
+
+            if (event.data.chromeMediaSourceId) {
+                if (event.data.chromeMediaSourceId === 'PermissionDeniedError') {
+                    callback('permission-denied');
+                } else {
+                    callback(null, event.data.chromeMediaSourceId, getScreenConstraints(null, event.data.chromeMediaSourceId, event.data.canRequestAudioTrack));
+                }
+
+                // this event listener is no more needed
+                window.removeEventListener('message', onIFrameCallback);
+            }
+
+            if (event.data.chromeExtensionStatus) {
+                callback(event.data.chromeExtensionStatus, null, getScreenConstraints(event.data.chromeExtensionStatus));
+
+                // this event listener is no more needed
+                window.removeEventListener('message', onIFrameCallback);
+            }
+        }
+
+        if(!custom_parameter) {
+            setTimeout(postGetSourceIdMessage, 100);
+        }
+        else {
+            setTimeout(function() {
+                postGetSourceIdMessage(custom_parameter);
+            }, 100);
+        }
+    };
+
+    function getScreenConstraints(error, sourceId, canRequestAudioTrack) {
+        var screen_constraints = {
+            audio: false,
+            video: {
+                mandatory: {
+                    chromeMediaSource: error ? 'screen' : 'desktop',
+                    maxWidth: window.screen.width > 1920 ? window.screen.width : 1920,
+                    maxHeight: window.screen.height > 1080 ? window.screen.height : 1080
+                },
+                optional: []
+            }
+        };
+
+        if(!!canRequestAudioTrack) {
+            screen_constraints.audio = {
+                mandatory: {
+                    chromeMediaSource: error ? 'screen' : 'desktop',
+                    // echoCancellation: true
+                },
+                optional: []
+            };
+        }
+
+        if (sourceId) {
+            screen_constraints.video.mandatory.chromeMediaSourceId = sourceId;
+
+            if(screen_constraints.audio && screen_constraints.audio.mandatory) {
+                screen_constraints.audio.mandatory.chromeMediaSourceId = sourceId;
+            }
+        }
+
+        return screen_constraints;
+    }
+
+    function postGetSourceIdMessage(custom_parameter) {
+        if (!iframe) {
+            loadIFrame(function() {
+                postGetSourceIdMessage(custom_parameter);
+            });
+            return;
+        }
+
+        if (!iframe.isLoaded) {
+            setTimeout(function() {
+                postGetSourceIdMessage(custom_parameter);
+            }, 100);
+            return;
+        }
+
+        if(!custom_parameter) {
+            iframe.contentWindow.postMessage({
+                captureSourceId: true
+            }, '*');
+        }
+        else if(!!custom_parameter.forEach) {
+            iframe.contentWindow.postMessage({
+                captureCustomSourceId: custom_parameter
+            }, '*');
+        }
+        else {
+            iframe.contentWindow.postMessage({
+                captureSourceIdWithAudio: true
+            }, '*');
+        }
+    }
+
+    var iframe;
+
+    // this function is used in RTCMultiConnection v3
+    window.getScreenConstraints = function(callback) {
+        loadIFrame(function() {
+            getScreenId(function(error, sourceId, screen_constraints) {
+                if(!screen_constraints) {
+                    screen_constraints = {
+                        video: true
+                    };
+                }
+
+                callback(error, screen_constraints.video);
+            });
+        });
+    };
+
+    function loadIFrame(loadCallback) {
+        if (iframe) {
+            loadCallback();
+            return;
+        }
+
+        iframe = document.createElement('iframe');
+        iframe.onload = function() {
+            iframe.isLoaded = true;
+
+            loadCallback();
+        };
+        iframe.src = 'https://www.webrtc-experiment.com/getSourceId/'; // https://wwww.yourdomain.com/getScreenId.html
+        iframe.style.display = 'none';
+        (document.body || document.documentElement).appendChild(iframe);
+    }
+
+    window.getChromeExtensionStatus = function(callback) {
+        // for Firefox:
+        if (!!navigator.mozGetUserMedia) {
+            callback('installed-enabled');
+            return;
+        }
+
+        window.addEventListener('message', onIFrameCallback);
+
+        function onIFrameCallback(event) {
+            if (!event.data) return;
+
+            if (event.data.chromeExtensionStatus) {
+                callback(event.data.chromeExtensionStatus);
+
+                // this event listener is no more needed
+                window.removeEventListener('message', onIFrameCallback);
+            }
+        }
+
+        setTimeout(postGetChromeExtensionStatusMessage, 100);
+    };
+
+    function postGetChromeExtensionStatusMessage() {
+        if (!iframe) {
+            loadIFrame(postGetChromeExtensionStatusMessage);
+            return;
+        }
+
+        if (!iframe.isLoaded) {
+            setTimeout(postGetChromeExtensionStatusMessage, 100);
+            return;
+        }
+
+        iframe.contentWindow.postMessage({
+            getChromeExtensionStatus: true
+        }, '*');
+    }
 })(window);/*
  * DeviceListener.js
  * Cube Engine
@@ -2705,6 +2901,12 @@ export class CubeEngine {
     }
 
     /**
+     * 加载最近会话列表模块
+     */
+    loadRecentSession(){
+    }
+
+    /**
      * 加载直播模块。
      * @param {Object} liveCore - 直播核心库
      * @param {HTMLElement} viewDom - 需要显示直播画面的视图元素
@@ -2801,9 +3003,16 @@ export class CubeEngine {
     getLiveService() {
     }
 
-    getDeviceInfo() {
+    /**
+     * 返回最近会话服务的实例。
+     *
+     * @returns {null|RecentSessionService} 指令服务实例。
+     */
+    getRecentSessionService(){
     }
 
+    getDeviceInfo() {
+    }
 
     /**
      * 设置资源路径, 资源路径包含引擎依赖的声音文件和图片文件, 资源目录应和引擎提供的资源目录结构相同。
@@ -2854,7 +3063,10 @@ import {Member} from './entity/group/Member.js'
 import {MemberRole} from './entity/group/MemberRole.js'
 import {User} from "./entity/user/User"
 import {GroupConfig} from "./entity/group/GroupConfig.js"
-
+import {SettingListener} from "./service/SettingListener";
+import {NotifyConfig} from "./entity/setting/NotifyConfig";
+import {DisturbConfig} from "./entity/setting/DisturbConfig";
+import {Setting} from "./entity/setting/Setting";
 
 /**
  * 引导程序, 负责引擎的初始化工作。
@@ -2900,6 +3112,7 @@ import {GroupConfig} from "./entity/group/GroupConfig.js"
     global.CubePeer = Peer;
     global.CubeSession = Session;
     global.CubeUserListener = UserListener;
+    global.CubeSettingListener = SettingListener;
     global.CubeGroupContext = GroupContext;
     global.CubeRegistrationState = RegistrationState;
     global.CubePermission = Permission;
@@ -2914,6 +3127,10 @@ import {GroupConfig} from "./entity/group/GroupConfig.js"
     global.CubeGroupMember = Member;
     global.CubeMemberRole = MemberRole;
     global.CubeUser = User;
+    global.CubeDisturbConfig = DisturbConfig;
+    global.CubeNotifyConfig = NotifyConfig;
+    global.CubeSetting = Setting;
+
 
     if (global._cube_cross === undefined) {
         global._cube_cross = {

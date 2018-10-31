@@ -63,22 +63,22 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 137);
+/******/ 	return __webpack_require__(__webpack_require__.s = 152);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 137:
+/***/ 152:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _AdvancedRecorder = __webpack_require__(86);
+var _AdvancedRecorder = __webpack_require__(91);
 
-var _Recorder = __webpack_require__(53);
+var _Recorder = __webpack_require__(59);
 
-var _RecordRTC = __webpack_require__(52);
+var _RecordRTC = __webpack_require__(58);
 
 /**
  * 引导程序, 负责模块的初始化工作。
@@ -99,7 +99,7 @@ var _RecordRTC = __webpack_require__(52);
 
 /***/ }),
 
-/***/ 52:
+/***/ 58:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3078,7 +3078,7 @@ window.StereoRecorder = StereoRecorder;
 
 /***/ }),
 
-/***/ 53:
+/***/ 59:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3097,7 +3097,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * Copyright (c) 2015 Cube Team. All rights reserved.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
-var _RecordRTC = __webpack_require__(52);
+var _RecordRTC = __webpack_require__(58);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -3783,7 +3783,7 @@ var CubeRecorder = exports.CubeRecorder = function () {
 
 /***/ }),
 
-/***/ 86:
+/***/ 91:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3802,7 +3802,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * Copyright (c) 2015 Cube Team. All rights reserved.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
-var _Recorder = __webpack_require__(53);
+var _Recorder = __webpack_require__(59);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 

@@ -175,13 +175,12 @@
 				for(let i = 0 ; i < inviteList.length ; i++) {
 					let cubeId = inviteList[i].cubeId ? inviteList[i].cubeId : inviteList[i]
 					let displayName = this.dataCenter.getNameByCube(cubeId)
-					
+
 					this.inviteList.push({
 						cubeId: inviteList[i].cubeId ? inviteList[i].cubeId : inviteList[i],
 						displayName: displayName
 					})
 				}
-				debugger;
 				this.openElement();
 				this.showInviteDialog = false;
 			},
@@ -357,5 +356,5 @@
 		left: 300px;
 		z-index: 99999;
 	}
-	
+
 </style>

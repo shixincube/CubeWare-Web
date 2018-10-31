@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 116);
+/******/ 	return __webpack_require__(__webpack_require__.s = 126);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -101,19 +101,19 @@ exports.CubeError = function CubeError(code, message) {
 
 /***/ }),
 
-/***/ 116:
+/***/ 126:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _InstructionServiceWorker = __webpack_require__(82);
+var _InstructionServiceWorker = __webpack_require__(86);
 
-var _InstructionListener = __webpack_require__(42);
+var _InstructionListener = __webpack_require__(47);
 
-var _Instruction = __webpack_require__(43);
+var _Instruction = __webpack_require__(48);
 
-var _InstructionFeedback = __webpack_require__(81);
+var _InstructionFeedback = __webpack_require__(85);
 
 /**
  * 引导程序, 负责模块的初始化工作。
@@ -137,7 +137,7 @@ var _InstructionFeedback = __webpack_require__(81);
 
 /***/ }),
 
-/***/ 117:
+/***/ 127:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -184,7 +184,7 @@ var InstructionRequestedResult = exports.InstructionRequestedResult = function (
 
 /***/ }),
 
-/***/ 118:
+/***/ 128:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -313,7 +313,7 @@ var InstructionService = exports.InstructionService = function (_CubeService) {
 
 /***/ }),
 
-/***/ 42:
+/***/ 47:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -382,7 +382,7 @@ var InstructionListener = exports.InstructionListener = function (_CubeListener)
 
 /***/ }),
 
-/***/ 43:
+/***/ 48:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -539,7 +539,7 @@ var Instruction = exports.Instruction = function () {
 
 /***/ }),
 
-/***/ 81:
+/***/ 85:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -606,7 +606,7 @@ var InstructionFeedback = exports.InstructionFeedback = function () {
 
 /***/ }),
 
-/***/ 82:
+/***/ 86:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -619,13 +619,13 @@ exports.InstructionServiceWorker = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _InstructionRequestedResult = __webpack_require__(117);
+var _InstructionRequestedResult = __webpack_require__(127);
 
-var _InstructionListener = __webpack_require__(42);
+var _InstructionListener = __webpack_require__(47);
 
-var _InstructionService2 = __webpack_require__(118);
+var _InstructionService2 = __webpack_require__(128);
 
-var _Instruction = __webpack_require__(43);
+var _Instruction = __webpack_require__(48);
 
 var _CubeError = __webpack_require__(0);
 

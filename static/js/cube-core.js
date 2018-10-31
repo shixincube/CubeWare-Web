@@ -474,7 +474,7 @@ var CubeConst = exports.CubeConst = {
     ActionLicenseAck: "license-ack",
     ActionLicenseNotify: "license-notify",
 
-    //账户指令
+    // 账户指令
     ActionLogin: "login",
     ActionLoginAck: "login-ack",
     ActionLoginSync: "login-sync",
@@ -486,6 +486,9 @@ var CubeConst = exports.CubeConst = {
     ActionQueryDeviceAck: "query-device-ack",
     ActionQueryByIdDevice: "query-device-by-id",
     ActionQueryByIdDeviceAck: "query-device-by-id-ack",
+    ActionUpdate: "update",
+    ActionUpdateAck: "update-ack",
+    ActionUpdateSync: "update-sync",
 
     //////////////////////////////////////////////////////// 设置指令 ////////////////////////////////////////////////////////
     //更新通知配置
@@ -1469,6 +1472,9 @@ var CubeConfig = exports.CubeConfig = function () {
             video: 512
         };
         this.socketEnabled = true;
+
+        /*是否显示一对一遮罩*/
+        this.showCallMask = true;
 
         if (_typeof(arguments.length <= 2 ? undefined : arguments[2]) == 'object') {
             this.set(arguments.length <= 2 ? undefined : arguments[2]);
@@ -2950,6 +2956,15 @@ var UserListener = exports.UserListener = function (_Listener) {
   }, {
     key: 'onDeviceOffline',
     value: function onDeviceOffline(logoutDevice, onlineDevices) {}
+
+    /**
+     * 用户更新回调
+     * @param user
+     */
+
+  }, {
+    key: 'onUserUpdated',
+    value: function onUserUpdated(user) {}
   }, {
     key: 'onFailed',
     value: function onFailed(error) {}
@@ -2978,10 +2993,7 @@ var UserListener = exports.UserListener = function (_Listener) {
 /* 62 */,
 /* 63 */,
 /* 64 */,
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2996,7 +3008,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _ConnectionService2 = __webpack_require__(108);
 
-var _NetworkDetection = __webpack_require__(70);
+var _NetworkDetection = __webpack_require__(67);
 
 var _CELLET = __webpack_require__(4);
 
@@ -3508,7 +3520,7 @@ var ConnectionServiceWorker = exports.ConnectionServiceWorker = function (_Conne
 }(_ConnectionService2.ConnectionService);
 
 /***/ }),
-/* 69 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3521,7 +3533,7 @@ exports.CubeServer = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Utils = __webpack_require__(72);
+var _Utils = __webpack_require__(69);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -3600,7 +3612,7 @@ var CubeServer = exports.CubeServer = function () {
 }();
 
 /***/ }),
-/* 70 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3677,7 +3689,7 @@ var NetworkDetection = exports.NetworkDetection = function () {
 }();
 
 /***/ }),
-/* 71 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3694,7 +3706,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _CubeConst = __webpack_require__(5);
 
-var _NetworkDetection = __webpack_require__(70);
+var _NetworkDetection = __webpack_require__(67);
 
 var _CELLET = __webpack_require__(4);
 
@@ -3907,7 +3919,7 @@ var NetworkListener = exports.NetworkListener = function () {
 }();
 
 /***/ }),
-/* 72 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4560,12 +4572,12 @@ var Utils = exports.Utils = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)))
 
 /***/ }),
+/* 70 */,
+/* 71 */,
+/* 72 */,
 /* 73 */,
 /* 74 */,
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4587,7 +4599,7 @@ var _Session = __webpack_require__(37);
 
 var _CubeConfig = __webpack_require__(23);
 
-var _Utils = __webpack_require__(72);
+var _Utils = __webpack_require__(69);
 
 var _UserServiceWorker = __webpack_require__(121);
 
@@ -4595,7 +4607,7 @@ var _LicenseServiceWorker = __webpack_require__(119);
 
 var _GroupServiceWorker = __webpack_require__(118);
 
-var _NetworkListener = __webpack_require__(71);
+var _NetworkListener = __webpack_require__(68);
 
 var _CubeError = __webpack_require__(0);
 
@@ -4611,11 +4623,11 @@ var _CubeEngineListener = __webpack_require__(112);
 
 var _CubeState = __webpack_require__(36);
 
-var _CubeServer = __webpack_require__(69);
+var _CubeServer = __webpack_require__(66);
 
 var _CodecType = __webpack_require__(35);
 
-var _ConnectionServiceWorker = __webpack_require__(68);
+var _ConnectionServiceWorker = __webpack_require__(65);
 
 var _SettingServiceWorker = __webpack_require__(120);
 
@@ -4635,7 +4647,7 @@ var CubeEngine = exports.CubeEngine = function () {
         _classCallCheck(this, CubeEngine);
 
         // 引擎版本信息
-        this.version = '3.0.1';
+        this.version = '3.0.2';
         // 通用工具
         this.utils = _Utils.Utils;
         // 会话管理器
@@ -5524,7 +5536,7 @@ var CubeEngine = exports.CubeEngine = function () {
 }();
 
 /***/ }),
-/* 79 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5582,7 +5594,7 @@ var DBEntity = exports.DBEntity = function () {
 }();
 
 /***/ }),
-/* 80 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5737,7 +5749,7 @@ function DBManager(databaseName) {
 }
 
 /***/ }),
-/* 81 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5815,7 +5827,7 @@ var Peer = exports.Peer = function () {
 }();
 
 /***/ }),
-/* 82 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5851,7 +5863,7 @@ var Permission = exports.Permission = {
 };
 
 /***/ }),
-/* 83 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5899,7 +5911,7 @@ var Setting = exports.Setting = function Setting() {
 };
 
 /***/ }),
-/* 84 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6064,6 +6076,9 @@ var GroupContext = exports.GroupContext = function () {
 }();
 
 /***/ }),
+/* 82 */,
+/* 83 */,
+/* 84 */,
 /* 85 */,
 /* 86 */,
 /* 87 */,
@@ -6089,15 +6104,15 @@ var GroupContext = exports.GroupContext = function () {
 "use strict";
 
 
-var _CubeEngine = __webpack_require__(78);
+var _CubeEngine = __webpack_require__(75);
 
 var _Service = __webpack_require__(9);
 
 var _Listener = __webpack_require__(8);
 
-var _DBEntity = __webpack_require__(79);
+var _DBEntity = __webpack_require__(76);
 
-var _DBManager = __webpack_require__(80);
+var _DBManager = __webpack_require__(77);
 
 var _CubeConst = __webpack_require__(5);
 
@@ -6111,17 +6126,17 @@ var _StateCode = __webpack_require__(3);
 
 var _Delegate = __webpack_require__(13);
 
-var _Peer = __webpack_require__(81);
+var _Peer = __webpack_require__(78);
 
 var _Session = __webpack_require__(37);
 
 var _UserListener = __webpack_require__(45);
 
-var _GroupContext = __webpack_require__(84);
+var _GroupContext = __webpack_require__(81);
 
 var _RegistrationState = __webpack_require__(7);
 
-var _Permission = __webpack_require__(82);
+var _Permission = __webpack_require__(79);
 
 var _GroupListener = __webpack_require__(43);
 
@@ -6151,7 +6166,7 @@ var _NotifyConfig = __webpack_require__(41);
 
 var _DisturbConfig = __webpack_require__(40);
 
-var _Setting = __webpack_require__(83);
+var _Setting = __webpack_require__(80);
 
 /**
  * 引导程序, 负责引擎的初始化工作。
@@ -7000,7 +7015,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * Copyright (c) 2015-2016 Cube Team. All rights reserved.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
-var _ConnectionServiceWorker = __webpack_require__(68);
+var _ConnectionServiceWorker = __webpack_require__(65);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8605,7 +8620,7 @@ var _LicenseService2 = __webpack_require__(115);
 
 var _CubeHttpServer = __webpack_require__(109);
 
-var _CubeServer = __webpack_require__(69);
+var _CubeServer = __webpack_require__(66);
 
 var _ICEServer = __webpack_require__(110);
 
@@ -9238,7 +9253,7 @@ var _Delegate = __webpack_require__(13);
 
 var _LicenseManager = __webpack_require__(111);
 
-var _NetworkListener = __webpack_require__(71);
+var _NetworkListener = __webpack_require__(68);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -9403,6 +9418,9 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
 
             return false;
         }
+    }, {
+        key: 'update',
+        value: function update(user) {}
 
         /**
          * 添加设备上下线监听器。
@@ -9682,6 +9700,17 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
             }
         }
     }, {
+        key: '_processUpdate',
+        value: function _processUpdate(dialect) {
+            var state = dialect.getParamAsString("state");
+            var user = dialect.getParamAsString("user");
+            if (state.code === 200) {
+                this.delegate.onUserUpdated(user);
+            } else {
+                nucleus.getLogger().w("CubeEngine", "update user failed");
+            }
+        }
+    }, {
         key: '_processQueryAck',
         value: function _processQueryAck(dialect) {
             if (null != this.queryCallback) {
@@ -9814,6 +9843,12 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
                 this._processQueryDeviceByIdAck(dialect);
             } else if (action === _CubeConst.CubeConst.ActionLicense) {
                 this._processLicense(dialect);
+            } else if (action === _CubeConst.CubeConst.ActionUpdate) {
+                this._processUpdate(dialect);
+            } else if (action === _CubeConst.CubeConst.ActionUpdateAck) {
+                this._processUpdate(dialect);
+            } else if (action === _CubeConst.CubeConst.ActionUpdateSync) {
+                this._processUpdate(dialect);
             }
         }
     }]);

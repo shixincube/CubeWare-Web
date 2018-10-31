@@ -63,24 +63,82 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 133);
+/******/ 	return __webpack_require__(__webpack_require__.s = 143);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 133:
+/***/ 14:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ShareDesktopServiceWorker = __webpack_require__(85);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-var _ShareDesktopListener = __webpack_require__(49);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _ShareDesktopConfig = __webpack_require__(50);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ShareDesktopMember = __webpack_require__(51);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * 创建群组配置
+ * @class Group
+ * @author Li WenKai
+ */
+var GroupConfig = exports.GroupConfig = function () {
+    function GroupConfig(type, displayName) {
+        var members = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+        var masters = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
+
+        _classCallCheck(this, GroupConfig);
+
+        this.type = type; //群组类型：会议，桌面共享，白板，直播
+        this.displayName = displayName; //群组名称
+        this.expired = 0; //群组有效期
+        this.maxNumber = 0; //群组最大人数
+        this.bindGroupId = ''; //群组绑定ID
+        this.isOpen = true; //是否开放入群
+        this.masters = masters; //群组管理员
+        this.members = members; //群组成员
+        this.invites = []; //邀请账号
+        if (_typeof(arguments.length <= 4 ? undefined : arguments[4]) == 'object') {
+            this.set(arguments.length <= 4 ? undefined : arguments[4]);
+        }
+    }
+
+    _createClass(GroupConfig, [{
+        key: 'set',
+        value: function set(args) {
+            for (var item in this) {
+                if (this.hasOwnProperty(item) && args.hasOwnProperty(item)) {
+                    this[item] = args[item];
+                }
+            }
+        }
+    }]);
+
+    return GroupConfig;
+}();
+
+/***/ }),
+
+/***/ 143:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _ShareDesktopServiceWorker = __webpack_require__(89);
+
+var _ShareDesktopListener = __webpack_require__(54);
+
+var _ShareDesktopConfig = __webpack_require__(55);
+
+var _ShareDesktopMember = __webpack_require__(56);
 
 /**
  * 引导程序, 负责模块的初始化工作。
@@ -105,7 +163,7 @@ var _ShareDesktopMember = __webpack_require__(51);
 
 /***/ }),
 
-/***/ 134:
+/***/ 144:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -245,7 +303,7 @@ var ShareDesktopService = exports.ShareDesktopService = function (_CubeService) 
 
 /***/ }),
 
-/***/ 135:
+/***/ 145:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -302,7 +360,7 @@ var ShareDesktop = exports.ShareDesktop = function (_CubeGroup) {
 
 /***/ }),
 
-/***/ 136:
+/***/ 146:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -377,64 +435,6 @@ var Action = exports.Action = {
     RejectJoinSDSync: 'reject-join-sd-sync',
     RejectJoinSDNotify: 'reject-join-sd-notify'
 };
-
-/***/ }),
-
-/***/ 14:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * 创建群组配置
- * @class Group
- * @author Li WenKai
- */
-var GroupConfig = exports.GroupConfig = function () {
-    function GroupConfig(type, displayName) {
-        var members = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-        var masters = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
-
-        _classCallCheck(this, GroupConfig);
-
-        this.type = type; //群组类型：会议，桌面共享，白板，直播
-        this.displayName = displayName; //群组名称
-        this.expired = 0; //群组有效期
-        this.maxNumber = 0; //群组最大人数
-        this.bindGroupId = ''; //群组绑定ID
-        this.isOpen = true; //是否开放入群
-        this.masters = masters; //群组管理员
-        this.members = members; //群组成员
-        this.invites = []; //邀请账号
-        if (_typeof(arguments.length <= 4 ? undefined : arguments[4]) == 'object') {
-            this.set(arguments.length <= 4 ? undefined : arguments[4]);
-        }
-    }
-
-    _createClass(GroupConfig, [{
-        key: 'set',
-        value: function set(args) {
-            for (var item in this) {
-                if (this.hasOwnProperty(item) && args.hasOwnProperty(item)) {
-                    this[item] = args[item];
-                }
-            }
-        }
-    }]);
-
-    return GroupConfig;
-}();
 
 /***/ }),
 
@@ -619,7 +619,7 @@ var User = exports.User = function () {
 
 /***/ }),
 
-/***/ 49:
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -753,7 +753,7 @@ var ShareDesktopListener = exports.ShareDesktopListener = function (_CubeListene
 
 /***/ }),
 
-/***/ 50:
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -799,7 +799,7 @@ var ShareDesktopConfig = exports.ShareDesktopConfig = function (_GroupConfig) {
 
 /***/ }),
 
-/***/ 51:
+/***/ 56:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -843,7 +843,7 @@ var ShareDesktopMember = exports.ShareDesktopMember = function (_Member) {
 
 /***/ }),
 
-/***/ 85:
+/***/ 89:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -856,17 +856,17 @@ exports.ShareDesktopServiceWorker = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ShareDesktopService2 = __webpack_require__(134);
+var _ShareDesktopService2 = __webpack_require__(144);
 
-var _ShareDesktopListener = __webpack_require__(49);
+var _ShareDesktopListener = __webpack_require__(54);
 
-var _Action = __webpack_require__(136);
+var _Action = __webpack_require__(146);
 
-var _ShareDesktopMember = __webpack_require__(51);
+var _ShareDesktopMember = __webpack_require__(56);
 
-var _ShareDesktopConfig = __webpack_require__(50);
+var _ShareDesktopConfig = __webpack_require__(55);
 
-var _ShareDesktop = __webpack_require__(135);
+var _ShareDesktop = __webpack_require__(145);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 112);
+/******/ 	return __webpack_require__(__webpack_require__.s = 122);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -108,6 +108,133 @@ exports.CubeError = function CubeError(code, message) {
 
 
 Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.FileInfo = undefined;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _FileType = __webpack_require__(18);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * 文件信息实体
+ *
+ * @class FileInfo
+ * @author Xu Jiangwei, Guan Yong
+ */
+var FileInfo = exports.FileInfo = function () {
+
+    /**
+     * @constructs FileInfo
+     * @param {string} fileId 文件id
+     * @param {string} name 文件名称
+     * @param {number} progress 进度
+     * @param {number} size 文件大小
+     * @param {FileType} type 文件类型
+     * @param {string} md5 文件MD5
+     * @param {string} createTime 文件创建时间
+     * @param {string} parentId 文件父目录sn
+     * @param {string} permission 文件可操作权限
+     * @param {string} url 文件地址
+     * @param {string} expires 文件有效期
+     * */
+    function FileInfo(fileId, name, progress, size, type, md5, createTime, parentId, permission, url, expires) {
+        _classCallCheck(this, FileInfo);
+
+        this.fileId = fileId;
+        this.name = name;
+        this.progress = progress;
+        this.size = size;
+        this.type = type;
+        this.md5 = md5;
+        this.createTime = createTime;
+        this.parentId = parentId;
+        this.permission = permission;
+        this.url = url;
+        this.expires = expires;
+        this.file = null;
+    }
+
+    /**
+     * 获取文件类型
+     * @returns {FileType} - 文件类型
+     */
+
+
+    _createClass(FileInfo, [{
+        key: 'getType',
+        value: function getType() {
+            if (!this.type) {
+                var sf = this.name.split('.');
+                if (sf.length > 0) {
+                    var sfArr = sf[sf.length - 1];
+                    var fileTypes = {
+                        '': _FileType.FileType.Folder,
+                        'png': _FileType.FileType.Image,
+                        'jpeg': _FileType.FileType.Image,
+                        'jpg': _FileType.FileType.Image,
+                        'gif': _FileType.FileType.Image,
+                        'doc': _FileType.FileType.Word,
+                        'docx': _FileType.FileType.Word,
+                        'xls': _FileType.FileType.Excel,
+                        'xlsx': _FileType.FileType.Excel,
+                        'pdf': _FileType.FileType.Pdf,
+                        'pptx': _FileType.FileType.Ptt,
+                        'mp3': _FileType.FileType.Audio,
+                        'wma': _FileType.FileType.Audio,
+                        'wav': _FileType.FileType.Audio,
+                        'avi': _FileType.FileType.Video,
+                        'rmvb': _FileType.FileType.Video,
+                        'rm': _FileType.FileType.Video,
+                        'exe': _FileType.FileType.App,
+                        'com': _FileType.FileType.App,
+                        'app': _FileType.FileType.App,
+                        'rar': _FileType.FileType.Zip,
+                        'zip': _FileType.FileType.Zip
+                    };
+                    this.type = null == fileTypes[sfArr] ? _FileType.FileType.Other : fileTypes[sfArr];
+                }
+            }
+            return this.type;
+        }
+
+        /**
+         * 解析文件
+         * */
+
+    }], [{
+        key: 'parse',
+        value: function parse(strJson) {
+            if (null == strJson || (typeof strJson === 'undefined' ? 'undefined' : _typeof(strJson)) != 'object') {
+                nucleus.getLogger().e('CubeFileInfo#parse', 'Error of parameters');
+            }
+            var fileInfo = new FileInfo();
+            for (var item in strJson) {
+                if (fileInfo.hasOwnProperty(item)) {
+                    fileInfo[item] = strJson[item];
+                }
+            }
+            fileInfo.getType();
+            return fileInfo;
+        }
+    }]);
+
+    return FileInfo;
+}();
+
+/***/ }),
+
+/***/ 11:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 /**
@@ -136,23 +263,23 @@ var FileAction = exports.FileAction = {
 
 /***/ }),
 
-/***/ 112:
+/***/ 122:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _FileManagerServiceWorker = __webpack_require__(80);
+var _FileManagerServiceWorker = __webpack_require__(84);
 
-var _FileManagerListener = __webpack_require__(41);
+var _FileManagerListener = __webpack_require__(46);
 
-var _FileInfo = __webpack_require__(9);
+var _FileInfo = __webpack_require__(10);
 
 var _FileType = __webpack_require__(18);
 
-var _FilePermission = __webpack_require__(79);
+var _FilePermission = __webpack_require__(83);
 
-var _FileStatusListener = __webpack_require__(78);
+var _FileStatusListener = __webpack_require__(82);
 
 /**
  * 引导程序, 负责模块的初始化工作。
@@ -178,7 +305,7 @@ var _FileStatusListener = __webpack_require__(78);
 
 /***/ }),
 
-/***/ 113:
+/***/ 123:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -387,7 +514,7 @@ var FileManagerService = exports.FileManagerService = function (_CubeService) {
 
 /***/ }),
 
-/***/ 114:
+/***/ 124:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -400,9 +527,9 @@ exports.DBFileManagerService = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _DBFile = __webpack_require__(115);
+var _DBFile = __webpack_require__(125);
 
-var _FileInfo = __webpack_require__(9);
+var _FileInfo = __webpack_require__(10);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -461,7 +588,7 @@ var DBFileManagerService = exports.DBFileManagerService = function () {
 
 /***/ }),
 
-/***/ 115:
+/***/ 125:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -573,7 +700,7 @@ var FileType = exports.FileType = {
 
 /***/ }),
 
-/***/ 41:
+/***/ 46:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -746,7 +873,7 @@ var FileManagerListener = exports.FileManagerListener = function (_CubeListener)
 
 /***/ }),
 
-/***/ 78:
+/***/ 82:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -842,7 +969,7 @@ var FileStatusListener = exports.FileStatusListener = function (_CubeListener) {
 
 /***/ }),
 
-/***/ 79:
+/***/ 83:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -886,7 +1013,7 @@ var FilePermission = exports.FilePermission = {
 
 /***/ }),
 
-/***/ 80:
+/***/ 84:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -899,15 +1026,15 @@ exports.FileManagerServiceWorker = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _FileManagerListener = __webpack_require__(41);
+var _FileManagerListener = __webpack_require__(46);
 
-var _DBFileManagerService = __webpack_require__(114);
+var _DBFileManagerService = __webpack_require__(124);
 
-var _FileManagerService2 = __webpack_require__(113);
+var _FileManagerService2 = __webpack_require__(123);
 
-var _FileAction = __webpack_require__(10);
+var _FileAction = __webpack_require__(11);
 
-var _FileInfo = __webpack_require__(9);
+var _FileInfo = __webpack_require__(10);
 
 var _CubeError = __webpack_require__(0);
 
@@ -953,6 +1080,10 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
         value: function mkdir(dir, parentId) {
             var _this2 = this;
 
+            if (null == dir) {
+                nucleus.getLogger().e('CubeFileManager#mkdir', 'dir is null');
+                return false;
+            }
             var postData = {
                 name: dir,
                 parentId: parentId,
@@ -986,6 +1117,10 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
         value: function deleteFile(fileId) {
             var _this3 = this;
 
+            if (null == fileId) {
+                nucleus.getLogger().e('CubeFileManager#deleteFile', 'fileId is null');
+                return false;
+            }
             var fileIds = void 0;
             if (!fileId instanceof Array) {
                 fileIds = [fileId];
@@ -1041,6 +1176,10 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
         value: function upload(file, parentId) {
             var _this4 = this;
 
+            if (null == file) {
+                nucleus.getLogger().e('CubeFileManager#upload', 'file is null');
+                return false;
+            }
             var postData = {
                 token: this.engine.accToken,
                 name: file.name,
@@ -1054,6 +1193,7 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
                 var self = _this4;
                 var fileInfo = data.data.fileInfo;
                 fileInfo.file = file.file;
+                //如果是秒传文件，则将上传文件置为空，否则大文件服务器关闭流会花和上传时间一样的时间
                 var fileBlob = fileInfo.secondUpload ? new Blob() : file.file.slice(0, file.file.size);
                 fileBlob.name = fileInfo.name;
                 var fileData = {
@@ -1090,6 +1230,10 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
         value: function rename(fileId, newName) {
             var _this5 = this;
 
+            if (null == fileId || null == newName) {
+                nucleus.getLogger().e('CubeFileManager#rename', 'fileId or newName is null');
+                return false;
+            }
             var postData = {
                 fileId: fileId,
                 name: newName,
@@ -1117,6 +1261,10 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
         value: function move(fileId, parentId) {
             var _this6 = this;
 
+            if (null == fileId) {
+                nucleus.getLogger().e('CubeFileManager#move', 'fileId is null');
+                return false;
+            }
             var postData = {
                 fileIds: this._toIds(fileId),
                 parentId: parentId,
@@ -1149,6 +1297,10 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
         value: function copy(fileId, parentId) {
             var _this7 = this;
 
+            if (null == fileId) {
+                nucleus.getLogger().e('CubeFileManager#copy', 'fileId is null');
+                return false;
+            }
             var postData = {
                 fileIds: this._toIds(fileId),
                 parentId: parentId,
@@ -1179,8 +1331,10 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
 
     }, {
         key: 'list',
-        value: function list(fileId, callback) {
+        value: function list(fileId) {
             var _this8 = this;
+
+            var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
 
             var postData = {
                 token: this.engine.accToken,
@@ -1211,6 +1365,10 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
         value: function queryByName(fileName, callback) {
             var _this9 = this;
 
+            if (null == fileId) {
+                nucleus.getLogger().e('CubeFileManager#copy', 'fileId is null');
+                return false;
+            }
             var postData = {
                 keyword: fileName,
                 token: this.engine.accToken,
@@ -1248,9 +1406,15 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
          * @param {string} fileId 文件ID
          * @param {Function} callback 回调函数
          */
-        value: function queryById(fileId, callback) {
+        value: function queryById(fileId) {
             var _this10 = this;
 
+            var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+
+            if (null == fileId) {
+                nucleus.getLogger().e('CubeFileManager#queryById', 'fileId is null');
+                return false;
+            }
             var postData = {
                 fileIds: this._toIds(fileId),
                 token: this.engine.accToken
@@ -1300,6 +1464,10 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
          * @param {string} parentId 上级文件夹id
          */
         value: function pauseUpload(file, parentId) {
+            if (null == file) {
+                nucleus.getLogger().e('CubeFileManager#pauseUpload', 'file is null');
+                return false;
+            }
             var fileData = this.uploadProcessFiles.get(file.fileId);
             if (null == fileData || fileData.paused) {
                 return false;
@@ -1328,6 +1496,10 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
          * @param {string} parentId 上级文件夹id
          */
         value: function resumeUpload(file, parentId) {
+            if (null == file) {
+                nucleus.getLogger().e('CubeFileManager#resumeUpload', 'file is null');
+                return false;
+            }
             var fileData = this.uploadProcessFiles.get(file.fileId);
             fileData.paused = false;
             var fileInfo = fileData.file;
@@ -1382,6 +1554,10 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
         value: function cancelUpload(fileId) {
             var _this12 = this;
 
+            if (null == fileId) {
+                nucleus.getLogger().e('CubeFileManager#cancelUpload', 'fileId is null');
+                return false;
+            }
             var fileData = this.uploadProcessFiles.get(fileId);
             //取消上传
             if (null != fileData && null != fileData.xhr) {
@@ -1422,6 +1598,10 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
          * @param {string} fileId 文件id
          */
         value: function download(fileId) {
+            if (null == fileId) {
+                nucleus.getLogger().e('CubeFileManager#download', 'fileId is null');
+                return false;
+            }
             var self = this;
             this.queryById(fileId, function (file) {
                 console.log('下载的文件', file);
@@ -1614,133 +1794,6 @@ var FileManagerServiceWorker = exports.FileManagerServiceWorker = function (_Fil
 
     return FileManagerServiceWorker;
 }(_FileManagerService2.FileManagerService);
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.FileInfo = undefined;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _FileType = __webpack_require__(18);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * 文件信息实体
- *
- * @class FileInfo
- * @author Xu Jiangwei, Guan Yong
- */
-var FileInfo = exports.FileInfo = function () {
-
-    /**
-     * @constructs FileInfo
-     * @param {string} fileId 文件id
-     * @param {string} name 文件名称
-     * @param {number} progress 进度
-     * @param {number} size 文件大小
-     * @param {FileType} type 文件类型
-     * @param {string} md5 文件MD5
-     * @param {string} createTime 文件创建时间
-     * @param {string} parentId 文件父目录sn
-     * @param {string} permission 文件可操作权限
-     * @param {string} url 文件地址
-     * @param {string} expires 文件有效期
-     * */
-    function FileInfo(fileId, name, progress, size, type, md5, createTime, parentId, permission, url, expires) {
-        _classCallCheck(this, FileInfo);
-
-        this.fileId = fileId;
-        this.name = name;
-        this.progress = progress;
-        this.size = size;
-        this.type = type;
-        this.md5 = md5;
-        this.createTime = createTime;
-        this.parentId = parentId;
-        this.permission = permission;
-        this.url = url;
-        this.expires = expires;
-        this.file = null;
-    }
-
-    /**
-     * 获取文件类型
-     * @returns {FileType} - 文件类型
-     */
-
-
-    _createClass(FileInfo, [{
-        key: 'getType',
-        value: function getType() {
-            if (!this.type) {
-                var sf = this.name.split('.');
-                if (sf.length > 0) {
-                    var sfArr = sf[sf.length - 1];
-                    var fileTypes = {
-                        '': _FileType.FileType.Folder,
-                        'png': _FileType.FileType.Image,
-                        'jpeg': _FileType.FileType.Image,
-                        'jpg': _FileType.FileType.Image,
-                        'gif': _FileType.FileType.Image,
-                        'doc': _FileType.FileType.Word,
-                        'docx': _FileType.FileType.Word,
-                        'xls': _FileType.FileType.Excel,
-                        'xlsx': _FileType.FileType.Excel,
-                        'pdf': _FileType.FileType.Pdf,
-                        'pptx': _FileType.FileType.Ptt,
-                        'mp3': _FileType.FileType.Audio,
-                        'wma': _FileType.FileType.Audio,
-                        'wav': _FileType.FileType.Audio,
-                        'avi': _FileType.FileType.Video,
-                        'rmvb': _FileType.FileType.Video,
-                        'rm': _FileType.FileType.Video,
-                        'exe': _FileType.FileType.App,
-                        'com': _FileType.FileType.App,
-                        'app': _FileType.FileType.App,
-                        'rar': _FileType.FileType.Zip,
-                        'zip': _FileType.FileType.Zip
-                    };
-                    this.type = null == fileTypes[sfArr] ? _FileType.FileType.Other : fileTypes[sfArr];
-                }
-            }
-            return this.type;
-        }
-
-        /**
-         * 解析文件
-         * */
-
-    }], [{
-        key: 'parse',
-        value: function parse(strJson) {
-            if (null == strJson || (typeof strJson === 'undefined' ? 'undefined' : _typeof(strJson)) != 'object') {
-                nucleus.getLogger().e('CubeFileInfo#parse', 'Error of parameters');
-            }
-            var fileInfo = new FileInfo();
-            for (var item in strJson) {
-                if (fileInfo.hasOwnProperty(item)) {
-                    fileInfo[item] = strJson[item];
-                }
-            }
-            fileInfo.getType();
-            return fileInfo;
-        }
-    }]);
-
-    return FileInfo;
-}();
 
 /***/ })
 
