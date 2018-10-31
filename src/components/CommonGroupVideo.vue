@@ -230,7 +230,7 @@
 	.conference-video {
 		position: absolute;
 		width: 640px;
-		height: 488px;
+		height: 430px;
 		top: calc(50% - 249px);;
 		z-index: 99998;
 		left: calc(50% - 100px);
