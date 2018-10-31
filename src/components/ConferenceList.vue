@@ -57,7 +57,7 @@
 				</el-input-number>
 			</div>
 			<group-join-member :memberList="inviteList"></group-join-member>
-			<el-button class="cp-create-conference-btn"
+			<el-button class="cp-create-conference-btn" :class="{'active':duration&&time&&date&&conferenceTopic}"
 					   @click="createConference">
 				创建会议
 			</el-button>
@@ -179,6 +179,15 @@
 				this.changeCreateDialog(true);
 			},
 			createConference(){
+				if(this.duration == undefined || this.time == '' || this.date == '' || this.conferenceTopic == ''){
+					this.$message({
+					showClose: true,
+					message: '请填写完整',
+					type: 'error',
+					duration: 2000
+				});
+					return false;
+				}
 				let coferenceConfig = new CubeConferenceConfig();
 				coferenceConfig.displayName = this.conferenceTopic;
 				let startTime = new Date().getTime();
@@ -329,12 +338,15 @@
 			.cp-create-conference-btn {
 				display: block;
 				margin-top: 80px;
-				background-color: $BG21;
 				border: none;
 				width: 120px;
 				padding: 0;
 				color: $T3;
 				height: 30px;
+				background-color: #b3b3b3;
+				&.active{
+					background-color: $BG21;
+				}
 			}
 		}
 		.ln-container{
