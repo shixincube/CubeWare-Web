@@ -171,7 +171,7 @@
 				this.dataCenter.getInfoByCube(newVal, info => {
 					if (info.groupId) {
 						// 发起多人语音/群视频/白板/会议/屏幕分享可以选择群主
-						let members = info.masters.concat(info.members) 
+						let members = info.masters.concat(info.members)
 						console.log('// 发起多人语音/群视频/白板/会议/屏幕分享可以选择群主')
 						console.log(members)
 						this.$store.commit('updateInviteList', members);
@@ -398,13 +398,13 @@
 				}else{
 					this.whiteboardService.quit(obj.id);
 				}
-				
+
 				// if(obj.inviteType == 'user-video-call' || obj.inviteType == 'user-voice-call'){
 					this.$store.dispatch('rejectCallInvite').then(() => {});
 				// }
 				this.hasInvite = false;
 			},
-			
+
 		},
 		components: {
 			PersonInfoDialog,

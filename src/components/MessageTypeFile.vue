@@ -140,22 +140,23 @@
 
 
 
-
 				let el = document.createElement('a');
-				el.setAttribute('download', this.message.fileName);
-				el.href = url + "?attname =" + encodeURI(this.message.fileName);
+				el.setAttribute('href',  url + '?attname=' + encodeURI(this.message.fileName));
+				el.setAttribute('target', '_blank');
 				el.style.display = 'none';
-
+				document.body.appendChild(el);
+               console.log(url + '?attname=' + encodeURI(this.message.fileName))
 				if(el.click) {
 					el.click();
 				} else {
-			    	let e = document.createEvent("MouseEvents");
+					let e = document.createEvent("MouseEvents");
 					e.initEvent("click", true, true);
 					el.dispatchEvent(e);
 				}
 
 				document.body.removeChild(el);
 			},
+
 			onMessageCanceled(message){
 				if(message.sn == this.message.sn) {
 					console.log("取消文件------messageTypeFile", message);

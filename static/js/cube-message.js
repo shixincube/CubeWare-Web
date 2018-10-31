@@ -188,7 +188,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * Copyright (c) 2015-2016 Cube Team. All rights reserved.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
-var _MessageStatus = __webpack_require__(74);
+var _MessageStatus = __webpack_require__(71);
 
 var _MessageType = __webpack_require__(1);
 
@@ -899,11 +899,11 @@ var _MessageEntity2 = __webpack_require__(2);
 
 var _MessageType = __webpack_require__(1);
 
-var _FileMessageStatus = __webpack_require__(73);
+var _FileMessageStatus = __webpack_require__(70);
 
 var _CubeError = __webpack_require__(0);
 
-var _FileAction = __webpack_require__(75);
+var _FileAction = __webpack_require__(72);
 
 var _FileHttp = __webpack_require__(21);
 
@@ -1879,6 +1879,7 @@ var FileHttp = exports.FileHttp = function () {
                     action: this.createHttp + _FileAction.FileAction.Uploader
                 }, success, errCallback);
             } else {
+                //如果是秒传文件，则将上传文件置为空，否则大文件服务器关闭流会花和上传时间一样的时间
                 var fileBlob = processFile.secondUpload ? new Blob() : processFile.file.slice(processFile.progress, processFile.file.size);
                 fileBlob.name = processFile.name;
                 var xhr = this._sendFile(_FileAction.FileAction.Uploader, {
@@ -4132,10 +4133,7 @@ var RichContentMessage = exports.RichContentMessage = function (_MessageEntity) 
 /* 67 */,
 /* 68 */,
 /* 69 */,
-/* 70 */,
-/* 71 */,
-/* 72 */,
-/* 73 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4176,7 +4174,7 @@ var FileMessageStatus = exports.FileMessageStatus = {
 };
 
 /***/ }),
-/* 74 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4217,7 +4215,7 @@ var MessageStatus = exports.MessageStatus = {
 };
 
 /***/ }),
-/* 75 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4243,6 +4241,9 @@ var FileAction = exports.FileAction = {
 };
 
 /***/ }),
+/* 73 */,
+/* 74 */,
+/* 75 */,
 /* 76 */,
 /* 77 */,
 /* 78 */,
@@ -4255,10 +4256,7 @@ var FileAction = exports.FileAction = {
 /* 85 */,
 /* 86 */,
 /* 87 */,
-/* 88 */,
-/* 89 */,
-/* 90 */,
-/* 91 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4279,9 +4277,9 @@ var _MessageListener = __webpack_require__(50);
 
 var _DBMessageService = __webpack_require__(136);
 
-var _MessageStatus = __webpack_require__(74);
+var _MessageStatus = __webpack_require__(71);
 
-var _FileMessageStatus = __webpack_require__(73);
+var _FileMessageStatus = __webpack_require__(70);
 
 var _MessageType = __webpack_require__(1);
 
@@ -4311,7 +4309,7 @@ var _VoiceMessage = __webpack_require__(31);
 
 var _VideoMessage = __webpack_require__(30);
 
-var _FileAction = __webpack_require__(75);
+var _FileAction = __webpack_require__(72);
 
 var _MessageAction = __webpack_require__(142);
 
@@ -4376,6 +4374,11 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
         _this.historyLocalData = {};
         return _this;
     }
+
+    /**
+     * 文件上传执行方法
+     * */
+
 
     _createClass(MessageServiceWorker, [{
         key: "_fileUpload",
@@ -4476,6 +4479,11 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
                 }, 200);
             }
         }
+
+        /**
+         * 获取图片的宽高
+         * */
+
     }, {
         key: "_getWidthAndHeight",
         value: function _getWidthAndHeight(file, callback) {
@@ -4497,6 +4505,7 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
 
         /**
          * 消息文件上传文件
+         * 默认文件上传成功后调用消息发送的方法
          * */
 
     }, {
@@ -4513,6 +4522,7 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
             msg.fileOldName = file.name;
             file.name = Date.now() + file.name;
 
+            //文件上传信息创建完成后回调，上传文件以及开启进度查询
             var createCallback = function createCallback(err, data) {
                 if (err) {
                     _this4.delegate.onMessageFailed(CubeStateCode.UploadFailed, msg);
@@ -4560,6 +4570,7 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
                 });
                 return;
             }
+            //创建文件上传信息
             this.fileHttp.createUpload(file, createCallback);
         }
 
@@ -4816,6 +4827,11 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
 
             return false;
         }
+
+        /**
+         * 查询历史消息tcp方式
+         * */
+
     }, {
         key: "queryHistoryMessage",
         value: function queryHistoryMessage(queryPage) {
@@ -4842,7 +4858,7 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
         }
 
         /**
-         * 查询历史消息
+         * 查询历史消息http方式
          * */
 
     }, {
@@ -4946,6 +4962,11 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
             }
             return null;
         }
+
+        /**
+         * 根据键值数组创建对象
+         * */
+
     }, {
         key: "_createObj",
         value: function _createObj(keyArr, valArr) {
@@ -4957,6 +4978,11 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
             }
             return data;
         }
+
+        /**
+         * 同步消息结束后的处理，更新引擎状态，初始化同步的数组
+         * */
+
     }, {
         key: "_endMessageSync",
         value: function _endMessageSync() {
@@ -4999,6 +5025,11 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
             };
             this.engine.connect.send(CELLET.Messaging, CubeConst.ActionMsgSync, param);
         }
+
+        /**
+         * 同步指令ACK收到后，剔除本地已有的消息，获取消息详情数据
+         * */
+
     }, {
         key: "_processMsgSyncAck",
         value: function _processMsgSyncAck(dialect) {
@@ -5025,6 +5056,11 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
                 this._endMessageSync();
             }
         }
+
+        /**
+         * 消息pullAck处理，查询历史消息和拉取离线消息均会调用pull指令，ack里做了区分
+         * */
+
     }, {
         key: "_processMsgPullAck",
         value: function _processMsgPullAck(dialect) {
@@ -5032,7 +5068,7 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
             var data = dialect.getParamAsString("data");
             if (state.code == 200) {
                 var queryTime = data.timestamp;
-                //查询历史消息的回调处理
+                //查询历史消息的回调处理，查询历史消息会带上本地时间戳来做回调，因此根据pullack是否有时间戳来区分
                 if (null != queryTime) {
                     var messages = [];
                     var _iteratorNormalCompletion3 = true;
@@ -5061,6 +5097,7 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
                     }
 
                     var hasSn = {};
+                    //可能会有多次pull,因此将数据缓存起来，等数据完全拉完再做回调
                     this.historyLocalData[queryTime] = this.historyLocalData[queryTime].concat(messages);
                     var _iteratorNormalCompletion4 = true;
                     var _didIteratorError4 = false;
@@ -5135,6 +5172,11 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
                 }
             }
         }
+
+        /**
+         * 历史消息查询指令ACK, 主要是剔除本地已有数据，然后拉取消息详细数据
+         * */
+
     }, {
         key: "_processMessageHistorySnsAck",
         value: function _processMessageHistorySnsAck(dialect) {
@@ -5194,6 +5236,11 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
                 _this11._historyCallback(data.timestamp);
             });
         }
+
+        /**
+         * 历史消息拉取完成后消息排序后回调上层传入的回调函数
+         * */
+
     }, {
         key: "_historyCallback",
         value: function _historyCallback(time) {
@@ -5208,7 +5255,7 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
         }
 
         /**
-         * 消息组装,去重
+         * 消息组装成按会话分组的形式,去重，存库
          * */
 
     }, {
@@ -5309,7 +5356,9 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
         }
 
         /**
-         * 获得需要拉取的消息,储存最大发送时间
+         * 获得本地没有的消息sn,储存最大发送时间
+         * @param isMarkTime 是否需要记录同步时间
+         * @param isUpdatMessage 是否需要拉取有变化的消息
          * */
 
     }, {
@@ -5496,6 +5545,11 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
             }
             this.syncMessage(messageSyncTime);
         }
+
+        /**
+         * 获得http接口
+         * */
+
     }, {
         key: "_getHttpUrl",
         value: function _getHttpUrl(url) {
@@ -5594,43 +5648,40 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
             return this.engine.connect.send(CELLET.Messaging, CubeConst.ActionUpdateTop, param);
         }
 
-        /**
-         * 回复消息
-         * */
-
-    }, {
-        key: "replyMessage",
-        value: function replyMessage(sn, reply) {
-            if (null == this.session || null == this.session.name || null == sn) {
-                return false;
-            }
-            var self = this;
-            //手动生成sn以返回给应用层
-            var replySn = _MessageEntity.MessageEntity.generateSerialNumber();
-            this.dbService.queryMessageBySns([sn], function (err, msgs) {
-                if (err) {
-                    nucleus.getLogger().e('SearchMessageBySns', 'ReplyMessage Search Message Error');
-                    return false;
-                }
-                var source = msgs[0];
-                if (null == source) {
-                    nucleus.getLogger().e('SearchMessageBySns', 'ReplyMessage Search Message Is Null');
-                    return false;
-                }
-                var receiver = null == source.group ? source.sender.name : source.group.name;
-                reply = self._toTextMessage(receiver, reply);
-                if (!reply) {
-                    return false;
-                }
-                var msg = new _ReplyMessage.ReplyMessage(receiver, reply, source);
-                msg.group = null == reply.group ? source.group : reply.group;
-                msg.sn = replySn;
-                if (self.sendMessage(receiver, msg)) {
-                    return msg;
-                };
-            });
-            return replySn;
-        }
+        // /**
+        //  * 回复消息
+        //  * */
+        // replyMessage(sn, reply){
+        //     if (null == this.session || null == this.session.name || null == sn) {
+        //         return false;
+        //     }
+        //     let self = this;
+        //     //手动生成sn以返回给应用层
+        //     let replySn = MessageEntity.generateSerialNumber();
+        //     this.dbService.queryMessageBySns([sn], function (err, msgs) {
+        //         if(err){
+        //             nucleus.getLogger().e('SearchMessageBySns', 'ReplyMessage Search Message Error');
+        //             return false;
+        //         }
+        //         let source = msgs[0];
+        //         if(null == source){
+        //             nucleus.getLogger().e('SearchMessageBySns', 'ReplyMessage Search Message Is Null');
+        //             return false;
+        //         }
+        //         let receiver = null == source.group ? source.sender.name : source.group.name;
+        //         reply = self._toTextMessage(receiver, reply);
+        //         if(!reply){
+        //             return false;
+        //         }
+        //         let msg = new ReplyMessage(receiver, reply, source);
+        //         msg.group = null == reply.group ? source.group : reply.group;
+        //         msg.sn = replySn;
+        //         if(self.sendMessage(receiver, msg)){
+        //             return msg;
+        //         };
+        //     })
+        //     return replySn;
+        // }
 
         /**
          * 通过sn查询数据
@@ -5652,6 +5703,11 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
                 callback(message);
             });
         }
+
+        /**
+         * 通过tcp方式拉取离线消息
+         * */
+
     }, {
         key: "syncMessageTcp",
         value: function syncMessageTcp() {
@@ -6135,6 +6191,11 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
                 return false;
             }
         }
+
+        /**
+         * 更新最近会话列表
+         * */
+
     }, {
         key: "_updateRecent",
         value: function _updateRecent(message) {
@@ -6148,6 +6209,9 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
 }(_MessageService2.MessageService);
 
 /***/ }),
+/* 89 */,
+/* 90 */,
+/* 91 */,
 /* 92 */,
 /* 93 */,
 /* 94 */,
@@ -6196,7 +6260,7 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
 "use strict";
 
 
-var _MessageServiceWorker = __webpack_require__(91);
+var _MessageServiceWorker = __webpack_require__(88);
 
 var _MessageListener = __webpack_require__(50);
 

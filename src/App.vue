@@ -128,7 +128,8 @@
 				window.appId = this.utils.getCookie('appId');
 				window.cube.setCubeConfig({
 					"appid": this.utils.getCookie('appId'),
-					"licenseServer": 'http://125.208.1.67:9000/auth/license/get'
+					"licenseServer": 'http://125.208.1.67:9000/auth/license/get',
+					"showCallMask" :false
 				});
 			}
 

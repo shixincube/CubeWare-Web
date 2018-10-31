@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 119);
+/******/ 	return __webpack_require__(__webpack_require__.s = 129);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -101,15 +101,15 @@ exports.CubeError = function CubeError(code, message) {
 
 /***/ }),
 
-/***/ 119:
+/***/ 129:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _LiveServiceWorker = __webpack_require__(83);
+var _LiveServiceWorker = __webpack_require__(87);
 
-var _LiveListener = __webpack_require__(44);
+var _LiveListener = __webpack_require__(49);
 
 /**
  * 引导程序, 负责模块的初始化工作。
@@ -131,7 +131,7 @@ var _LiveListener = __webpack_require__(44);
 
 /***/ }),
 
-/***/ 120:
+/***/ 130:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -243,7 +243,7 @@ var LiveService = exports.LiveService = function (_CubeService) {
 
 /***/ }),
 
-/***/ 121:
+/***/ 131:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -306,7 +306,7 @@ var LiveAgent = exports.LiveAgent = function () {
 
 /***/ }),
 
-/***/ 122:
+/***/ 132:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -378,7 +378,7 @@ var LiveInfo = exports.LiveInfo = function () {
 
 /***/ }),
 
-/***/ 123:
+/***/ 133:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -414,7 +414,7 @@ var Action = exports.Action = {
 
 /***/ }),
 
-/***/ 44:
+/***/ 49:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -470,7 +470,7 @@ var LiveListener = exports.LiveListener = function (_CubeListener) {
 
 /***/ }),
 
-/***/ 83:
+/***/ 87:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -483,15 +483,15 @@ exports.LiveServiceWorker = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _LiveService2 = __webpack_require__(120);
+var _LiveService2 = __webpack_require__(130);
 
-var _LiveListener = __webpack_require__(44);
+var _LiveListener = __webpack_require__(49);
 
-var _Action = __webpack_require__(123);
+var _Action = __webpack_require__(133);
 
-var _LiveInfo = __webpack_require__(122);
+var _LiveInfo = __webpack_require__(132);
 
-var _LiveAgent = __webpack_require__(121);
+var _LiveAgent = __webpack_require__(131);
 
 var _CubeError = __webpack_require__(0);
 

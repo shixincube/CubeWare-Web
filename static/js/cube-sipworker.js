@@ -83,7 +83,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ConferenceListener = __webpack_require__(64);
+var _ConferenceListener = __webpack_require__(61);
 
 var _ConferenceService2 = __webpack_require__(158);
 
@@ -95,7 +95,7 @@ var _StateCode = __webpack_require__(3);
 
 var _CubeConst = __webpack_require__(5);
 
-var _ConferenceType = __webpack_require__(65);
+var _ConferenceType = __webpack_require__(62);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -149,6 +149,11 @@ var ConferenceServiceWorker = exports.ConferenceServiceWorker = function (_Confe
             var valArr = [true];
             return this._createObj(keyArr, valArr);
         }
+
+        /**
+         * 获得对应指令处理的事件，keyArr与valArr一一对应
+         * */
+
     }, {
         key: '_getDialogue',
         value: function _getDialogue() {
@@ -156,6 +161,11 @@ var ConferenceServiceWorker = exports.ConferenceServiceWorker = function (_Confe
             var valArr = ['_processConferenceControlNotify', '_processConferenceControlAck', '_processCreateConferenceAck', '_processCreateConferenceNotify', '_processCreateConferenceSync', '_processDestroyConferenceAck', '_processDestroyConferenceNotify', '_processDestroyConferenceSync', '_processInviteConferenceMemberAck', '_processInviteConferenceMemberNotify', '_processInviteConferenceMemberSync', '_processAcceptConferenceInviteAck', '_processAcceptConferenceInviteNotify', '_processAcceptConferenceInviteSync', '_processRejectConferenceInviteAck', '_processRejectConferenceInviteNotify', '_processRejectConferenceInviteSync', '_processQuitConferenceAck', '_processQuitConferenceNotify', '_processQuitConferenceSync', '_processApplyJoinConferenceNotify', '_processRejectApplyConferenceAck', '_processRejectApplyConferenceNotify', '_processAcceptApplyConferenceAck', '_processAcceptApplyConferenceNotify', '_processAcceptApplyConferenceSync', '_processCallConferenceAck', '_processJoinConferenceAck', '_processJoinConferenceSync', '_processJoinConferenceNotify'];
             return this._createObj(keyArr, valArr);
         }
+
+        /**
+         * 根据键值数组生成对象
+         * */
+
     }, {
         key: '_createObj',
         value: function _createObj(keyArr, valArr) {
@@ -768,6 +778,11 @@ var ConferenceServiceWorker = exports.ConferenceServiceWorker = function (_Confe
             }
             return true;
         }
+
+        /**
+         * 指令处理，除了this.handleFailed的指令，其他会同意判断错误回调onConferenceFailed
+         * */
+
     }, {
         key: 'onDialogue',
         value: function onDialogue(action, dialect) {
@@ -841,19 +856,6 @@ var ConferenceServiceWorker = exports.ConferenceServiceWorker = function (_Confe
                 }
             }
             return conference;
-        }
-
-        /**
-         * 是否是当前设备发起的指令
-         * 例：多终端同时在线时，收到创建会议或者加入会议回调时可以使用
-         *
-         * @return
-         */
-
-    }, {
-        key: 'isSelf',
-        value: function isSelf(conference) {
-            return Boolean(conference.isSelf);
         }
 
         /**
@@ -1261,6 +1263,10 @@ var ConferenceServiceWorker = exports.ConferenceServiceWorker = function (_Confe
                 return this.engine.connect.send(CELLET.Conference, _CubeConst.CubeConst.ActionReinviteConference, param);
             } else {
                 this.hasConference = false;
+                // 更改状态
+                if (this.engine.session.callPeer && this.engine.session.callPeer.type == 'conference') {
+                    this.engine.session.callState = CubeSignalingState.End;
+                }
             }
         }
     }]);
@@ -1453,7 +1459,7 @@ var SIPServiceWorker = exports.SIPServiceWorker = function () {
                 "uri": "sip:" + name + "@" + self.domain,
                 "password": password,
                 "display_name": displayName,
-                "register_expires": 610,
+                "register_expires": 6100,
                 "register": true
             };
 
@@ -2092,9 +2098,9 @@ module.exports = g;
 
 var _SIPServiceWorker = __webpack_require__(101);
 
-var _ConferenceListener = __webpack_require__(64);
+var _ConferenceListener = __webpack_require__(61);
 
-var _ConferenceType = __webpack_require__(65);
+var _ConferenceType = __webpack_require__(62);
 
 var _ConferenceServiceWorker = __webpack_require__(100);
 
@@ -4979,7 +4985,7 @@ var CubeConst = exports.CubeConst = {
     ActionLicenseAck: "license-ack",
     ActionLicenseNotify: "license-notify",
 
-    //账户指令
+    // 账户指令
     ActionLogin: "login",
     ActionLoginAck: "login-ack",
     ActionLoginSync: "login-sync",
@@ -4991,6 +4997,9 @@ var CubeConst = exports.CubeConst = {
     ActionQueryDeviceAck: "query-device-ack",
     ActionQueryByIdDevice: "query-device-by-id",
     ActionQueryByIdDeviceAck: "query-device-by-id-ack",
+    ActionUpdate: "update",
+    ActionUpdateAck: "update-ack",
+    ActionUpdateSync: "update-sync",
 
     //////////////////////////////////////////////////////// 设置指令 ////////////////////////////////////////////////////////
     //更新通知配置
@@ -5311,7 +5320,7 @@ var CubeConst = exports.CubeConst = {
 
 /***/ }),
 
-/***/ 64:
+/***/ 61:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5659,7 +5668,7 @@ var ConferenceListener = exports.ConferenceListener = function (_CubeListener) {
 
 /***/ }),
 
-/***/ 65:
+/***/ 62:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

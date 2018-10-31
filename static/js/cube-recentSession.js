@@ -74,7 +74,7 @@
 "use strict";
 
 
-var _RecentSessionServiceWorker = __webpack_require__(93);
+var _RecentSessionServiceWorker = __webpack_require__(90);
 
 var _RecentSession = __webpack_require__(57);
 
@@ -440,7 +440,7 @@ var RecentSession = exports.RecentSession = function RecentSession() {
 
 /***/ }),
 
-/***/ 93:
+/***/ 90:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -551,6 +551,7 @@ var RecentSessionServiceWorker = exports.RecentSessionServiceWorker = function (
                 var saveRecent = recents[recentId];
                 _this2.dbService.queryRecentById(recentId, function (err, recent) {
                     if (null != recent) {
+                        recent = recent[0];
                         saveRecent = recent.time > recents[recentId].time ? recent : recents[recentId];
                         saveRecent.unreadCount = recent.unreadCount + recents[recentId].unreadCount;
                     }
@@ -565,9 +566,9 @@ var RecentSessionServiceWorker = exports.RecentSessionServiceWorker = function (
     }, {
         key: "_messagesToRecentSession",
         value: function _messagesToRecentSession(messages) {
-            var recents = {};
-            var recent = void 0;
-            var unread = void 0;
+            var recents = {},
+                recent = void 0,
+                unread = 0;
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
@@ -577,9 +578,9 @@ var RecentSessionServiceWorker = exports.RecentSessionServiceWorker = function (
                     var message = _step.value;
 
                     recent = this._getMessageRecent(message);
-                    unread = recents[recent.name] == null ? 0 : recents[recent.name].unreadCount;
+                    unread = recents[recent.name] ? recents[recent.name].unreadCount : 0;
                     this._messageIsRead(message) ? '' : unread++;
-                    if (recents[recent.name] == null) {
+                    if (!recents[recent.name]) {
                         recents[recent.name] = new _RecentSession.RecentSession({
                             sessionId: recent.name,
                             sessionType: recent.sessionType,
@@ -589,7 +590,7 @@ var RecentSessionServiceWorker = exports.RecentSessionServiceWorker = function (
                             messageSN: message.sn,
                             messageJson: message.toJSON(),
                             messageStatus: null,
-                            unreadCount: unread,
+                            unreadCount: 0,
                             time: message.sendTime,
                             topTime: 0
                         });
@@ -620,6 +621,7 @@ var RecentSessionServiceWorker = exports.RecentSessionServiceWorker = function (
                 }
             }
 
+            console.log(recents);
             return recents;
         }
 
