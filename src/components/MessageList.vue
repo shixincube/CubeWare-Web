@@ -151,7 +151,7 @@
 				//  排除群组 好友是否有效
 				this.recentList.map((list, index) => {
 					let info = this.invalidSession(list.sessionId)
-					if(info) {
+					if (info) {
 						list.displayName = info.displayName;
 						recents.push(list);
 					}
@@ -162,7 +162,7 @@
 				this.getAllUnread(this.recentList);
 			},
 
-			invalidSession (sessionId){
+			invalidSession(sessionId) {
 				if (sessionId.includes('g')) {
 					for (let group of this.$store.state.groupList) {
 						if (group.groupId == sessionId) {
@@ -204,7 +204,7 @@
 					this.recentList.map((list, index) => {
 						if (list.sessionId == rencet.sessionId) {
 							recents.splice(index, 1, rencet);
-							this.receiptMessage(list);
+							this.sessionId == list.sessionId ? this.receiptMessage(list) : '';
 						}
 					});
 					this.recentList = recents;

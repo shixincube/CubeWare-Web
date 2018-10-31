@@ -113,7 +113,7 @@
 						   @conferenceDestroyed="conferenceDestroyed"></common-conference>
 		<message-bottom-fixed :conferenceNotify="conferenceNotify"
 							  class="show-hidden"
-							  v-show="hasInvite"
+							  v-show="hasInvite && $store.state.inviteType == ''"
 							  @acceptInvite="acceptInvite"
 							  @rejectInvite="rejectInvite"></message-bottom-fixed>
 		<during-voice-call v-if="$store.state.inviteType == 'audioCallAlone'"></during-voice-call>
