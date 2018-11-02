@@ -146,7 +146,7 @@
 						});
 						console.log('createGroupList',groupList)
 						this.$store.commit('createGroupList', groupList);
-						this.$router.push({name: 'message'});
+						this.$router.push({name: 'message', query: { curUser: this.$store.state.curUser }});
 					}, function (code, desc) {
 					});
 

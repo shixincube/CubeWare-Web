@@ -34,7 +34,7 @@
 		methods: {
 			checkLogin() {
 				if (!this.$store.state.curUser) {
-					this.$router.push({name: 'login'});
+					this.$store.dispatch('onLogined', this);
 				}
 			},
 			addAppListener() {
