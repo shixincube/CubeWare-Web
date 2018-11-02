@@ -108,5 +108,8 @@ export default {
 	},
 	updateLoadingMsg(state, data) {
 		state.loadingMsg = data;
-	}
+	},
+	messageBottomFixed(state, type){
+		state.messageBottomFixed = type;
+	},
 }

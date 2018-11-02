@@ -8,15 +8,18 @@
 		> 
 			<i-d-card-group @groupItemInfo='groupItemInfo' :groupInfo ="groupInfo" v-on:closeDialog = "close" class="cb-friends-id-group"></i-d-card-group>
 		</el-dialog>
+		<person-info-dialog :userInfo="curInfo" :personShow.sync="personShow"></person-info-dialog>
 	</div>
 </template>
 <script>
 	import IDCardGroup from './../IDCardGroup';
-
+	import PersonInfoDialog from './PersonInfoDialog';
 	export default {
 		name: "GroupInfoDialog",
 		data() {
 			return {
+				personShow:false,
+				curInfo:null,
 				groupMember: [],
 				curCube: this.$store.state.curUser,
 				userList: []
@@ -39,14 +42,17 @@
 		},
 		methods: {
 			groupItemInfo(item){
-				this.$emit('groupItemInfo',item)
+				this.curInfo = item;
+				this.personShow = true;
+				this.$emit('groupItemInfo',false)
 			},
 			close() {
 				this.$emit('update:groupShow', false);
 			},
 		},
 		components: {
-			IDCardGroup
+			IDCardGroup,
+			PersonInfoDialog
 		}
 
 	}

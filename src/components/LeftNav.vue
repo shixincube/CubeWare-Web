@@ -227,6 +227,9 @@
 				this.showInvite();
 			},
 			receiveInviteWB(res){
+				console.log('left')
+				console.log(res)
+				console.log(cube.accName)
 				if(res.from.cubeId == cube.accName){
 					return false;
 				}
@@ -329,7 +332,6 @@
 				this.$bus.on('onVoiceInvited', this.receiveInvite);
 				this.$bus.on('onShareInvited', this.receiveInvite);
 				this.$bus.on('onWhiteboardInvited', this.receiveInviteWB);
-				this.$bus.on('onWhiteboardRejectInvited', this.receiveInviteWB);
 				this.$bus.on('onCall', this.receiveCall);
 				this.$bus.on('onGroupVideoInvited', this.receiveInvite);
 				this.$bus.on('onConferenceFailed', this.onConferenceFailed);
@@ -342,7 +344,6 @@
 				this.$bus.off('onVoiceInvited', this.receiveInvite);
 				this.$bus.off('onShareInvited', this.receiveInvite);
 				this.$bus.off('onWhiteboardInvited', this.receiveInviteWB);
-				this.$bus.off('onWhiteboardRejectInvited', this.receiveInviteWB);
 
 				this.$bus.off('onCall', this.receiveCall);
 				this.$bus.off('onGroupVideoInvited', this.receiveInvite);
@@ -399,7 +400,7 @@
 				if(obj.inviteType != 'share-wb'){
 					this.conferenceService.quit(obj.id);
 				}else{
-					this.whiteboardService.quit(obj.id);
+					this.whiteboardService.rejectInvite(obj.id,obj.name);
 				}
 
 				// if(obj.inviteType == 'user-video-call' || obj.inviteType == 'user-voice-call'){

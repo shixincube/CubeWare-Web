@@ -98,7 +98,8 @@
 				joinedList: [],
 				receiveInvite: false,
 				action: '',
-				maxNumber: ''
+				maxNumber: '',
+				isFrist:true,
 			}
 		},
 		props: {},
@@ -146,9 +147,13 @@
 			},
 			inviteWhiteboard(list) {
 				let inviteIds = [];
+				
 				for(let invite of this.inviteList){
 					inviteIds.push(invite.cubeId);
 				}
+				console.log('**********************')
+				console.log(inviteIds)
+				console.log('**********************')
 				this.$store.commit('updateJoinedList', inviteIds);
 				this.whiteboardService.invite(this.whiteboard.whiteboardId, inviteIds || list);
 			},
@@ -275,6 +280,7 @@
 						this.$bus.off('onWhiteboardDestroyed');
 						this.$bus.off('onWhiteboardFailed');
 						this.$bus.off('onWhiteboardCreated');
+						this.$bus.off('onWhiteboardQuited');
 					})
 				}
 			},
@@ -298,46 +304,119 @@
 						this.receiveInvite = true;
 					}
 				});
-				this.$bus.on('onWhiteboardJoined', (res) => {
-					this.$store.commit('updateWhiteboard', res.whiteboard);
-					this.$store.commit('openEngineElement', 'showWBCanvas');
-					if(res.whiteboard.masters[0].cubeId == this.$store.state.curUser) {
-						this.whiteboardService.zoom(1.2);
+				 this.$bus.on('onWhiteboardJoined', (res) => {
+                    console.log('监听加入白板人员')
+                    this.$store.commit('updateWhiteboard', res.whiteboard);
+                    this.$store.commit('openEngineElement', 'showWBCanvas');
+                    if(res.whiteboard.masters[0].cubeId == this.$store.state.curUser) {
+                        this.whiteboardService.zoom(1.2);
 						this.whiteboardService.zoom(1.0);
-						this.inviteWhiteboard();
+					
 						let iList = this.inviteList;
-						this.inviteList = [];
-						for(let i = 0 ; i < iList.length ; i++) {
-							this.inviteList.push({
-								cubeId: iList[i].cubeId,
-								displayName: iList[i].displayName
-							})
+						console.log(this.inviteList)
+						console.log(res.whiteboard.members)
+                        // 判断等待的人员是采用的哪一个列表（初始化inviteList 或 有人加入过后的inviteList）
+                        for(let i = 0; i < this.inviteList.length; i++) {
+                            for(let j = 0; j < res.whiteboard.members.length; j++) {
+                                if(this.inviteList[i].cubeId == res.whiteboard.members[j].cubeId) {
+                                    this.isFrist = false;
+                                    break;
+                                }
+                            }
 						}
-					} else {
-						this.inviteList = [];
+						if(this.isFrist){
+							this.inviteWhiteboard();
+						}
+                        this.inviteList = [];
 						this.joinedList = [];
-					}
-					for(let i = 0; i < res.whiteboard.invites.length; i++) {
-						this.inviteList.push({
-							cubeId: res.whiteboard.invites[i].cubeId,
-							displayName: res.whiteboard.invites[i].displayName
-						});
-					};
-					for(let i = 0; i < res.whiteboard.members.length; i++) {
-						this.joinedList.push({
-							cubeId: res.whiteboard.members[i].cubeId,
-							displayName: res.whiteboard.members[i].displayName
-						});
-					};
-					this.receiveInvite = false;
-					this.$store.commit('updateWhiteboard', res.whiteboard);
-				});
+						console.log('进入白板',this.isFrist)
+                        if(this.isFrist) {
+                            for(let i = 0; i < iList.length; i++) {
+                                this.inviteList.push({
+                                    cubeId: iList[i].cubeId,
+                                    displayName: iList[i].displayName
+                                })
+                            }
+                        } else {
+                            for(let i = 0; i < res.whiteboard.invites.length; i++) {
+                                this.inviteList.push({
+                                    cubeId: res.whiteboard.invites[i].cubeId,
+                                    displayName: res.whiteboard.invites[i].displayName
+                                });
+                            };
+                        }
+
+                        for(let i = 0; i < res.whiteboard.members.length; i++) {
+                            this.joinedList.push({
+                                cubeId: res.whiteboard.members[i].cubeId,
+                                displayName: res.whiteboard.members[i].displayName
+                            });
+                        };
+                    } else {
+                        this.inviteList = [];
+                        this.joinedList = [];
+                        for(let i = 0; i < res.whiteboard.invites.length; i++) {
+                            this.inviteList.push({
+                                cubeId: res.whiteboard.invites[i].cubeId,
+                                displayName: res.whiteboard.invites[i].displayName
+                            });
+                        };
+                        for(let i = 0; i < res.whiteboard.members.length; i++) {
+                            this.joinedList.push({
+                                cubeId: res.whiteboard.members[i].cubeId,
+                                displayName: res.whiteboard.members[i].displayName
+                            });
+                        };
+                    }
+                    this.receiveInvite = false;
+                    this.$store.commit('updateWhiteboard', res.whiteboard);
+                });
 				this.$bus.on('onWhiteboardFailed', (res) => {
 					this.$message.error(res.error);
 				});
 				this.$bus.on('onWhiteboardRejectInvited', (res) => {
+					console.log('监听了拒绝了邀请')
+					this.inviteList = [];
+                    this.joinedList = [];
+                    for(let i = 0; i < res.whiteboard.invites.length; i++) {
+                        this.inviteList.push({
+                            cubeId: res.whiteboard.invites[i].cubeId,
+                            displayName: res.whiteboard.invites[i].displayName
+                        });
+                    };
+                    for(let i = 0; i < res.whiteboard.members.length; i++) {
+                        this.joinedList.push({
+                            cubeId: res.whiteboard.members[i].cubeId,
+                            displayName: res.whiteboard.members[i].displayName
+                        });
+                    };
 					this.receiveInvite = false;
-				})
+				});
+				 this.$bus.on('onWhiteboardQuited', (res) => {
+                    console.log('退出白板22')
+                    this.inviteList = [];
+                    this.joinedList = [];
+                    if(res.whiteboard.whiteboard.invites.length > 0) {
+                        for(let i = 0; i < res.whiteboard.whiteboard.invites.length; i++) {
+                            this.inviteList.push({
+                                cubeId: res.whiteboard.whiteboard.invites[i].cubeId,
+                                displayName: res.whiteboard.whiteboard.invites[i].displayName
+                            });
+                        };
+                    };
+                    
+                    if(res.whiteboard.whiteboard.members.length > 0) {
+                        for(let i = 0; i < res.whiteboard.whiteboard.members.length; i++) {
+                            this.joinedList.push({
+                                cubeId: res.whiteboard.whiteboard.members[i].cubeId,
+                                displayName: res.whiteboard.whiteboard.members[i].displayName
+                            });
+                        };
+                    }
+                    console.log(123)
+
+                });
+				
 			},
 			removeWhiteboardListener() {
 				this.cleanWhiteboard();
@@ -347,6 +426,7 @@
 				this.$bus.off('onWhiteboardInvited');
 				this.$bus.off('onSlideUploadCompleted');
 				this.$bus.off('onWhiteboardDestroyed');
+				this.$bus.off('onWhiteboardQuited');
 				this.$bus.off('onWhiteboardFailed');
 				this.$bus.off('onWhiteboardCreated');
 				// this.$emit('conferenceDestroyed');

@@ -28,5 +28,6 @@ export default {
 	leftHoverNav:'0',
 	joinedList: [],
 	allUnread:0,
-	loadingMsg: null
+	loadingMsg: null,
+	messageBottomFixed:true,
 }

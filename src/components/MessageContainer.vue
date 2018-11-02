@@ -99,8 +99,6 @@
 		methods: {
 			groupItemInfo(item){
 				this.groupShow = false;
-				this.personShow = true;
-				this.curInfo = item;
 			},
 			openDialog() {
 				if (this.isGroup) {

@@ -25,7 +25,6 @@ export class AppWhiteboardListener {
 	};
 
 	onWhiteboardRejectApplied(whiteboard, from, applier){
-	
 		this.vue.$bus.emit('onWhiteboardRejectApplied', {
 			whiteboard: whiteboard,
 			applier: applier,
@@ -51,7 +50,6 @@ export class AppWhiteboardListener {
 	};
 
 	onWhiteboardRejectInvited(whiteboard, from, rejectMember){
-		console.log('22222222222222222222')
 		this.vue.$bus.emit('onWhiteboardRejectInvited', {
 			whiteboard: whiteboard,
 			rejectMember: rejectMember,
@@ -60,7 +58,6 @@ export class AppWhiteboardListener {
 	};
 
 	onWhiteboardInviteJoined(whiteboard, from, joinedMember){
-		console.log('1111111111111111111')
 		this.vue.$bus.emit('onWhiteboardInviteJoined', {
 			whiteboard: whiteboard,
 			joinedMember: joinedMember,

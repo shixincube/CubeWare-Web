@@ -33,6 +33,7 @@
 				<span>开始时间</span>
 				<div>
 					<el-date-picker
+					editable=false
 						v-model="date"
 						type="date"
 						value-format="timestamp"
@@ -41,6 +42,7 @@
 						>
 					</el-date-picker>
 					<el-time-select
+					editable=false
 						v-model="time"
 						:picker-options="timePickerOptions"
 						@focus='focus'
@@ -57,7 +59,7 @@
 				</el-input-number>
 			</div>
 			<group-join-member :memberList="inviteList"></group-join-member>
-			<el-button class="cp-create-conference-btn" :class="{'active':duration&&time&&date&&conferenceTopic}"
+			<el-button class="cp-create-conference-btn" :class="{'active':time&&date&&duration&&conferenceTopic}"
 					   @click="createConference">
 				创建会议
 			</el-button>
@@ -114,7 +116,8 @@
 				timePickerOptions:{
 							start:'00:00',
 							step: '00:30',
-							end: '24:00'
+							end: '24:00',
+							minTime:'00:00'
 						},
 				conferenceService: window.cube.getConferenceService(),
 				conferenceName: '',
@@ -155,7 +158,14 @@
 		},
 		methods: {
 			focus(){
-				this.timePickerOptions.minTime = this.utils.parseTimeAbbr(Date.now(), 'YY-MM-DD')
+				let nowDate = this.utils.formatTime(Date.now(), 'YY-MM-DD'), selectDate = this.utils.formatTime(this.date, 'YY-MM-DD');
+				if(selectDate <= nowDate){
+					this.timePickerOptions.minTime = this.utils.parseTimeAbbr(Date.now())
+
+				}else{
+					this.timePickerOptions.minTime = ''
+				}
+				
 			},
 			handleOpen() {
 
