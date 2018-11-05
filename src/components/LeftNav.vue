@@ -270,6 +270,10 @@
 				if(res.quitMember.cubeId == cube.accName){
 					this.conference = null;
 				}
+				if(res.quitMember.cubeId == res.conference.founder && res.conference.members.length == 0){
+					console.log('监听发起者退出会议')
+					this.hasInvite = false;
+				}
 			},
 			onConferenceFailed(res){
 				console.log('会议出错', res);
