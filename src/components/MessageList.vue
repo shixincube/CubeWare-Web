@@ -67,14 +67,17 @@
 			this.queryRecent();
 			// 判断当前session 是否存在 如果不存在 默认最近列表第一位
 			this.invalidSession(this.sessionId) ? this.$store.commit('updateMessagePeer', recents[0].sessionId) : '';
+
+			// 加载点击
+			setTimeout(()=>{
+				this.handleSelect(this.$store.state.messagePeer);
+			},300)
 		},
 		methods: {
 			handleSelect(key) {
-				console.log('handleSelect', key)
 				if (key != this.$store.state.curGroup) {
 					this.showJoin = false;
-				}
-				;
+				};
 				clearInterval(this.receiptTimer);
 				this.recentList.map((list, index) => {
 					if (list.sessionId == key) {
@@ -82,7 +85,7 @@
 							this.$store.commit('updateCurGroup', key);
 							this.queryConference(key);
 						}
-						this.receiptMessage(list);
+							this.receiptMessage(list);
 					}
 				});
 				this.$store.commit('updateMessagePeer', key);
