@@ -55,13 +55,10 @@
 				this.sortRecent();
 			},
 			'$store.state.messagePeer': function (peer) {
-//				this.handleSelect(peer);
 				this.sessionId = peer;
 			}
 		},
-		beforeMount() {
-
-		},
+		beforeMount() {},
 		mounted() {
 			this.addAppListener();
 			this.queryRecent();
@@ -150,17 +147,21 @@
 					return b.time - a.time;
 				});
 
-				let recents = [], haveSession = false;
+				let recentList = [], checkCurSession = true;
 				//  排除群组 好友是否有效
 				this.recentList.map((list, index) => {
-					let info = this.invalidSession(list.sessionId)
+					let info = this.invalidSession(list.sessionId);
 					if (info) {
 						list.displayName = info.displayName;
-						recents.push(list);
+						recentList.push(list);
+					}
+					else if(this.sessionId == list.sessionId){
+						checkCurSession = false;
 					}
 				});
-
-				this.recentList = recents;
+				// 检测当前会话是否有效
+				checkCurSession || this.$store.commit('updateMessagePeer', recentList[0].sessionId);
+				this.recentList = recentList;
 				// 获取总的未读数
 				this.getAllUnread(this.recentList);
 			},
@@ -222,11 +223,16 @@
 					}, 1000);
 				});
 
-				this.$bus.on('onQuitGroup', (groupId) => {
-					if (groupId == this.sessionId) {
-						this.$store.commit('updateMessagePeer', this.recentList[0].sessionId);
-					}
-				});
+//				this.$bus.on('onQuitGroup', (groupId) => {
+//					if (groupId == this.sessionId) {
+//						if(this.sessionId == this.recentList[0].sessionId){
+//							this.$store.commit('updateMessagePeer', this.recentList[1].sessionId);
+//						}else {
+//							this.$store.commit('updateMessagePeer', this.recentList[0].sessionId);
+//						}
+//
+//					}
+//				});
 			},
 			destroyAppListener() {
 				this.$bus.off('onRecentSessionAdded');

@@ -323,8 +323,7 @@
 			addAppListener() {
 				this.$bus.on('onLogouted', () => {
 					this.logoutDialog = false;
-					this.$router.push({name: 'login'});
-					window.location.reload();
+
 				});
 				this.$bus.on('onVideoQuited', this.onVideoQuited)
 				this.$bus.on('onViedoJoined', this.showConference);
