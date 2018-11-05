@@ -4832,7 +4832,7 @@ var CubeEngine = exports.CubeEngine = function () {
                     _this.triggerCubeEngineState(_CubeState.CubeState.Start);
                     return true;
                 } else {
-                    _this.delegate.onError();
+                    // this.delegate.onError();
                     callback(new _CubeError.CubeError(_StateCode.StateCode.InitFailed, 'Cube Engine initialization failed!'));
                     return false;
                 }

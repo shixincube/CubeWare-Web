@@ -16,7 +16,7 @@
 				</div>
 				<div class="cb-login-step"
 					 v-show="loginStep == 2">
-					<el-select v-model="selectAcc"  placeholder="请选择账号">
+					<el-select v-model="selectAcc" placeholder="请选择账号">
 						<el-option
 							v-for="item in accList"
 							:key="item.cubeId"
@@ -40,33 +40,35 @@
 				</div>
 			</div>
 		</div>
+		<div class="version">v1.0.4</div>
 	</section>
 </template>
 
 <script>
-	import { validate, find , login} from './../ajax/api';
-    export default {
-        name: "login",
-        data() {
-            return {
-            	appId: this.utils.getCookie('appId') || '',
+	import {validate, find, login} from './../ajax/api';
+
+	export default {
+		name: "login",
+		data() {
+			return {
+				appId: this.utils.getCookie('appId') || '',
 				appKey: this.utils.getCookie('appKey') || '',
 				selectAcc: '',
 				accList: '',
 				loginStep: 1
 			}
-        },
-        props: {},
-        computed: {},
-        watch: {},
+		},
+		props: {},
+		computed: {},
+		watch: {},
 		beforeMount() {
 		},
-        mounted() {
+		mounted() {
 			this.addAppListener();
-        },
-        methods: {
+		},
+		methods: {
 			nextStep() {
-				if(!this.appId || !this.appKey) {
+				if (!this.appId || !this.appKey) {
 					this.$message.error('请输入AppId与AppKey');
 					return false;
 				}
@@ -87,12 +89,14 @@
 						this.$store.commit('updateUserList', res.data.list);
 						this.loginStep = 2;
 						let list = [];
-						for(let i = 0 ; i < 12 ; i++) {
+						for (let i = 0; i < 12; i++) {
 							res.data.list[i] && list.push(res.data.list[i]);
-						};
-						for(let item of list) {
+						}
+						;
+						for (let item of list) {
 							item.cubeId = item.cubeId.toString();
-						};
+						}
+						;
 						this.$store.commit('updateUserList', list);
 						this.$store.commit('updateAllUserList', res.data.list);
 						this.accList = list;
@@ -100,7 +104,7 @@
 				})
 			},
 			login() {
-				if(!this.selectAcc) {
+				if (!this.selectAcc) {
 					this.$message.error('请选择登录账号');
 					return false;
 				}
@@ -127,24 +131,24 @@
 					}
 				})
 			},
-			addAppListener(){
-				this.$bus.on('onLogined',() =>{
+			addAppListener() {
+				this.$bus.on('onLogined', () => {
 					//注册成功更新群组
 					window.cube.getGroupService().queryGroups(0, 1000, groups => {
 						let groupList = [];
 						// 去重
-						groups.map((group)=>{
+						groups.map((group) => {
 							let same = false;
-							groupList.map((item)=>{
-								if(group.groupId == item.groupId){
+							groupList.map((item) => {
+								if (group.groupId == item.groupId) {
 									same = true;
 								}
 							})
-							if(!same){
+							if (!same) {
 								groupList.push(group);
 							}
 						});
-						console.log('createGroupList',groupList)
+						console.log('createGroupList', groupList)
 						this.$store.commit('createGroupList', groupList);
 						this.$router.push({name: 'message', query: { curUser: this.$store.state.curUser }});
 					}, function (code, desc) {
@@ -152,20 +156,30 @@
 
 				});
 			},
-			destroyAppListener(){
+			destroyAppListener() {
 				this.$bus.off('onLogined');
 			}
 		},
-        components: {},
-		beforeDestroy(){
+		components: {},
+		beforeDestroy() {
 			this.destroyAppListener();
 		}
-    }
+	}
 </script>
 
 <style lang='scss'>
 	@import "./../assets/css/color-library";
+
 	.cb-login {
+		.version {
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			padding: 10px;
+			font-size: 20px;
+			color: #606266;
+			font-size: 12px
+		}
 		height: 100%;
 		background-color: $BG2;
 		.cb-login-container {
@@ -176,7 +190,7 @@
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -70%);
-			box-shadow: 0 2px 4px 1px rgba(218,218,218,0.50);
+			box-shadow: 0 2px 4px 1px rgba(218, 218, 218, 0.50);
 			.cb-login-header {
 				height: 100px;
 				padding-top: 40px;
@@ -191,14 +205,15 @@
 				background-color: $BG5;
 				padding-bottom: 60px;
 				.cb-login-step {
-					.no-account{
-						font-size: 14px; color: #606266;
+					.no-account {
+						font-size: 14px;
+						color: #606266;
 						margin-top: 20px;
 						display: inline-block;
 						float: left;
 						text-align: center;
 						width: 100%;
-						a{
+						a {
 							color: #337ab7;
 							text-decoration: none;
 						}
@@ -232,10 +247,11 @@
 			}
 		}
 	}
+
 	.el-select-dropdown {
 		ul {
 			height: 127px;
-			box-shadow: 0 2px 4px 1px rgba(218,218,218,0.50);
+			box-shadow: 0 2px 4px 1px rgba(218, 218, 218, 0.50);
 		}
 	}
 </style>

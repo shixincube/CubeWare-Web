@@ -4,7 +4,7 @@
 		<div class="img-container ml10" :class="{ myselfContainer: isMyself } ">
 			<p class="message-name" v-show="isGroup && !isMyself">{{message.name}}</p>
 			<div class="img-body pointer" @click="imgSrc">
-				<img :src="message.fileUrl.indexOf('gif')? message.fileUrl :message.fileUrl + '?imageView2/2/h/200'">
+				<img :src="message.fileUrl+ '?imageView2/2/h/200' " :onerror="'this.src='+'\''+message.fileUrl+'\',this.onerror = null'">
 			</div>
 		</div>
 	</div>
