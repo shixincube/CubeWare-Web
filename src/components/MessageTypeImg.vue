@@ -4,7 +4,7 @@
 		<div class="img-container ml10" :class="{ myselfContainer: isMyself } ">
 			<p class="message-name" v-show="isGroup && !isMyself">{{message.name}}</p>
 			<div class="img-body pointer" @click="imgSrc">
-				<img :src="message.fileUrl + '?imageView2/2/h/200'">
+				<img :src="message.fileUrl+ '?imageView2/2/h/200' " :onerror="'this.src='+'\''+message.fileUrl+'\',this.onerror = null'">
 			</div>
 		</div>
 	</div>
@@ -19,7 +19,7 @@
 		props: {
 			message: {
 				type: Object,
-				default: function() {
+				default: function () {
 					return {}
 				}
 			},
@@ -37,7 +37,7 @@
 		methods: {
 			imgSrc(e) {
 				let img = new Image();
-				img.onload =  () =>{
+				img.onload = () => {
 					var obj = {
 						'imgSrc': this.message.fileUrl,
 						'width': img.width,
@@ -55,13 +55,15 @@
 
 <style lang='scss'>
 	@import "./../assets/css/color-library";
-	.pointer{
+
+	.pointer {
 		cursor: pointer;
 	}
+
 	.cp-mt-img {
 		box-sizing: border-box;
 		padding: 20px;
-		>img {
+		> img {
 			cursor: pointer;
 			display: inline-block;
 			width: 40px;
@@ -73,7 +75,7 @@
 			position: relative;
 			display: inline-block;
 			max-width: 400px;
-			>p {
+			> p {
 				&:first-child {
 					font-family: MicrosoftYaHei;
 					font-size: 12px;
@@ -85,7 +87,7 @@
 				background-color: $BD6;
 				border-radius: 10px;
 				margin-top: 5px;
-				>img {
+				> img {
 					/*width: 150px;*/
 					max-width: 400px;
 					/*height: auto;*/

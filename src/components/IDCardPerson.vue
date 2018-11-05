@@ -97,6 +97,8 @@
 			},
 			logout() {
 				this.userService.logout();
+				this.$router.push({name: 'login'});
+				window.location.reload();
 			},
 			addAppListener() {
 //				this.$bus.on('checkUserInfo', user => {

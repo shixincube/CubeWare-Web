@@ -6609,11 +6609,17 @@ var DBMessageService = exports.DBMessageService = function () {
                 return;
             }
 
+            if (message.type == _MessageType.MessageType.Receipt) {
+                // 排除回执消息
+                return;
+            }
+
             var json = message.toJSON();
             if (message.fileStatus) {
                 json.fileStatus = message.fileStatus;
             }
             var entity = new _DBMessage.CubeDBMessage(message.sn, message.sn, JSON.stringify(message.getSender()), JSON.stringify(message.getReceiver()), message.group ? JSON.stringify(message.group) : null, message.type, message.timestamp, message.getStatus(), JSON.stringify(message.getFromDevice()), JSON.stringify(message.getReceivedDevices()), message.isReceipted() ? 1 : 0, message.anonymous ? 1 : 0, JSON.stringify(json));
+
             this.dbm.setEntity(entity, function (err) {});
         }
     }, {

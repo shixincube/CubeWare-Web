@@ -21,7 +21,8 @@ export class AppAccountListener{
      * @param session {Session}
      */
     onLogouted (session) {
-		this.vue.$bus.emit('onLogouted',session);
+    	console.log(session)
+		// this.vue.$bus.emit('onLogouted',session);
     }
 
     onFailed (error) {
