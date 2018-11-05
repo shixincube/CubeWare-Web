@@ -62,8 +62,6 @@
 		mounted() {
 			this.addAppListener();
 			this.queryRecent();
-			// 判断当前session 是否存在 如果不存在 默认最近列表第一位
-			this.invalidSession(this.sessionId) ? this.$store.commit('updateMessagePeer', recents[0].sessionId) : '';
 
 			// 加载点击
 			setTimeout(()=>{

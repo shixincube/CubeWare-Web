@@ -91,7 +91,9 @@
 			},
 			groupInfo:{
 				type: Object,
-				default: this.firstUserInfo
+				default: function(){
+					return this.$store.state.groupList[0];
+				}
 			}
 		},
 		computed: {},
