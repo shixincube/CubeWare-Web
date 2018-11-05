@@ -3,7 +3,7 @@
 		<el-dialog :visible="imgShow" @close="close" :show-close="false" width="750px" :title="imgInfo">
 			<div class="img-info"></div>
 			<div class="ly-change-img-box">
-				<img :src="imgSrc.imgSrc" alt="" @mousewheel='changeImg' :width="imgWidth" @mousedown="move"/>
+				<img id='ly-change-img' :src="imgSrc.imgSrc" alt="" @mousewheel='changeImg' :width="imgWidth" @mousedown="move"/>
 			</div>
 			<div class="mzub ly-changeBtn">
 				<span @click="addSize" class="add">+</span> <span @click="smallSize" class="detele">-</span>
@@ -41,8 +41,8 @@
 		},
 		watch: {
 			imgSrc() {
-				this.imgWidth = this.imgSrc.width
-				this.imgInfo = this.imgSrc.imgSrc.replace(/(.*\/)*([^.]+).*/ig, "$2") + '  ' + this.imgSrc.width + '*' + this.imgSrc.height
+				this.imgWidth = this.imgSrc.width;
+				this.imgInfo = this.imgSrc.imgSrc.replace(/(.*\/)*([^.]+).*/ig, "$2") + '  ' + this.imgSrc.width + '*' + this.imgSrc.height;
 			}
 		},
 		created() {},
@@ -57,7 +57,6 @@
 					//用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
 					let left = e.clientX - disX;  
 					let top = e.clientY - disY;
-					console.log(123)
 					//绑定元素位置到positionX和positionY上面
 					this.positionX = top;
 					this.positionY = left;
@@ -67,12 +66,14 @@
 					odiv.style.top = top + 'px';
 				};
 				document.onmouseup = (e) => {
-					console.log(456)
 					document.onmousemove = null;
 					document.onmouseup = null;
 				};
 				},
 			close() {
+				document.getElementById('ly-change-img').style.left = '50%'
+				document.getElementById('ly-change-img').style.top = '50%'
+
 				this.$emit('update:imgShow', false);
 			},
 			changeImg() {

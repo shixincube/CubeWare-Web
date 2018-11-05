@@ -33,7 +33,7 @@
 				<span>开始时间</span>
 				<div>
 					<el-date-picker
-					editable=false
+						editable
 						v-model="date"
 						type="date"
 						value-format="timestamp"
@@ -42,7 +42,7 @@
 						>
 					</el-date-picker>
 					<el-time-select
-					editable=false
+						editable
 						v-model="time"
 						:picker-options="timePickerOptions"
 						@focus='focus'

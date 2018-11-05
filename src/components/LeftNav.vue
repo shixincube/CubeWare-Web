@@ -227,9 +227,8 @@
 				this.showInvite();
 			},
 			receiveInviteWB(res){
-				console.log('left')
+				console.log('监听收到白板邀请')
 				console.log(res)
-				console.log(cube.accName)
 				if(res.from.cubeId == cube.accName){
 					return false;
 				}
@@ -320,6 +319,31 @@
 				this.$store.commit('updateInviteType', '');
 				this.$store.commit('closeEngineElement', 'showCRemoteVideo');
 			},
+			onWhiteboardDestroyed(res){
+				if(res.from.cubeId == res.whiteboard.founder && res.whiteboard.members.length == 0){
+					console.log('监听发起者退出白板');
+					this.hasInvite = false;
+				}
+			},
+			onVoiceQuited(res){
+				if(res.quitMember.cubeId == res.conference.masters[0].cubeId && res.conference.members.length == 0){
+					console.log('监听发起者退出多人语音');
+					this.hasInvite = false;
+				}
+			},
+			onShareQuited(res){
+				if(res.quitMember.cubeId == res.conference.masters[0].cubeId && res.conference.members.length == 0){
+					console.log('监听发起者退出屏幕分享')
+					this.hasInvite = false;
+				}
+				
+			},
+			onGroupVideoQuited(res){
+				if(res.quitMember.cubeId == res.conference.masters[0].cubeId && res.conference.members.length == 0){
+					console.log('监听发起者退出多人视频');
+					this.hasInvite = false;
+				}
+			},
 			addAppListener() {
 				this.$bus.on('onLogouted', () => {
 					this.logoutDialog = false;
@@ -335,6 +359,10 @@
 				this.$bus.on('onCall', this.receiveCall);
 				this.$bus.on('onGroupVideoInvited', this.receiveInvite);
 				this.$bus.on('onConferenceFailed', this.onConferenceFailed);
+				this.$bus.on('onWhiteboardDestroyed',this.onWhiteboardDestroyed);
+				this.$bus.on('onVoiceQuited',this.onVoiceQuited);
+				this.$bus.on('onShareQuited',this.onShareQuited);
+				this.$bus.on('onGroupVideoQuited',this.onGroupVideoQuited);
 			},
 			destroyAppListener() {
 				this.$bus.off('onLogout');
@@ -344,10 +372,14 @@
 				this.$bus.off('onVoiceInvited', this.receiveInvite);
 				this.$bus.off('onShareInvited', this.receiveInvite);
 				this.$bus.off('onWhiteboardInvited', this.receiveInviteWB);
-
 				this.$bus.off('onCall', this.receiveCall);
 				this.$bus.off('onGroupVideoInvited', this.receiveInvite);
 				this.$bus.off('onConferenceFailed', this.onConferenceFailed);
+				this.$bus.off('onWhiteboardDestroyed',this.onWhiteboardDestroyed);
+				this.$bus.off('onVoiceQuited',this.onVoiceQuited);
+				this.$bus.off('onShareQuited',this.onShareQuited);
+				this.$bus.off('onGroupVideoQuited',this.onGroupVideoQuited);
+
 			},
 			conferenceDestroyed() {
 				this.$store.commit('updateInviteType', '');
@@ -394,9 +426,6 @@
 				this.hasInvite = false;
 			},
 			rejectInvite(obj){
-				console.log('888888888888888888888888888888888')
-				console.log(obj)
-				console.log('888888888888888888888888888888888')
 				if(obj.inviteType != 'share-wb'){
 					this.conferenceService.quit(obj.id);
 				}else{

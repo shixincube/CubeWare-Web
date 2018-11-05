@@ -151,16 +151,12 @@
 				for(let invite of this.inviteList){
 					inviteIds.push(invite.cubeId);
 				}
-				console.log('**********************')
-				console.log(inviteIds)
-				console.log('**********************')
 				this.$store.commit('updateJoinedList', inviteIds);
 				this.whiteboardService.invite(this.whiteboard.whiteboardId, inviteIds || list);
 			},
 			emitInviteWhiteboard(list) {
 				let inviteIds = [];
 				for(let invite of list){
-					debugger;
 					inviteIds.push(invite.cubeId);
 					this.inviteList.push({
 						cubeId: invite.cubeId,
@@ -259,22 +255,23 @@
 			},
 			destroyWhiteboard() {
 				if(this.$store.state.whiteboard) {
-					this.$store.commit('changeLeftHoverNav','')
-					this.$store.commit('updateInviteType', '');
 					new Promise((resolve, reject) => {
 						this.$bus.on('onWhiteboardQuited', () => {
 							resolve();
 						});
 						this.whiteboardService.quit(this.$store.state.whiteboard.whiteboardId);
+						
 					}).then(() => {
 						this.whiteboard = '';
 						this.inviteList = [];
+						
+						this.$store.commit('changeLeftHoverNav','')
+						this.$store.commit('updateInviteType', '');
 						// this.cleanWhiteboard();
 						// this.$emit('conferenceDestroyed');
 						this.$store.commit('closeEngineElement', 'showWBCanvas');
 						this.$store.commit('updateWhiteboard', '');
 						this.$bus.off('onWhiteboardJoined');
-						this.$bus.off('onWhiteboardInvited');
 						this.$bus.off('onWhiteboardRejectInvited');
 						this.$bus.off('onSlideUploadCompleted');
 						this.$bus.off('onWhiteboardDestroyed');
@@ -367,7 +364,8 @@
                                 displayName: res.whiteboard.members[i].displayName
                             });
                         };
-                    }
+					}
+					this.maxNumber = res.whiteboard.maxNumber
                     this.receiveInvite = false;
                     this.$store.commit('updateWhiteboard', res.whiteboard);
                 });
@@ -395,7 +393,12 @@
 				 this.$bus.on('onWhiteboardQuited', (res) => {
                     console.log('退出白板22')
                     this.inviteList = [];
-                    this.joinedList = [];
+					this.joinedList = [];
+					if( this.$store.state.whiteboard && this.$store.state.whiteboard.maxNumber == 2){
+						this.destroyWhiteboard();
+						return false;
+					}
+
                     if(res.whiteboard.whiteboard.invites.length > 0) {
                         for(let i = 0; i < res.whiteboard.whiteboard.invites.length; i++) {
                             this.inviteList.push({
