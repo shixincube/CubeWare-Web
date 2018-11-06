@@ -1,7 +1,10 @@
 <template>
 	<div class="cp-mt-voice"
 		 :class="{ myselfMessage: isMyself } ">
-		<img @click="$emit('openDialog',true)"  src="./../assets/img/user-face.jpg">
+		<img @click="$emit('openDialog',true)"
+			 :name="message.sender"
+			 :src="dataCenter.getAvatarByCube(message.sender)"
+			 :onerror="'this.src='+'\''+ $store.state.userFace +'\''">
 		<div class="voice-container ml10"
 			 :class="{ myselfContainer: isMyself } ">
 			<p v-show="isGroup && !isMyself">{{message.name}}</p>

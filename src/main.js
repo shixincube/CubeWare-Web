@@ -39,4 +39,6 @@ let vue = new Vue({
 
 const dataCenter = new DataCenter(vue);
 
+window.VM = vue;
+
 Vue.prototype.dataCenter = dataCenter;

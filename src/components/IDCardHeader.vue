@@ -9,25 +9,24 @@
 				<el-dropdown-item command="quit">退出该群</el-dropdown-item>
 			</el-dropdown-menu>
 		</el-dropdown>
+		<div @click="uploadImg"
+			:class="idCardId == $store.state.curUser ? 'isSelf': 'hide'"></div>
+		<img v-show="cardType != 'group'"
+			 :name="idCardId"
+			 :src="'https://dev.download.shixincube.cn/file/avatar/' + idCardId"
+			 :onerror="'this.src='+'\''+ $store.state.userFace +'\''">
+		<img v-show="cardType == 'group'"
+			 src="./../assets/img/group-face.jpg">
 
-		<img v-show="idCardGroupId.indexOf('g') != 0" src="./../assets/img/user-face.jpg">
-		<img v-show="idCardGroupId.indexOf('g') == 0" src="./../assets/img/group-face.jpg">
 		<div class="cp-id-card-header-info">
-			<!--<p>-->
-				<!--{{ idCardName }}-->
-				<!--<i class="el-icon-edit edit-icon pointer"-->
-				   <!--v-if="cardType == 'group'"-->
-				   <!--@click="editName = !editName">-->
-				<!--</i>-->
-			<!--</p>-->
 			<el-input
 				v-model="idCardName"
-				:disabled ="!editName"
+				:disabled="!editName"
 				v-focus="editName"
 				@blur="changeGroupName">
 			</el-input>
 			<i class="el-icon-edit edit-icon pointer"
-			   v-if="cardType == 'group' && !editName && isMaster"
+			   v-if="(cardType == 'group' && !editName && isMaster) || idCardId == $store.state.curUser"
 			   @click="editName = !editName ">
 			</i>
 		</div>
@@ -56,7 +55,7 @@
 				type: String,
 				default: 'person'
 			},
-			idCardGroupId: {
+			idCardId: {
 				type: String,
 				default: '1'
 			},
@@ -81,12 +80,17 @@
 			changeGroupName() {
 				this.editName = !this.editName;
 				this.name = this.idCardName;
-				this.$emit('showUpdateGroup',this.idCardName);
+				if(this.cardType == 'group'){
+					this.$emit('showUpdateGroup', this.idCardName);
+				}else {
+					let user = new CubeUser(this.$store.state.curUser, this.idCardName, 'https://dev.download.shixincube.cn/file/avatar/' + this.idCardId)
+					window.cube.getUserService().update(user);
+				}
 			},
 
 			handleCommand(command) {
 				if (command == "destroy") {
-					let ret = this.groupService.destroy(this.idCardGroupId);
+					let ret = this.groupService.destroy(this.idCardId);
 					this.loading = this.$loading({
 						lock: true,
 						text: '解散群组中...',
@@ -98,7 +102,7 @@
 					}, 5000);
 				}
 				else if (command == "quit") {
-					let ret = this.groupService.quit(this.idCardGroupId);
+					let ret = this.groupService.quit(this.idCardId);
 					if (ret) {
 						this.$notify({
 							title: '退出群组成功',
@@ -108,10 +112,15 @@
 					}
 				}
 
-				this.$bus.emit('onQuitGroup', this.idCardGroupId);
+				this.$bus.emit('onQuitGroup', this.idCardId);
 
 				this.$emit("closeDialog", false);
 			},
+
+			uploadImg() {
+				window.cube.getUserService().uploadAvatar((data) => {},true);
+			},
+
 			addAppListener() {
 				if (this.cardType == 'group') {
 					this.$bus.on('onGroupDestroyed', () => {
@@ -145,6 +154,21 @@
 		text-align: center;
 		background-color: $BG23;
 		/*border-radius: 6px 6px 0 0;*/
+		.hide {
+			display: none;
+		}
+		.isSelf {
+			position: absolute;
+			width: 100px;
+			height: 100px;
+			border-radius: 100%;
+			left: calc(50% - 50px);
+			&:hover {
+				opacity: 0.5;
+				background: url("../../static/img/change-photo-icon.png") no-repeat black center;
+				cursor: pointer;
+			}
+		}
 		> img {
 			width: 100px;
 			height: 100px;
@@ -161,10 +185,10 @@
 			float: right;
 		}
 		.cp-id-card-header-info {
-			.el-input{
-				width:auto;
-				&.is-disabled .el-input__inner{
-					background-color:#f4f4f4;
+			.el-input {
+				width: auto;
+				&.is-disabled .el-input__inner {
+					background-color: #f4f4f4;
 					border-color: #f4f4f4;
 					font-size: 20px;
 					color: #434343;

@@ -55,6 +55,10 @@
 				this.sortRecent();
 			},
 			'$store.state.messagePeer': function (peer) {
+				// 加载点击
+				setTimeout(()=>{
+					this.handleSelect(this.$store.state.messagePeer);
+				}, 200)
 				this.sessionId = peer;
 			}
 		},
@@ -62,11 +66,6 @@
 		mounted() {
 			this.addAppListener();
 			this.queryRecent();
-
-			// 加载点击
-			setTimeout(()=>{
-				this.handleSelect(this.$store.state.messagePeer);
-			},300)
 		},
 		methods: {
 			handleSelect(key) {
@@ -218,7 +217,7 @@
 					setTimeout(() => {
 						this.closeLoading();
 						this.queryRecent();
-					}, 1000);
+					}, 2000);
 				});
 
 //				this.$bus.on('onQuitGroup', (groupId) => {

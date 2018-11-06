@@ -33,21 +33,19 @@ export class DataCenter {
 		let name = cube.toString();
 		this.getInfoByCube(cube.toString(), (info) => {
 			name = info == null || info.displayName == null || info.displayName == '' ? name : info.displayName;
-			console.log('名称数据', info);
 		});
 		return name;
 	}
 
-	getAvatorByCube(cube) {
+	getAvatarByCube(cube) {
 		if (null == cube) {
 			return false;
 		}
-		let avator = "http://download.getcube.cn/file/download/6ac1e304-0cab-41c0-865c-cf5f8e358ff5.png";
+		let avatar = 'https://dev.download.shixincube.cn/file/avatar/' + cube +'?imageView2/2/h/40';
 		this.getInfoByCube(cube.toString(), (info) => {
-			avator = info == null || info.avator == null || info.avator == '' ? avator : info.avator;
-			console.log('头像数据', info);
+			avatar = info == null || info.avatar == null || info.avatar == '' ? avatar : info.avatar;
 		});
-		return avator;
+		return avatar;
 	}
 
 	getRecentSessionById(id, callback) {

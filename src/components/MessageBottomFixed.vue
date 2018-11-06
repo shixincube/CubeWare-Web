@@ -1,7 +1,7 @@
 <template>
 	<div class="cp-message-bottom-fixed">
 		<div class="cp-mbf-header">
-			<img :src="dataCenter.getAvatorByCube(conferenceNotify.name)"/>
+			<img :src="dataCenter.getAvatarByCube(conferenceNotify.name)"/>
 			<div class="cp-mbf-header-right">
 				<p>{{ dataCenter.getNameByCube(conferenceNotify.name) }}</p>
 				<p>邀请您参加 {{ getTypeName(conferenceNotify.inviteType) }}</p>
@@ -10,7 +10,7 @@
 		<!--<div class="cp-mbf-body">-->
 			<!--<p>参与人员</p>-->
 			<!--<div class="cp-mbf-body-img">-->
-				<!--<img :src="dataCenter.getAvatorByCube(i)" v-for="i in conferenceNotify.inviteList"/>-->
+				<!--<img :src="dataCenter.getAvatarByCube(i)" v-for="i in conferenceNotify.inviteList"/>-->
 			<!--</div>-->
 		<!--</div>-->
 		<div class="cp-mbf-footer">
@@ -51,13 +51,13 @@
 
         },
         methods: {
-			acceptInvite() { 
+			acceptInvite() {
 				this.$emit('acceptInvite', this.conferenceNotify);
 			},
 			rejectInvite() {
 				this.$emit('rejectInvite', this.conferenceNotify);
 			},
-			getTypeName(type){				
+			getTypeName(type){
 				let nameMap = {};
 				nameMap[CubeGroupType.VOICE_CALL] = '多人语音';
 				nameMap[CubeGroupType.VIDEO_CALL] = '群视频';

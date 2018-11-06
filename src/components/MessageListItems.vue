@@ -1,7 +1,9 @@
 <template>
 	<div class="cp-message-list-items" :data-sessionid = "user.sessionId">
 		<div class="ml-avatar">
-			<img v-show="user.sessionType != 'GROUP'" src="./../assets/img/user-face.jpg">
+			<img v-show="user.sessionType != 'GROUP'"
+				 :src="'https://dev.download.shixincube.cn/file/avatar/' + user.sessionId"
+				 :onerror="'this.src='+'\''+ $store.state.userFace +'\''">
 			<img v-show="user.sessionType == 'GROUP'" src="./../assets/img/group-face.jpg">
 		</div>
 		<div class="ml-info">
@@ -66,6 +68,7 @@
 				margin-top: 10px;
 				width: 40px;
 				height: 40px;
+				border-radius: 100%;
 			}
 		}
 		.ml-info {

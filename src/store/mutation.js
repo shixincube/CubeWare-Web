@@ -19,6 +19,20 @@ export default {
 		state.allUserList = list;
 	},
 
+	updateUser(state, list) {
+		state.userList.map((user, index) => {
+			if (user.cubeId == list.cubeId) {
+				state.userList.splice(index, 1, list);
+			}
+		});
+		state.allUserList.map((user, index) => {
+			if (user.cubeId == list.cubeId) {
+				state.allUserList.splice(index, 1, list);
+			}
+		});
+
+	},
+
 	createGroupList(state, list) {
 		state.groupList = list;
 	},
@@ -33,6 +47,10 @@ export default {
 				state.groupList.splice(index, 1, list);
 			}
 		});
+	},
+
+	updateCurGroupInfo(state, Info) {
+		state.curGroupInfo = Info
 	},
 
 	removeGroupList(state, list) {
@@ -103,13 +121,13 @@ export default {
 	changeLeftHoverNav(state, index) {
 		state.leftHoverNav = index;
 	},
-	getAllUnread(state, num){
+	getAllUnread(state, num) {
 		state.allUnread = num;
 	},
 	updateLoadingMsg(state, data) {
 		state.loadingMsg = data;
 	},
-	messageBottomFixed(state, type){
+	messageBottomFixed(state, type) {
 		state.messageBottomFixed = type;
 	},
 }

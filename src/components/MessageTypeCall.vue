@@ -1,7 +1,10 @@
 <template>
 	<div class="cp-mt-call">
 		<div class="cp-mt-calling" v-if="!answered">
-			<img @click="$emit('openDialog',true)"  src="./../assets/img/user-face.jpg">
+			<img @click="$emit('openDialog',true)"
+				 :name="message.sender"
+				 :src="dataCenter.getAvatarByCube(message.sender)"
+				 :onerror="'this.src='+'\''+ $store.state.userFace +'\''">
 			<div class="cp-mt-call-outgoing"
 				 v-if="direction == 'outgoing'">
 				<p>

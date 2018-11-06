@@ -26,7 +26,7 @@
 		<div class="cb-friends-id-container">
 			<i-d-card-person :userInfo="userInfo" v-show="activeName == 'friends'"
 							 class="cb-friends-id-group"></i-d-card-person>
-			<i-d-card-group v-show="activeName == 'groups'" class="cb-friends-id-group"></i-d-card-group>
+			<i-d-card-group :groupInfo = "curGroupInfo" v-show="activeName == 'groups'" class="cb-friends-id-group"></i-d-card-group>
 		</div>
 	</section>
 </template>
@@ -44,18 +44,27 @@
 			return {
 				activeName: 'friends',
 				userInfo: this.$store.state.userList[0],
+				curGroupInfo:this.$store.state.groupList[0],
 				friendList: this.$store.state.userList,
 				groupsList: this.$store.state.groupList
 			}
 		},
 		props: {},
 		computed: {},
-		watch: {},
+		watch: {
+			'$store.state.curGroupInfo': function (newVal, oldVal) {
+				this.curGroupInfo = newVal;
+			}
+		},
 		beforeMount() {
+			this.addAppListener();
 			// 初始化个人资料页
-			let index = this.$store.state.userList[0].cubeId == this.$store.state.curUser ? 1 : 0;
-			this.userInfo = this.$store.state.userList[index]
-			this.addAppListener()
+			setTimeout(() => {
+				let index = this.$store.state.userList[0].cubeId == this.$store.state.curUser ? 1 : 0;
+				this.userInfo = this.$store.state.userList[index];
+				this.friendList = this.$store.state.userList,
+				this.groupsList = this.$store.state.groupList
+			}, 500)
 		},
 		mounted() {
 

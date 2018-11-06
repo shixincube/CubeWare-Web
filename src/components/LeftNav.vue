@@ -3,7 +3,9 @@
 		<el-scrollbar class="cp-scroll">
 			<div class="user-face-box">
 				<img @click="openDialog()"
-					 src="./../assets/img/user-face.jpg">
+					 :name="$store.state.curUser"
+					 :src="'https://dev.download.shixincube.cn/file/avatar/' + $store.state.curUser"
+					 :onerror="'this.src='+'\''+ $store.state.userFace +'\''">
 			</div>
 			<el-menu
 				class="el-menu-vertical-demo"
@@ -12,7 +14,7 @@
 					class="ln-container por"
 					index="0"
 					@click="handleNavClick(0)">
-					<router-link :to="{name: 'message'}">
+					<router-link :to="{name: 'message', query: { curUser: $store.state.curUser }}">
 						<img class="cp-ln-img"
 							 src="./../assets/img/nav_chat_n.png"
 							 v-show="select != 0">
@@ -29,7 +31,7 @@
 					class="ln-container"
 					index="1"
 					@click="handleNavClick(1)">
-					<router-link :to="{name: 'friend'}">
+					<router-link :to="{name: 'friend', query: { curUser: $store.state.curUser }}">
 						<img class="cp-ln-img"
 							 src="./../assets/img/nav_friends_n.png"
 							 v-show="select != 1">
@@ -45,7 +47,7 @@
 					class="ln-container"
 					index="2"
 					@click="handleNavClick(2)">
-					<router-link :to="{name: 'conference'}">
+					<router-link :to="{name: 'conference', query: { curUser: $store.state.curUser }}">
 						<img class="cp-ln-img"
 							 src="./../assets/img/nav_meet_n.png"
 							 v-show="select != 2">
@@ -159,13 +161,7 @@
 		computed: {},
 		watch: {
 			'$route': function (e) {
-				this.inviteType = '';
-				const router = {
-					'message': 0,
-					'friend': 1,
-					'conference': 2
-				};
-				this.select = router[e.name];
+				this.watchSelect(e);
 			},
 			'$store.state.messagePeer': function (newVal, oldVal) {
 				this.dataCenter.getInfoByCube(newVal, info => {
@@ -185,8 +181,18 @@
 			this.addAppListener();
 		},
 		mounted() {
+			this.watchSelect(this.$route);
 		},
 		methods: {
+			watchSelect(e) {
+				this.inviteType = '';
+				const router = {
+					'message': 0,
+					'friend': 1,
+					'conference': 2
+				};
+				this.select = router[e.name];
+			},
 			openDialog() {
 				this.dataCenter.getInfoByCube(this.$store.state.curUser,(userInfo)=>{
 				    this.userInfo = userInfo;
@@ -227,8 +233,6 @@
 				this.showInvite();
 			},
 			receiveInviteWB(res){
-				console.log('监听收到白板邀请')
-				console.log(res)
 				if(res.from.cubeId == cube.accName){
 					return false;
 				}
@@ -335,7 +339,7 @@
 					this.hasInvite = false;
 				}
 			},
-			
+
 			addAppListener() {
 				this.$bus.on('onLogouted', () => {
 					this.logoutDialog = false;
