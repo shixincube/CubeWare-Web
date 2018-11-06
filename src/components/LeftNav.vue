@@ -335,19 +335,7 @@
 					this.hasInvite = false;
 				}
 			},
-			onShareQuited(res){
-				if(res.quitMember.cubeId == res.conference.masters[0].cubeId && res.conference.members.length == 0){
-					console.log('监听发起者退出屏幕分享')
-					this.hasInvite = false;
-				}
-				
-			},
-			onGroupVideoQuited(res){
-				if(res.quitMember.cubeId == res.conference.masters[0].cubeId && res.conference.members.length == 0){
-					console.log('监听发起者退出多人视频');
-					this.hasInvite = false;
-				}
-			},
+			
 			addAppListener() {
 				this.$bus.on('onLogouted', () => {
 					this.logoutDialog = false;
@@ -364,8 +352,8 @@
 				this.$bus.on('onConferenceFailed', this.onConferenceFailed);
 				this.$bus.on('onWhiteboardDestroyed',this.onWhiteboardDestroyed);
 				this.$bus.on('onVoiceQuited',this.onVoiceQuited);
-				this.$bus.on('onShareQuited',this.onShareQuited);
-				this.$bus.on('onGroupVideoQuited',this.onGroupVideoQuited);
+				this.$bus.on('onShareQuited',this.onVoiceQuited);
+				this.$bus.on('onGroupVideoQuited',this.onVoiceQuited);
 			},
 			destroyAppListener() {
 				this.$bus.off('onLogout');
@@ -380,8 +368,8 @@
 				this.$bus.off('onConferenceFailed', this.onConferenceFailed);
 				this.$bus.off('onWhiteboardDestroyed',this.onWhiteboardDestroyed);
 				this.$bus.off('onVoiceQuited',this.onVoiceQuited);
-				this.$bus.off('onShareQuited',this.onShareQuited);
-				this.$bus.off('onGroupVideoQuited',this.onGroupVideoQuited);
+				this.$bus.off('onShareQuited',this.onVoiceQuited);
+				this.$bus.off('onGroupVideoQuited',this.onVoiceQuited);
 
 			},
 			conferenceDestroyed() {
