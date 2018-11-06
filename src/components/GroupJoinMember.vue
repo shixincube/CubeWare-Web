@@ -9,7 +9,11 @@
 			</div>
 			<div class="cp-gj-member"
 				 v-for="item in groupMemberList">
-				<img src="./../assets/img/user-face.jpg">
+				<img 
+				 :name="item.cubeId"
+				 :src="dataCenter.getAvatarByCube(item.cubeId)"
+				 :onerror="'this.src='+'\''+ $store.state.userFace +'\''"
+				>
 				<p class="overflow">{{ item.displayName || item.cubeId }}</p>
 			</div>
 		</div>
