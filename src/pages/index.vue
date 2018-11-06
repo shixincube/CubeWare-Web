@@ -101,11 +101,9 @@
 						}, function (code, desc) {
 
 						});
-
 					}
-
-				}).catch({
-					
+				}).catch(()=>{
+						VM.$router.push({name: 'login'});
 				});
 			}else {
 				next();
