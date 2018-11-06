@@ -1,10 +1,14 @@
 <template>
 	<div class="cp-mt-img" :class="{ myselfMessage: isMyself } ">
-		<img @click="$emit('openDialog',true)" src="./../assets/img/user-face.jpg">
+		<img @click="$emit('openDialog',true)"
+			 :name="message.sender"
+			 :src="dataCenter.getAvatarByCube(message.sender)"
+			 :onerror="'this.src='+'\''+ $store.state.userFace +'\''">
 		<div class="img-container ml10" :class="{ myselfContainer: isMyself } ">
 			<p class="message-name" v-show="isGroup && !isMyself">{{message.name}}</p>
 			<div class="img-body pointer" @click="imgSrc">
-				<img :src="message.fileUrl+ '?imageView2/2/h/200' " :onerror="'this.src='+'\''+message.fileUrl+'\',this.onerror = null'">
+				<img :src="message.fileUrl+ '?imageView2/2/h/200' "
+					 :onerror="'this.src='+'\''+message.fileUrl+'\',this.onerror = null'">
 			</div>
 		</div>
 	</div>

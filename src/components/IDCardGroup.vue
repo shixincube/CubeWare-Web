@@ -6,7 +6,7 @@
 			v-on:closeDialog = "$emit('closeDialog', false);"
 			@showUpdateGroup = "updateGroup"
 			:id-card-name="groupInfo.displayName"
-			card-type="group" :id-card-group-id="groupInfo.groupId">
+			card-type="group" :id-card-id="groupInfo.groupId">
 		</i-d-card-header>
 		<div class="cp-id-card-body">
 			<inline-list
@@ -28,9 +28,10 @@
 				<div v-show="isMaster" @click="openDialog()" class="add-btn" style="color: rgb(38, 37, 42);">添加</div>
 				<div class="member-content member-master" v-for="item in groupInfo.masters"  @click='personInfo(item)'>
 					<span  class="group-master remove-member-btn"></span>
-					<img src="./../assets/img/user-face.jpg">
-					<div
-						style="display: block; width: 64px;font-size: 10px; text-align: center;  overflow: hidden; text-overflow:ellipsis; white-space: nowrap; color: #26252A">
+					<img :name="item.cubeId"
+						 :src="dataCenter.getAvatarByCube(item.cubeId)"
+						 :onerror="'this.src='+'\''+ $store.state.userFace +'\''">
+					<div style="display: block; width: 64px;font-size: 10px; text-align: center;  overflow: hidden; text-overflow:ellipsis; white-space: nowrap; color: #26252A">
 						{{item.displayName ? item.displayName : item.cubeId}}
 					</div>
 				</div>
@@ -42,7 +43,9 @@
 					<i v-show="isMaster"
 					   @click="removeMember(item)"
 					   class="el-icon-remove remove-member-btn"></i>
-					<img src="./../assets/img/user-face.jpg">
+					<img :name="item.cubeId"
+						 :src="dataCenter.getAvatarByCube(item.cubeId)"
+						:onerror="'this.src='+'\''+ $store.state.userFace +'\''">
 					<div
 						style="display: block; width: 70px;font-size: 10px; text-align: center;  overflow: hidden; text-overflow:ellipsis; white-space: nowrap; color: #26252A">
 						{{item.displayName ? item.displayName : item.cubeId}}
@@ -92,7 +95,7 @@
 			groupInfo:{
 				type: Object,
 				default: function(){
-					return this.$store.state.groupList[0];
+					return this.$store.state.curGroupInfo;
 				}
 			}
 		},
@@ -113,7 +116,12 @@
 			},
 			'$store.state.messagePeer': function (newVal, oldVal) {
 				this.isMasters();
+			},
+
+			'$store.state.curGroupInfo': function (newVal, oldVal) {
+				this.isMasters();
 			}
+
 		},
 		beforeMount() {
 			this.isMasters();
@@ -143,6 +151,40 @@
 				this.isMaster = isMaster;
 			},
 
+			updateGroup(groupName){
+				if (!groupName.length) {
+					this.$message.error('群名不能为空');
+					return false;
+				}
+				else {
+					this.groupInfo.displayName = groupName;
+					this.groupService.update(this.groupInfo);
+				}
+			},
+
+			addGroupMember(groupMembers) {
+				this.show = false;
+				var ret = this.groupService.addMembers(this.groupInfo.groupId, groupMembers);
+				if (ret) {
+					this.$notify({
+						title: '添加群成员成功',
+						duration: 1500,
+						type: 'success'
+					});
+				}
+			},
+
+			removeMember(member) {
+				var ret = this.groupService.removeMembers(this.groupInfo.groupId, [member.cubeId]);
+				if (ret) {
+					this.$notify({
+						title: '删除群成员' + member.cubeId + '成功',
+						duration: 1500,
+						type: 'success'
+					});
+				}
+			},
+
 			sendMessage() {
 				this.$store.commit('updateMessagePeer', this.groupInfo.groupId);
 				setTimeout(() => {
@@ -163,42 +205,9 @@
 				this.$emit("closeDialog", false);
 				this.$router.push({name: 'message'});
 			},
+
 			addAppListener() {
-				this.$bus.on('checkGroupInfo', group => {
-					this.groupInfo = group;
-					this.isMasters();
-				});
-			},
-			addGroupMember(groupMembers) {
-				this.show = false;
-				var ret = this.groupService.addMembers(this.groupInfo.groupId, groupMembers);
-				if (ret) {
-					this.$notify({
-						title: '添加群成员成功',
-						duration: 1500,
-						type: 'success'
-					});
-				}
-			},
-			updateGroup(groupName){
-				if (!groupName.length) {
-					this.$message.error('群名不能为空');
-					return false;
-				}
-				else {
-					this.groupInfo.displayName = groupName;
-					this.groupService.update(this.groupInfo);
-				}
-			},
-			removeMember(member) {
-				var ret = this.groupService.removeMembers(this.groupInfo.groupId, [member.cubeId]);
-				if (ret) {
-					this.$notify({
-						title: '删除群成员' + member.cubeId + '成功',
-						duration: 1500,
-						type: 'success'
-					});
-				}
+
 			},
 		},
 		components: {

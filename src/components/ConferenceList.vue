@@ -154,7 +154,9 @@
 			this.addAppListener();
 		},
 		mounted() {
-			this.queryConferences();
+			setTimeout(()=>{
+				this.queryConferences();
+			}, 100);
 		},
 		methods: {
 			focus(){
@@ -165,7 +167,7 @@
 				}else{
 					this.timePickerOptions.minTime = ''
 				}
-				
+
 			},
 			handleOpen() {
 

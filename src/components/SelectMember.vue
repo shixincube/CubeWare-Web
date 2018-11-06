@@ -11,7 +11,9 @@
 					<div class="cp-member-list"
 						 v-for="item in showMembers"
 						 v-if="item.cubeId != $store.state.curUser">
-						<img :src="item.avatar || avatar">
+						<img :name="item.cubeId "
+							 :src="dataCenter.getAvatarByCube(item.cubeId)"
+							:onerror="'this.src='+'\''+ $store.state.userFace +'\''">
 						<div class="cp-member-list-info">
 							<p class="overflow">{{ item.displayName || item.cubeId }}</p>
 							<el-checkbox

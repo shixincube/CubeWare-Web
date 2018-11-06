@@ -25,7 +25,7 @@
 			groupsList: {
         		type: Array,
 				default: function () {
-					return []
+					return this.$store.state.groupList
 				}
 			},
 			isRemoveSelf:{
@@ -51,7 +51,9 @@
         },
         methods: {
 			checkInfo(group){
-				this.$bus.emit('checkGroupInfo',group);
+				console.log('checkInfo')
+				this.$store.commit("updateCurGroupInfo", group)
+//				this.$bus.emit('checkGroupInfo',group);
 			},
 
 		},

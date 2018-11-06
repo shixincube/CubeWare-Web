@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 134);
+/******/ 	return __webpack_require__(__webpack_require__.s = 133);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -192,7 +192,7 @@ var _MessageStatus = __webpack_require__(71);
 
 var _MessageType = __webpack_require__(1);
 
-var _MessageDirection = __webpack_require__(22);
+var _MessageDirection = __webpack_require__(21);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -905,9 +905,7 @@ var _CubeError = __webpack_require__(0);
 
 var _FileAction = __webpack_require__(72);
 
-var _FileHttp = __webpack_require__(21);
-
-var _sparkMd = __webpack_require__(141);
+var _sparkMd = __webpack_require__(140);
 
 var md5 = _interopRequireWildcard(_sparkMd);
 
@@ -1035,7 +1033,7 @@ var FileMessage = exports.FileMessage = function (_MessageEntity) {
                             md5: md5
                         };
                         if (null != fn) {
-                            fn(file);
+                            fn(file, md5);
                         }
                     });
                 }
@@ -1401,7 +1399,8 @@ var FileMessage = exports.FileMessage = function (_MessageEntity) {
 /* 8 */,
 /* 9 */,
 /* 10 */,
-/* 11 */
+/* 11 */,
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1435,7 +1434,6 @@ var FileAction = exports.FileAction = {
 };
 
 /***/ }),
-/* 12 */,
 /* 13 */,
 /* 14 */,
 /* 15 */,
@@ -1715,15 +1713,1367 @@ var ImageMessage = exports.ImageMessage = function (_FileMessage) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+/*
+ * MessageDirection.js
+ * Cube Engine
+ *
+ * Copyright (c) 2015-2016 Cube Team. All rights reserved.
+ */
+/**
+ * 消息方向枚举。
+ *
+ * @readonly
+ * @enum {String}
+ * @author Guan Yong
+ */
+var MessageDirection = exports.MessageDirection = {
+    /** 初始化。 */
+    None: "none",
+
+    /** 收取。 */
+    Received: "received",
+
+    /** 发出。 */
+    Sent: "sent"
+};
+
+/***/ }),
+/* 22 */,
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.CardMessage = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _FileMessage = __webpack_require__(6);
+
+var _MessageType = __webpack_require__(1);
+
+var _MessageEntity2 = __webpack_require__(2);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * CardMessage.js
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+/**
+ * 卡片消息。
+ *
+ * @class CardMessage
+ * @extends MessageEntity
+ * @author Li Wenkai
+ */
+var CardMessage = exports.CardMessage = function (_MessageEntity) {
+    _inherits(CardMessage, _MessageEntity);
+
+    /**
+     * @constructs CardMessage
+     * @param {String} receiver - 指定消息接收人的 Cube 号。
+     * @param {String} title - 卡片消息标题
+     * @param {String} icon - 卡片消息链接
+     * @param {String} desc - 卡片消息描述
+     */
+    function CardMessage(receiver, title, icon, content, desc) {
+        _classCallCheck(this, CardMessage);
+
+        var _this = _possibleConstructorReturn(this, (CardMessage.__proto__ || Object.getPrototypeOf(CardMessage)).call(this, receiver));
+
+        _this.type = _MessageType.MessageType.Card;
+        _this.receiver = { "name": receiver };
+        _this.title = title;
+        _this.icon = icon;
+        _this.content = content;
+        _this.cardContents = [];
+        _this.traceless = false;
+        _this.pulled = false;
+        _this.secret = false;
+        _this.device = cube.deviceInfo;
+
+        return _this;
+    }
+
+    /**
+     * 设置卡片消息集合。
+     *
+     * @param {Array}  cardContents - 卡片消息集合。
+     */
+
+
+    _createClass(CardMessage, [{
+        key: 'setCardContents',
+        value: function setCardContents(cardContents) {
+            this.cardContents = cardContents;
+        }
+
+        /**
+         * 设置卡片消息内容。
+         *
+         * @param {String}  name - 卡片消息名字。
+         * @param {String} icon - 卡片消息头像。
+         * @param {String} url - 卡片消息Url。
+         * @param {String} desc - 卡片消息描述desc。
+         */
+
+    }, {
+        key: 'setCardContent',
+        value: function setCardContent(name, icon, url, desc) {
+            this.cardContents.push({ "name": name, "icon": icon, "url": url, "desc": desc });
+        }
+
+        /**
+         * 返回卡片消息内容。
+         *
+         * @returns {String} 消息内容。
+         */
+
+    }, {
+        key: 'getCardContent',
+        value: function getCardContent() {
+            return this.cardContents[0];
+        }
+    }, {
+        key: 'toJSON',
+        value: function toJSON() {
+            var json = _MessageEntity2.MessageEntity.prototype.toJSON.call(this);
+            // 消息头
+            json.content = this.content;
+            json.cardContents = this.cardContents;
+            json.title = this.title;
+            json.icon = this.icon;
+            json.traceless = this.traceless;
+            json.pulled = this.pulled;
+            json.secret = this.secret;
+            json.group = this.group;
+            json.device = this.device;
+            return json;
+        }
+    }], [{
+        key: 'parse',
+        value: function parse(json) {
+            // 创建消息实例
+            var msg = new CardMessage(json.to.name, json.title, json.icon, json.content, json.desc);
+            msg.receiver.displayName = json.to.displayName;
+
+            msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
+
+            if (undefined !== json.group) {
+                msg.group = json.group;
+                msg.groupName = json.group.name;
+            }
+
+            msg.sendTime = json.time.send;
+            msg.receiveTime = json.time.receive;
+            msg.timestamp = json.time.timestamp;
+
+            msg.sn = json.sn;
+            msg.pulled = json.pulled;
+
+            msg.device = json.device;
+
+            msg.receipted = json.receipted;
+
+            msg.cardContents = json.cardContent ? [json.cardContent] : json.cardContents;
+
+            return msg;
+        }
+    }]);
+
+    return CardMessage;
+}(_MessageEntity2.MessageEntity);
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.CustomMessage = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _MessageEntity2 = __webpack_require__(2);
+
+var _MessageType = __webpack_require__(1);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * CustomMessage.js
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+/**
+ * 自定义消息。
+ *
+ * @class CustomMessage
+ * @extends MessageEntity
+ * @author Xu Jiangwei, Guan Yong
+ */
+var CustomMessage = exports.CustomMessage = function (_MessageEntity) {
+    _inherits(CustomMessage, _MessageEntity);
+
+    /**
+     * @constructs CustomMessage
+     * @param {String} receiver - 指定消息接收人的 Cube 号。
+     */
+    function CustomMessage(receiver) {
+        _classCallCheck(this, CustomMessage);
+
+        var _this = _possibleConstructorReturn(this, (CustomMessage.__proto__ || Object.getPrototypeOf(CustomMessage)).call(this, _MessageType.MessageType.Custom));
+
+        _this.receiver = { "name": receiver };
+
+        _this.body = null;
+        _this.expires = 0;
+        return _this;
+    }
+
+    /**
+     * 设置消息体数据。
+    *
+     * @param {Object} body - 指定需要设置的内容。
+     */
+
+
+    _createClass(CustomMessage, [{
+        key: 'setBody',
+        value: function setBody(body) {
+            this.body = body;
+        }
+
+        /**
+         * 返回消息体数据。
+         *
+         * @returns {Object} 返回自定义消息体内容。
+         */
+
+    }, {
+        key: 'getBody',
+        value: function getBody() {
+            return this.body;
+        }
+
+        /**
+         * 设置消息超期时间。
+         *
+            * @param {Number} expires 指定以秒为单位的消息超期时间。
+         */
+
+    }, {
+        key: 'setExpires',
+        value: function setExpires(expires) {
+            this.expires = expires;
+        }
+
+        /**
+            * 返回消息的超期时间。
+         *
+            * @returns {Number} 返回消息的超期时间（单位：秒）。
+            */
+
+    }, {
+        key: 'getExpires',
+        value: function getExpires() {
+            return this.expires;
+        }
+
+        // 消息转 JSON
+
+    }, {
+        key: 'toJSON',
+        value: function toJSON() {
+            var json = _MessageEntity2.MessageEntity.prototype.toJSON.call(this);
+
+            json.expires = this.expires;
+
+            // 消息体
+            if (null != this.body) {
+                json.body = this.body;
+            }
+
+            return json;
+        }
+    }], [{
+        key: 'parse',
+        value: function parse(json) {
+            // 创建消息实例
+            var msg = new CustomMessage(json.to.name);
+            msg.receiver.displayName = json.to.displayName;
+
+            msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
+
+            if (undefined !== json.group) {
+                msg.group = json.group;
+                msg.groupName = json.group.name;
+            }
+
+            msg.sendTime = json.time.send;
+            msg.receiveTime = json.time.receive;
+            msg.timestamp = json.time.timestamp;
+
+            msg.sn = json.sn;
+            msg.pulled = json.pulled;
+
+            if (undefined !== json.header) {
+                for (var key in json.header) {
+                    msg.setHeader(key, json.header[key]);
+                }
+            }
+
+            if (undefined !== json.body) {
+                msg.setBody(json.body);
+            }
+
+            msg.fromDevice = json.device;
+            msg.receivedDevices = json.pulledDevices;
+            // TODO
+            msg.receipted = json.receipted;
+
+            return msg;
+        }
+    }]);
+
+    return CustomMessage;
+}(_MessageEntity2.MessageEntity);
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.ReceiptMessage = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _MessageEntity2 = __webpack_require__(2);
+
+var _MessageType = __webpack_require__(1);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * ReceiptMessage.js
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+/**
+ * 回执消息。
+ *
+ * @class ReceiptMessage
+ * @extends MessageEntity
+ * @author Huang yuanliang
+ */
+var ReceiptMessage = exports.ReceiptMessage = function (_MessageEntity) {
+    _inherits(ReceiptMessage, _MessageEntity);
+
+    /**
+     * @constructs ReceiptMessage
+     * @param {String||Array} sns - 回执的消息sn集合。
+     * @param {String} receiver - 接收者信息。
+     * @param {object} sender - 发送者信息。
+     * @param {String} 回执消息sn
+     */
+    function ReceiptMessage(receiver, sender, sn) {
+        _classCallCheck(this, ReceiptMessage);
+
+        var _this = _possibleConstructorReturn(this, (ReceiptMessage.__proto__ || Object.getPrototypeOf(ReceiptMessage)).call(this, _MessageType.MessageType.Receipt));
+
+        _this.receiver = { "name": receiver };
+        _this.sender = sender;
+        //回执消息默认不入库
+        _this.traceless = true;
+        if (null != sn) {
+            _this.sn = sn;
+        }
+        if (null != sender) {
+            _this.sender = sender;
+        }
+        return _this;
+    }
+
+    _createClass(ReceiptMessage, [{
+        key: 'toJSON',
+        value: function toJSON() {
+            var json = _MessageEntity2.MessageEntity.prototype.toJSON.call(this);
+            json.sns = this.sns;
+            return json;
+        }
+    }], [{
+        key: 'parse',
+        value: function parse(json) {
+            // 创建消息实例
+            var msg = new ReceiptMessage();
+            msg.receiver = { "name": json.to.name, "displayName": json.to.displayName };
+
+            msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
+
+            if (undefined !== json.group) {
+                msg.group = json.group;
+                msg.groupName = json.group.name;
+            }
+
+            msg.sendTime = json.time.send;
+            msg.receiveTime = json.time.receive;
+            msg.timestamp = json.time.timestamp;
+
+            msg.sn = json.sn;
+
+            msg.pulled = json.pulled;
+
+            msg.fromDevice = json.device ? json.device : "";
+            msg.receivedDevices = json.pulledDevices ? json.pulledDevices : "";
+            // TODO
+            msg.receipted = json.receipted;
+
+            return msg;
+        }
+    }]);
+
+    return ReceiptMessage;
+}(_MessageEntity2.MessageEntity);
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.ReplyMessage = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _MessageEntity2 = __webpack_require__(2);
+
+var _MessageType = __webpack_require__(1);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * ReplyMessage.js
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+/**
+ * 回复消息
+ *
+ * @class ReplyMessage
+ * @extends MessageEntity
+ * @author Huang Yuanliang
+ */
+var ReplyMessage = exports.ReplyMessage = function (_MessageEntity) {
+    _inherits(ReplyMessage, _MessageEntity);
+
+    /**
+     * @constructs ReplyMessage
+     * @param {String} receiver - 指定对应消息的Cube号
+     * @param {MessageEntity} reply - 回复内容
+     * @param {MessageEntity} source - 原始内容
+     */
+    function ReplyMessage(receiver, reply, source) {
+        _classCallCheck(this, ReplyMessage);
+
+        var _this = _possibleConstructorReturn(this, (ReplyMessage.__proto__ || Object.getPrototypeOf(ReplyMessage)).call(this, _MessageType.MessageType.Reply));
+
+        _this.receiver = { "name": receiver };
+        if (null != reply) {
+            reply.sn = _this.sn;
+        }
+        _this.reply = reply;
+        _this.source = source;
+        return _this;
+    }
+
+    _createClass(ReplyMessage, [{
+        key: 'setSource',
+        value: function setSource(source) {
+            this.source = {
+                "type": source.type,
+                "content": source.content,
+                "from": source.sender,
+                "sn": source.sn,
+                "to": source.receiver,
+                "time": {
+                    "receive": source.receiveTime,
+                    "send": source.sendTime,
+                    "timestamp": source.timestamp
+                }
+            };
+            this.source = Object.assign(this.source, source);
+            if (null != source.tos) {
+                this.source.tos = source.tos;
+            }
+            if (null != source.group) {
+                this.source.group = source.group.name;
+            }
+            if (source.type == _MessageType.MessageType.Reply) {
+                this.source.content = source.reply.content;
+            }
+        }
+    }, {
+        key: 'toJSON',
+        value: function toJSON() {
+            if (null != this.reply) {
+                this.reply.sender = this.sender;
+            }
+            var json = _MessageEntity2.MessageEntity.prototype.toJSON.call(this);
+            json.source = this.source instanceof _MessageEntity2.MessageEntity ? this.source.toJSON() : this.source;
+            json.reply = this.reply instanceof _MessageEntity2.MessageEntity ? this.reply.toJSON() : this.reply;
+            return json;
+        }
+    }], [{
+        key: 'parse',
+        value: function parse(json) {
+            // 创建消息实例
+            var msg = new ReplyMessage(json.to.name, json.reply, json.source);
+            msg.receiver.displayName = json.to.displayName;
+
+            msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
+
+            if (undefined !== json.group) {
+                msg.group = json.group;
+                msg.groupName = json.group.name;
+            }
+
+            if (null != msg.reply) {
+                msg.reply.sn = json.sn;
+                msg.reply.from = json.from;
+                msg.reply.time = json.time;
+                msg.reply.sendTime = json.time.send;
+                msg.reply.receiveTime = json.time.receive;
+                msg.reply.timestamp = json.time.timestamp;
+            }
+            msg.sendTime = json.time.send;
+            msg.receiveTime = json.time.receive;
+            msg.timestamp = json.time.timestamp;
+
+            msg.sn = json.sn;
+
+            msg.pulled = json.pulled;
+
+            msg.fromDevice = json.device ? json.device : "";
+            msg.receivedDevices = json.pulledDevices ? json.pulledDevices : "";
+            // TODO
+            msg.receipted = json.receipted;
+
+            return msg;
+        }
+    }]);
+
+    return ReplyMessage;
+}(_MessageEntity2.MessageEntity);
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.WhiteboardMessage = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _MessageEntity2 = __webpack_require__(2);
+
+var _MessageType = __webpack_require__(1);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * WhiteboardMessage.js
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+/**
+ * 文本消息。
+ *
+ * @class WhiteboardMessage
+ * @extends MessageEntity
+ * @author Xu Jiangwei, Guan Yong
+ */
+var WhiteboardMessage = exports.WhiteboardMessage = function (_MessageEntity) {
+	_inherits(WhiteboardMessage, _MessageEntity);
+
+	/**
+  * @constructs WhiteboardMessage
+  * @param {String} receiver - 指定消息接收人的 Cube 号。
+  */
+	function WhiteboardMessage(receiver) {
+		_classCallCheck(this, WhiteboardMessage);
+
+		var _this = _possibleConstructorReturn(this, (WhiteboardMessage.__proto__ || Object.getPrototypeOf(WhiteboardMessage)).call(this, _MessageType.MessageType.Whiteboard));
+
+		_this.receiver = { "name": receiver };
+		_this.content = null;
+		_this.domId = null;
+		_this.file = null;
+		_this.finish = null;
+		_this.completeCb = null;
+		return _this;
+	}
+
+	/**
+  * 填充消息内容。
+  *
+  * @param {Object} content - 白板的内容 JSON 数据。
+  */
+
+
+	_createClass(WhiteboardMessage, [{
+		key: 'fillContent',
+		value: function fillContent(content) {
+			this.content = JSON.stringify(content);
+			this.file = {
+				modified: 0,
+				name: Date.now() + ".cwb",
+				size: this.content.length
+			};
+		}
+	}, {
+		key: 'getFile',
+		value: function getFile() {
+			return this.file;
+		}
+
+		// 创建操作表单
+
+	}, {
+		key: '_buildForm',
+		value: function _buildForm() {
+			// 生成表单ID
+			this.domId = '_cube_wb_msg_' + this.customData;
+
+			var container = document.createElement('div');
+			container.id = this.domId;
+			container.style.display = 'none';
+			container.innerHTML = '<form id="_form' + this.domId + '" method="POST" enctype="multipart/form-data" action="' + this._getServerAction() + '" target="_frame' + this.domId + '">' + '<input type="hidden" name="filename" value="' + this.file.name + '"/>' + '<input type="hidden" name="receiver" value="' + this.receiver.name + '"/>' + '<input type="hidden" name="sender" value="' + this.sender.name + '"/>' + '<input type="hidden" name="sendTime" value="' + this.sendTime + '"/>' + '<input type="hidden" name="content" value=\'' + this.content + '\'/>' + '</form>' + '<iframe name="_frame' + this.domId + '"></iframe>';
+			document.body.appendChild(container);
+			return container;
+		}
+	}, {
+		key: '_postData',
+		value: function _postData() {
+			// 构建表单
+			var el = this._buildForm();
+
+			// 建立监听
+			var iframe = el.getElementsByTagName("iframe")[0];
+			var self = this;
+			iframe.onload = function () {
+				setTimeout(function () {
+					self.finish = true;
+					if (null != self.completeCb) {
+						self.completeCb(false, self.content.length, self.content.length);
+					}
+
+					self._clear();
+				}, 1000);
+			};
+
+			var form = document.getElementById('_form' + this.domId);
+			if (null != form) {
+				form.submit();
+			} else {
+				nucleus.getLogger().e('CubeWhiteboardMessage#_postData', 'Send content error');
+			}
+		}
+	}, {
+		key: '_notifyAck',
+		value: function _notifyAck(callback) {
+			if (this.finish) {
+				callback(false, this.content.length, this.content.length);
+			} else {
+				this.completeCb = complete;
+			}
+		}
+
+		// 从服务器请求白板数据内容。
+
+	}, {
+		key: '_fetchData',
+		value: function _fetchData(success, error) {
+			var p = cube.utils.isSecure ? "https" : "http";
+			// 查询进度
+			var url = p + '://' + _CUBE_DOMAIN + ':' + _CUBE_PORT + '/message/read/cwb/?receiver=' + this.receiver.name + '&sn=' + this.sn;
+
+			var self = this;
+			// 发送请求
+			Ajax.newRequest(url).method("GET").send(function (reponse) {
+				if (reponse.getStatus() == 200) {
+					self.content = reponse.getData().toString();
+					success.call(null, self);
+				} else {
+					error.call(null, self, reponse.getStatus());
+				}
+			});
+		}
+	}, {
+		key: '_getServerAction',
+		value: function _getServerAction() {
+			var protocol = window.location.protocol;
+			if (protocol.indexOf("http") != 0) {
+				protocol = "http:";
+			}
+			return protocol + '//' + _CUBE_DOMAIN + ':' + _CUBE_PORT + '/message/submit/';
+			//return "http://localhost:8080/live/submit/";
+		}
+	}, {
+		key: '_clear',
+		value: function _clear() {
+			this.completeCb = null;
+
+			if (null != this.domId) {
+				var container = document.getElementById(this.domId);
+				if (null != container) {
+					// 删除 iframe 元素以终止 Post 发送
+					document.body.removeChild(container);
+					return true;
+				}
+			}
+
+			return false;
+		}
+	}, {
+		key: 'toJSON',
+		value: function toJSON() {
+			var json = _MessageEntity2.MessageEntity.prototype.toJSON.call(this);
+			json.file = this.file;
+			return json;
+		}
+	}], [{
+		key: 'parse',
+		value: function parse(json) {
+			var msg = new WhiteboardMessage(json.to.name);
+			msg.receiver.displayName = json.to.displayName;
+
+			msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
+
+			if (undefined !== json.group) {
+				msg.group = json.group;
+				msg.groupName = json.group.name;
+			}
+
+			msg.sendTime = json.time.send;
+			msg.receiveTime = json.time.receive;
+			msg.timestamp = json.time.timestamp;
+
+			msg.file = undefined !== json.file ? json.file : null;
+
+			msg.sn = json.sn;
+
+			msg.pulled = json.pulled;
+
+			msg.fromDevice = json.device;
+			msg.receivedDevices = json.pulledDevices;
+			// TODO
+			msg.receipted = json.receipted;
+
+			return msg;
+		}
+	}]);
+
+	return WhiteboardMessage;
+}(_MessageEntity2.MessageEntity);
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+        value: true
+});
+exports.VideoMessage = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _FileMessage2 = __webpack_require__(6);
+
+var _MessageType = __webpack_require__(1);
+
+var _MessageEntity = __webpack_require__(2);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * VideoMessage.js
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+/**
+ * 短视频消息。
+ *
+ * @class VideoMessage
+ * @extends FileMessage
+ * @author Xu Jiangwei, Guan Yong
+ */
+var VideoMessage = exports.VideoMessage = function (_FileMessage) {
+        _inherits(VideoMessage, _FileMessage);
+
+        /**
+         * @constructs VideoMessage
+         * @param {String} receiver - 指定消息接收人的 Cube 号。
+         */
+        function VideoMessage(receiver) {
+                _classCallCheck(this, VideoMessage);
+
+                var _this = _possibleConstructorReturn(this, (VideoMessage.__proto__ || Object.getPrototypeOf(VideoMessage)).call(this, receiver));
+
+                _this.type = _MessageType.MessageType.Video;
+                return _this;
+        }
+
+        /**
+         * 返回视频文件基本信息。
+        *
+        * @returns {VideoFileInfo} 视频文件信息对象。
+         */
+
+
+        _createClass(VideoMessage, [{
+                key: 'getFile',
+                value: function getFile() {
+                        return this.file;
+                }
+                /**
+                 * @typedef {Object} VideoFileInfo
+                 * @property {String} name - 文件名。
+                 * @property {Number} size - 文件的大小，单位：字节。
+                 * @property {Number} modified - 绝对时间形式的文件的最后修改时间。
+                 * @property {String} url - 文件的访问 URL 。
+                 * @property {Number} duration - 视频时长，单位：秒。
+                 * @property {Number} width - 视频的宽度。
+                 * @property {Number} height - 视频的高度。
+                 * @property {String} thumb - 视频静态缩略图 URL 。
+                 * @property {String} webm - 视频 WebM 格式文件的 URL 。
+                 */
+
+        }, {
+                key: 'toJSON',
+                value: function toJSON() {
+                        var json = _MessageEntity.MessageEntity.prototype.toJSON.call(this);
+                        json.file = this.file;
+                        return json;
+                }
+        }], [{
+                key: 'parse',
+                value: function parse(json) {
+                        var msg = new VideoMessage(json.to.name);
+                        msg.receiver.displayName = json.to.displayName;
+
+                        msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
+
+                        if (undefined !== json.group) {
+                                msg.group = json.group;
+                                msg.groupName = json.group.name;
+                        }
+
+                        msg.sendTime = json.time.send;
+                        msg.receiveTime = json.time.receive;
+                        msg.timestamp = json.time.timestamp;
+
+                        msg.file = undefined !== json.file ? json.file : null;
+
+                        msg.sn = json.sn;
+                        msg.pulled = json.pulled;
+
+                        msg.fromDevice = json.device;
+                        msg.receivedDevices = json.pulledDevices;
+                        // TODO
+                        msg.receipted = json.receipted;
+
+                        return msg;
+                }
+        }]);
+
+        return VideoMessage;
+}(_FileMessage2.FileMessage);
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.VoiceMessage = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _FileMessage2 = __webpack_require__(6);
+
+var _MessageType = __webpack_require__(1);
+
+var _MessageEntity = __webpack_require__(2);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * VoiceMessage.js
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+/**
+ * 短语音消息。
+ *
+ * @class VoiceMessage
+ * @extends FileMessage
+ * @author Xu Jiangwei, Guan Yong
+ */
+var VoiceMessage = exports.VoiceMessage = function (_FileMessage) {
+    _inherits(VoiceMessage, _FileMessage);
+
+    /**
+     * @constructs VoiceMessage
+     * @param {String} receiver - 指定消息接收人的 Cube 号。
+     */
+    function VoiceMessage(receiver) {
+        _classCallCheck(this, VoiceMessage);
+
+        var _this = _possibleConstructorReturn(this, (VoiceMessage.__proto__ || Object.getPrototypeOf(VoiceMessage)).call(this, receiver));
+
+        _this.type = _MessageType.MessageType.Voice;
+
+        _this.stopCallback = null;
+        return _this;
+    }
+
+    /**
+     * 返回语音文件基本信息。
+    *
+    * @returns {VoiceFileInfo} 语音文件信息对象。
+     */
+
+
+    _createClass(VoiceMessage, [{
+        key: 'getFile',
+        value: function getFile() {
+            return this.file;
+        }
+        /**
+         * @typedef {Object} VoiceFileInfo
+         * @property {String} name - 文件名。
+         * @property {Number} size - 文件的大小，单位：字节。
+         * @property {Number} modified - 绝对时间形式的文件的最后修改时间。
+         * @property {String} url - 文件的访问 URL 。
+         * @property {Number} duration - 语音时长，单位：秒。
+         * @property {String} mp3 - 语音 MP3 格式文件的 URL 。
+         * @property {String} ogg - 语音 OGG 格式文件的 URL 。
+         */
+
+        /**
+         * 开始录制
+         *
+         * @param callback {CubeBaseCallback} - 开始录制的回调
+         */
+
+    }, {
+        key: 'startRecord',
+        value: function startRecord(callback) {
+            var self = this;
+
+            cube.utils.getUserMedia(false, true, function (err, stream) {
+                if (err) {
+                    callback(err);
+                } else {
+                    self.recorder = new MediaRecorder(stream);
+                    self.audioTrack = stream.getAudioTracks()[0];
+                    var chunks = [],
+                        startTime = 0;
+                    self.recorder.ondataavailable = function (e) {
+                        chunks.push(e.data);
+                    };
+                    self.recorder.onstop = function (e) {
+                        var duration = (Date.now() - startTime) / 1000;
+                        if (!self.canceledRecord) {
+                            var file = new File(chunks, 'cube_clip_voice' + Date.now() + '.ogg', { 'type': 'audio/ogg; codecs=opus' });
+                            self.setFormFile(file, function () {
+                                self.file.duration = Math.round(duration);
+                                if (typeof self.stopCallback == 'function') {
+                                    self.stopCallback(file);
+                                }
+                            });
+                        }
+                        chunks = [];
+                        self.canceledRecord = false;
+                    };
+                    self.recorder.start();
+                    startTime = Date.now();
+
+                    callback();
+                }
+            });
+        }
+        /**
+         * This is a description of the callback function
+         * @callback CubeBaseCallback
+         * @param error {{Code: {Number}} | null} - 是否发生错误
+         */
+
+        /**
+         * 停止录制
+         */
+
+    }, {
+        key: 'stopRecord',
+        value: function stopRecord(callback) {
+            if (null != this.recorder && null != this.audioTrack) {
+                this.stopCallback = callback;
+                this.recorder.stop();
+                this.audioTrack.stop();
+                this.recorder = null;
+                this.audioTrack = null;
+            }
+        }
+
+        /**
+         * 取消录制
+         */
+
+    }, {
+        key: 'cancelRecord',
+        value: function cancelRecord() {
+            this.canceledRecord = true;
+            this.stopRecord();
+        }
+
+        /**
+         * 返回已经录制的语音文件对象
+         * @returns {File} - 文件对象
+         */
+
+    }, {
+        key: 'getVoiceFile',
+        value: function getVoiceFile() {
+            return this.formFile;
+        }
+    }, {
+        key: 'toJSON',
+        value: function toJSON() {
+            var json = _MessageEntity.MessageEntity.prototype.toJSON.call(this);
+            json.file = this.file;
+            return json;
+        }
+    }], [{
+        key: 'parse',
+        value: function parse(json) {
+            var msg = new VoiceMessage(json.to.name);
+            msg.receiver.displayName = json.to.displayName;
+
+            msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
+
+            if (undefined !== json.group) {
+                msg.group = json.group;
+                msg.groupName = json.group.name;
+            }
+
+            msg.sendTime = json.time.send;
+            msg.receiveTime = json.time.receive;
+            msg.timestamp = json.time.timestamp;
+
+            msg.file = undefined !== json.file ? json.file : null;
+
+            msg.sn = json.sn;
+            msg.pulled = json.pulled;
+
+            msg.fromDevice = json.device;
+            msg.receivedDevices = json.pulledDevices;
+            // TODO
+            msg.receipted = json.receipted;
+
+            return msg;
+        }
+    }]);
+
+    return VoiceMessage;
+}(_FileMessage2.FileMessage);
+
+/***/ }),
+/* 30 */,
+/* 31 */,
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+(function (factory) {
+  if (( false ? "undefined" : _typeof(exports)) === "object") {
+    module.exports = factory();
+  } else if (true) {
+    !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {
+    var glob;try {
+      glob = window;
+    } catch (e) {
+      glob = self;
+    }glob.SparkMD5 = factory();
+  }
+})(function (undefined) {
+  "use strict";
+  var add32 = function add32(a, b) {
+    return a + b & 4294967295;
+  },
+      hex_chr = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];function cmn(q, a, b, x, s, t) {
+    a = add32(add32(a, q), add32(x, t));return add32(a << s | a >>> 32 - s, b);
+  }function md5cycle(x, k) {
+    var a = x[0],
+        b = x[1],
+        c = x[2],
+        d = x[3];a += (b & c | ~b & d) + k[0] - 680876936 | 0;a = (a << 7 | a >>> 25) + b | 0;d += (a & b | ~a & c) + k[1] - 389564586 | 0;d = (d << 12 | d >>> 20) + a | 0;c += (d & a | ~d & b) + k[2] + 606105819 | 0;c = (c << 17 | c >>> 15) + d | 0;b += (c & d | ~c & a) + k[3] - 1044525330 | 0;b = (b << 22 | b >>> 10) + c | 0;a += (b & c | ~b & d) + k[4] - 176418897 | 0;a = (a << 7 | a >>> 25) + b | 0;d += (a & b | ~a & c) + k[5] + 1200080426 | 0;d = (d << 12 | d >>> 20) + a | 0;c += (d & a | ~d & b) + k[6] - 1473231341 | 0;c = (c << 17 | c >>> 15) + d | 0;b += (c & d | ~c & a) + k[7] - 45705983 | 0;b = (b << 22 | b >>> 10) + c | 0;a += (b & c | ~b & d) + k[8] + 1770035416 | 0;a = (a << 7 | a >>> 25) + b | 0;d += (a & b | ~a & c) + k[9] - 1958414417 | 0;d = (d << 12 | d >>> 20) + a | 0;c += (d & a | ~d & b) + k[10] - 42063 | 0;c = (c << 17 | c >>> 15) + d | 0;b += (c & d | ~c & a) + k[11] - 1990404162 | 0;b = (b << 22 | b >>> 10) + c | 0;a += (b & c | ~b & d) + k[12] + 1804603682 | 0;a = (a << 7 | a >>> 25) + b | 0;d += (a & b | ~a & c) + k[13] - 40341101 | 0;d = (d << 12 | d >>> 20) + a | 0;c += (d & a | ~d & b) + k[14] - 1502002290 | 0;c = (c << 17 | c >>> 15) + d | 0;b += (c & d | ~c & a) + k[15] + 1236535329 | 0;b = (b << 22 | b >>> 10) + c | 0;a += (b & d | c & ~d) + k[1] - 165796510 | 0;a = (a << 5 | a >>> 27) + b | 0;d += (a & c | b & ~c) + k[6] - 1069501632 | 0;d = (d << 9 | d >>> 23) + a | 0;c += (d & b | a & ~b) + k[11] + 643717713 | 0;c = (c << 14 | c >>> 18) + d | 0;b += (c & a | d & ~a) + k[0] - 373897302 | 0;b = (b << 20 | b >>> 12) + c | 0;a += (b & d | c & ~d) + k[5] - 701558691 | 0;a = (a << 5 | a >>> 27) + b | 0;d += (a & c | b & ~c) + k[10] + 38016083 | 0;d = (d << 9 | d >>> 23) + a | 0;c += (d & b | a & ~b) + k[15] - 660478335 | 0;c = (c << 14 | c >>> 18) + d | 0;b += (c & a | d & ~a) + k[4] - 405537848 | 0;b = (b << 20 | b >>> 12) + c | 0;a += (b & d | c & ~d) + k[9] + 568446438 | 0;a = (a << 5 | a >>> 27) + b | 0;d += (a & c | b & ~c) + k[14] - 1019803690 | 0;d = (d << 9 | d >>> 23) + a | 0;c += (d & b | a & ~b) + k[3] - 187363961 | 0;c = (c << 14 | c >>> 18) + d | 0;b += (c & a | d & ~a) + k[8] + 1163531501 | 0;b = (b << 20 | b >>> 12) + c | 0;a += (b & d | c & ~d) + k[13] - 1444681467 | 0;a = (a << 5 | a >>> 27) + b | 0;d += (a & c | b & ~c) + k[2] - 51403784 | 0;d = (d << 9 | d >>> 23) + a | 0;c += (d & b | a & ~b) + k[7] + 1735328473 | 0;c = (c << 14 | c >>> 18) + d | 0;b += (c & a | d & ~a) + k[12] - 1926607734 | 0;b = (b << 20 | b >>> 12) + c | 0;a += (b ^ c ^ d) + k[5] - 378558 | 0;a = (a << 4 | a >>> 28) + b | 0;d += (a ^ b ^ c) + k[8] - 2022574463 | 0;d = (d << 11 | d >>> 21) + a | 0;c += (d ^ a ^ b) + k[11] + 1839030562 | 0;c = (c << 16 | c >>> 16) + d | 0;b += (c ^ d ^ a) + k[14] - 35309556 | 0;b = (b << 23 | b >>> 9) + c | 0;a += (b ^ c ^ d) + k[1] - 1530992060 | 0;a = (a << 4 | a >>> 28) + b | 0;d += (a ^ b ^ c) + k[4] + 1272893353 | 0;d = (d << 11 | d >>> 21) + a | 0;c += (d ^ a ^ b) + k[7] - 155497632 | 0;c = (c << 16 | c >>> 16) + d | 0;b += (c ^ d ^ a) + k[10] - 1094730640 | 0;b = (b << 23 | b >>> 9) + c | 0;a += (b ^ c ^ d) + k[13] + 681279174 | 0;a = (a << 4 | a >>> 28) + b | 0;d += (a ^ b ^ c) + k[0] - 358537222 | 0;d = (d << 11 | d >>> 21) + a | 0;c += (d ^ a ^ b) + k[3] - 722521979 | 0;c = (c << 16 | c >>> 16) + d | 0;b += (c ^ d ^ a) + k[6] + 76029189 | 0;b = (b << 23 | b >>> 9) + c | 0;a += (b ^ c ^ d) + k[9] - 640364487 | 0;a = (a << 4 | a >>> 28) + b | 0;d += (a ^ b ^ c) + k[12] - 421815835 | 0;d = (d << 11 | d >>> 21) + a | 0;c += (d ^ a ^ b) + k[15] + 530742520 | 0;c = (c << 16 | c >>> 16) + d | 0;b += (c ^ d ^ a) + k[2] - 995338651 | 0;b = (b << 23 | b >>> 9) + c | 0;a += (c ^ (b | ~d)) + k[0] - 198630844 | 0;a = (a << 6 | a >>> 26) + b | 0;d += (b ^ (a | ~c)) + k[7] + 1126891415 | 0;d = (d << 10 | d >>> 22) + a | 0;c += (a ^ (d | ~b)) + k[14] - 1416354905 | 0;c = (c << 15 | c >>> 17) + d | 0;b += (d ^ (c | ~a)) + k[5] - 57434055 | 0;b = (b << 21 | b >>> 11) + c | 0;a += (c ^ (b | ~d)) + k[12] + 1700485571 | 0;a = (a << 6 | a >>> 26) + b | 0;d += (b ^ (a | ~c)) + k[3] - 1894986606 | 0;d = (d << 10 | d >>> 22) + a | 0;c += (a ^ (d | ~b)) + k[10] - 1051523 | 0;c = (c << 15 | c >>> 17) + d | 0;b += (d ^ (c | ~a)) + k[1] - 2054922799 | 0;b = (b << 21 | b >>> 11) + c | 0;a += (c ^ (b | ~d)) + k[8] + 1873313359 | 0;a = (a << 6 | a >>> 26) + b | 0;d += (b ^ (a | ~c)) + k[15] - 30611744 | 0;d = (d << 10 | d >>> 22) + a | 0;c += (a ^ (d | ~b)) + k[6] - 1560198380 | 0;c = (c << 15 | c >>> 17) + d | 0;b += (d ^ (c | ~a)) + k[13] + 1309151649 | 0;b = (b << 21 | b >>> 11) + c | 0;a += (c ^ (b | ~d)) + k[4] - 145523070 | 0;a = (a << 6 | a >>> 26) + b | 0;d += (b ^ (a | ~c)) + k[11] - 1120210379 | 0;d = (d << 10 | d >>> 22) + a | 0;c += (a ^ (d | ~b)) + k[2] + 718787259 | 0;c = (c << 15 | c >>> 17) + d | 0;b += (d ^ (c | ~a)) + k[9] - 343485551 | 0;b = (b << 21 | b >>> 11) + c | 0;x[0] = a + x[0] | 0;x[1] = b + x[1] | 0;x[2] = c + x[2] | 0;x[3] = d + x[3] | 0;
+  }function md5blk(s) {
+    var md5blks = [],
+        i;for (i = 0; i < 64; i += 4) {
+      md5blks[i >> 2] = s.charCodeAt(i) + (s.charCodeAt(i + 1) << 8) + (s.charCodeAt(i + 2) << 16) + (s.charCodeAt(i + 3) << 24);
+    }return md5blks;
+  }function md5blk_array(a) {
+    var md5blks = [],
+        i;for (i = 0; i < 64; i += 4) {
+      md5blks[i >> 2] = a[i] + (a[i + 1] << 8) + (a[i + 2] << 16) + (a[i + 3] << 24);
+    }return md5blks;
+  }function md51(s) {
+    var n = s.length,
+        state = [1732584193, -271733879, -1732584194, 271733878],
+        i,
+        length,
+        tail,
+        tmp,
+        lo,
+        hi;for (i = 64; i <= n; i += 64) {
+      md5cycle(state, md5blk(s.substring(i - 64, i)));
+    }s = s.substring(i - 64);length = s.length;tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];for (i = 0; i < length; i += 1) {
+      tail[i >> 2] |= s.charCodeAt(i) << (i % 4 << 3);
+    }tail[i >> 2] |= 128 << (i % 4 << 3);if (i > 55) {
+      md5cycle(state, tail);for (i = 0; i < 16; i += 1) {
+        tail[i] = 0;
+      }
+    }tmp = n * 8;tmp = tmp.toString(16).match(/(.*?)(.{0,8})$/);lo = parseInt(tmp[2], 16);hi = parseInt(tmp[1], 16) || 0;tail[14] = lo;tail[15] = hi;md5cycle(state, tail);return state;
+  }function md51_array(a) {
+    var n = a.length,
+        state = [1732584193, -271733879, -1732584194, 271733878],
+        i,
+        length,
+        tail,
+        tmp,
+        lo,
+        hi;for (i = 64; i <= n; i += 64) {
+      md5cycle(state, md5blk_array(a.subarray(i - 64, i)));
+    }a = i - 64 < n ? a.subarray(i - 64) : new Uint8Array(0);length = a.length;tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];for (i = 0; i < length; i += 1) {
+      tail[i >> 2] |= a[i] << (i % 4 << 3);
+    }tail[i >> 2] |= 128 << (i % 4 << 3);if (i > 55) {
+      md5cycle(state, tail);for (i = 0; i < 16; i += 1) {
+        tail[i] = 0;
+      }
+    }tmp = n * 8;tmp = tmp.toString(16).match(/(.*?)(.{0,8})$/);lo = parseInt(tmp[2], 16);hi = parseInt(tmp[1], 16) || 0;tail[14] = lo;tail[15] = hi;md5cycle(state, tail);return state;
+  }function rhex(n) {
+    var s = "",
+        j;for (j = 0; j < 4; j += 1) {
+      s += hex_chr[n >> j * 8 + 4 & 15] + hex_chr[n >> j * 8 & 15];
+    }return s;
+  }function hex(x) {
+    var i;for (i = 0; i < x.length; i += 1) {
+      x[i] = rhex(x[i]);
+    }return x.join("");
+  }if (hex(md51("hello")) !== "5d41402abc4b2a76b9719d911017c592") {
+    add32 = function add32(x, y) {
+      var lsw = (x & 65535) + (y & 65535),
+          msw = (x >> 16) + (y >> 16) + (lsw >> 16);return msw << 16 | lsw & 65535;
+    };
+  }if (typeof ArrayBuffer !== "undefined" && !ArrayBuffer.prototype.slice) {
+    (function () {
+      function clamp(val, length) {
+        val = val | 0 || 0;if (val < 0) {
+          return Math.max(val + length, 0);
+        }return Math.min(val, length);
+      }ArrayBuffer.prototype.slice = function (from, to) {
+        var length = this.byteLength,
+            begin = clamp(from, length),
+            end = length,
+            num,
+            target,
+            targetArray,
+            sourceArray;if (to !== undefined) {
+          end = clamp(to, length);
+        }if (begin > end) {
+          return new ArrayBuffer(0);
+        }num = end - begin;target = new ArrayBuffer(num);targetArray = new Uint8Array(target);sourceArray = new Uint8Array(this, begin, num);targetArray.set(sourceArray);return target;
+      };
+    })();
+  }function toUtf8(str) {
+    if (/[\u0080-\uFFFF]/.test(str)) {
+      str = unescape(encodeURIComponent(str));
+    }return str;
+  }function utf8Str2ArrayBuffer(str, returnUInt8Array) {
+    var length = str.length,
+        buff = new ArrayBuffer(length),
+        arr = new Uint8Array(buff),
+        i;for (i = 0; i < length; i += 1) {
+      arr[i] = str.charCodeAt(i);
+    }return returnUInt8Array ? arr : buff;
+  }function arrayBuffer2Utf8Str(buff) {
+    return String.fromCharCode.apply(null, new Uint8Array(buff));
+  }function concatenateArrayBuffers(first, second, returnUInt8Array) {
+    var result = new Uint8Array(first.byteLength + second.byteLength);result.set(new Uint8Array(first));result.set(new Uint8Array(second), first.byteLength);return returnUInt8Array ? result : result.buffer;
+  }function hexToBinaryString(hex) {
+    var bytes = [],
+        length = hex.length,
+        x;for (x = 0; x < length - 1; x += 2) {
+      bytes.push(parseInt(hex.substr(x, 2), 16));
+    }return String.fromCharCode.apply(String, bytes);
+  }function SparkMD5() {
+    this.reset();
+  }SparkMD5.prototype.append = function (str) {
+    this.appendBinary(toUtf8(str));return this;
+  };SparkMD5.prototype.appendBinary = function (contents) {
+    this._buff += contents;this._length += contents.length;var length = this._buff.length,
+        i;for (i = 64; i <= length; i += 64) {
+      md5cycle(this._hash, md5blk(this._buff.substring(i - 64, i)));
+    }this._buff = this._buff.substring(i - 64);return this;
+  };SparkMD5.prototype.end = function (raw) {
+    var buff = this._buff,
+        length = buff.length,
+        i,
+        tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ret;for (i = 0; i < length; i += 1) {
+      tail[i >> 2] |= buff.charCodeAt(i) << (i % 4 << 3);
+    }this._finish(tail, length);ret = hex(this._hash);if (raw) {
+      ret = hexToBinaryString(ret);
+    }this.reset();return ret;
+  };SparkMD5.prototype.reset = function () {
+    this._buff = "";this._length = 0;this._hash = [1732584193, -271733879, -1732584194, 271733878];return this;
+  };SparkMD5.prototype.getState = function () {
+    return { buff: this._buff, length: this._length, hash: this._hash };
+  };SparkMD5.prototype.setState = function (state) {
+    this._buff = state.buff;this._length = state.length;this._hash = state.hash;return this;
+  };SparkMD5.prototype.destroy = function () {
+    delete this._hash;delete this._buff;delete this._length;
+  };SparkMD5.prototype._finish = function (tail, length) {
+    var i = length,
+        tmp,
+        lo,
+        hi;tail[i >> 2] |= 128 << (i % 4 << 3);if (i > 55) {
+      md5cycle(this._hash, tail);for (i = 0; i < 16; i += 1) {
+        tail[i] = 0;
+      }
+    }tmp = this._length * 8;tmp = tmp.toString(16).match(/(.*?)(.{0,8})$/);lo = parseInt(tmp[2], 16);hi = parseInt(tmp[1], 16) || 0;tail[14] = lo;tail[15] = hi;md5cycle(this._hash, tail);
+  };SparkMD5.hash = function (str, raw) {
+    return SparkMD5.hashBinary(toUtf8(str), raw);
+  };SparkMD5.hashBinary = function (content, raw) {
+    var hash = md51(content),
+        ret = hex(hash);return raw ? hexToBinaryString(ret) : ret;
+  };SparkMD5.ArrayBuffer = function () {
+    this.reset();
+  };SparkMD5.ArrayBuffer.prototype.append = function (arr) {
+    var buff = concatenateArrayBuffers(this._buff.buffer, arr, true),
+        length = buff.length,
+        i;this._length += arr.byteLength;for (i = 64; i <= length; i += 64) {
+      md5cycle(this._hash, md5blk_array(buff.subarray(i - 64, i)));
+    }this._buff = i - 64 < length ? new Uint8Array(buff.buffer.slice(i - 64)) : new Uint8Array(0);return this;
+  };SparkMD5.ArrayBuffer.prototype.end = function (raw) {
+    var buff = this._buff,
+        length = buff.length,
+        tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        i,
+        ret;for (i = 0; i < length; i += 1) {
+      tail[i >> 2] |= buff[i] << (i % 4 << 3);
+    }this._finish(tail, length);ret = hex(this._hash);if (raw) {
+      ret = hexToBinaryString(ret);
+    }this.reset();return ret;
+  };SparkMD5.ArrayBuffer.prototype.reset = function () {
+    this._buff = new Uint8Array(0);this._length = 0;this._hash = [1732584193, -271733879, -1732584194, 271733878];return this;
+  };SparkMD5.ArrayBuffer.prototype.getState = function () {
+    var state = SparkMD5.prototype.getState.call(this);state.buff = arrayBuffer2Utf8Str(state.buff);return state;
+  };SparkMD5.ArrayBuffer.prototype.setState = function (state) {
+    state.buff = utf8Str2ArrayBuffer(state.buff, true);return SparkMD5.prototype.setState.call(this, state);
+  };SparkMD5.ArrayBuffer.prototype.destroy = SparkMD5.prototype.destroy;SparkMD5.ArrayBuffer.prototype._finish = SparkMD5.prototype._finish;SparkMD5.ArrayBuffer.hash = function (arr, raw) {
+    var hash = md51_array(new Uint8Array(arr)),
+        ret = hex(hash);return raw ? hexToBinaryString(ret) : ret;
+  };return SparkMD5;
+});
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.FileHttp = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _FileAction = __webpack_require__(11);
+var _FileAction = __webpack_require__(12);
 
 var _CubeError = __webpack_require__(0);
 
-var _sparkMd = __webpack_require__(34);
+var _sparkMd = __webpack_require__(32);
 
 var md5 = _interopRequireWildcard(_sparkMd);
 
@@ -2101,1359 +3451,7 @@ var FileHttp = exports.FileHttp = function () {
 }();
 
 /***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-/*
- * MessageDirection.js
- * Cube Engine
- *
- * Copyright (c) 2015-2016 Cube Team. All rights reserved.
- */
-/**
- * 消息方向枚举。
- *
- * @readonly
- * @enum {String}
- * @author Guan Yong
- */
-var MessageDirection = exports.MessageDirection = {
-    /** 初始化。 */
-    None: "none",
-
-    /** 收取。 */
-    Received: "received",
-
-    /** 发出。 */
-    Sent: "sent"
-};
-
-/***/ }),
-/* 23 */,
-/* 24 */,
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.CardMessage = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _FileMessage = __webpack_require__(6);
-
-var _MessageType = __webpack_require__(1);
-
-var _MessageEntity2 = __webpack_require__(2);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * CardMessage.js
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
-/**
- * 卡片消息。
- *
- * @class CardMessage
- * @extends MessageEntity
- * @author Li Wenkai
- */
-var CardMessage = exports.CardMessage = function (_MessageEntity) {
-    _inherits(CardMessage, _MessageEntity);
-
-    /**
-     * @constructs CardMessage
-     * @param {String} receiver - 指定消息接收人的 Cube 号。
-     * @param {String} title - 卡片消息标题
-     * @param {String} icon - 卡片消息链接
-     * @param {String} desc - 卡片消息描述
-     */
-    function CardMessage(receiver, title, icon, content, desc) {
-        _classCallCheck(this, CardMessage);
-
-        var _this = _possibleConstructorReturn(this, (CardMessage.__proto__ || Object.getPrototypeOf(CardMessage)).call(this, receiver));
-
-        _this.type = _MessageType.MessageType.Card;
-        _this.receiver = { "name": receiver };
-        _this.title = title;
-        _this.icon = icon;
-        _this.content = content;
-        _this.cardContents = [];
-        _this.traceless = false;
-        _this.pulled = false;
-        _this.secret = false;
-        _this.device = cube.deviceInfo;
-
-        return _this;
-    }
-
-    /**
-     * 设置卡片消息集合。
-     *
-     * @param {Array}  cardContents - 卡片消息集合。
-     */
-
-
-    _createClass(CardMessage, [{
-        key: 'setCardContents',
-        value: function setCardContents(cardContents) {
-            this.cardContents = cardContents;
-        }
-
-        /**
-         * 设置卡片消息内容。
-         *
-         * @param {String}  name - 卡片消息名字。
-         * @param {String} icon - 卡片消息头像。
-         * @param {String} url - 卡片消息Url。
-         * @param {String} desc - 卡片消息描述desc。
-         */
-
-    }, {
-        key: 'setCardContent',
-        value: function setCardContent(name, icon, url, desc) {
-            this.cardContents.push({ "name": name, "icon": icon, "url": url, "desc": desc });
-        }
-
-        /**
-         * 返回卡片消息内容。
-         *
-         * @returns {String} 消息内容。
-         */
-
-    }, {
-        key: 'getCardContent',
-        value: function getCardContent() {
-            return this.cardContents[0];
-        }
-    }, {
-        key: 'toJSON',
-        value: function toJSON() {
-            var json = _MessageEntity2.MessageEntity.prototype.toJSON.call(this);
-            // 消息头
-            json.content = this.content;
-            json.cardContents = this.cardContents;
-            json.title = this.title;
-            json.icon = this.icon;
-            json.traceless = this.traceless;
-            json.pulled = this.pulled;
-            json.secret = this.secret;
-            json.group = this.group;
-            json.device = this.device;
-            return json;
-        }
-    }], [{
-        key: 'parse',
-        value: function parse(json) {
-            // 创建消息实例
-            var msg = new CardMessage(json.to.name, json.title, json.icon, json.content, json.desc);
-            msg.receiver.displayName = json.to.displayName;
-
-            msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
-
-            if (undefined !== json.group) {
-                msg.group = json.group;
-                msg.groupName = json.group.name;
-            }
-
-            msg.sendTime = json.time.send;
-            msg.receiveTime = json.time.receive;
-            msg.timestamp = json.time.timestamp;
-
-            msg.sn = json.sn;
-            msg.pulled = json.pulled;
-
-            msg.device = json.device;
-
-            msg.receipted = json.receipted;
-
-            msg.cardContents = json.cardContent ? [json.cardContent] : json.cardContents;
-
-            return msg;
-        }
-    }]);
-
-    return CardMessage;
-}(_MessageEntity2.MessageEntity);
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.CustomMessage = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _MessageEntity2 = __webpack_require__(2);
-
-var _MessageType = __webpack_require__(1);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * CustomMessage.js
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
-/**
- * 自定义消息。
- *
- * @class CustomMessage
- * @extends MessageEntity
- * @author Xu Jiangwei, Guan Yong
- */
-var CustomMessage = exports.CustomMessage = function (_MessageEntity) {
-    _inherits(CustomMessage, _MessageEntity);
-
-    /**
-     * @constructs CustomMessage
-     * @param {String} receiver - 指定消息接收人的 Cube 号。
-     */
-    function CustomMessage(receiver) {
-        _classCallCheck(this, CustomMessage);
-
-        var _this = _possibleConstructorReturn(this, (CustomMessage.__proto__ || Object.getPrototypeOf(CustomMessage)).call(this, _MessageType.MessageType.Custom));
-
-        _this.receiver = { "name": receiver };
-
-        _this.body = null;
-        _this.expires = 0;
-        return _this;
-    }
-
-    /**
-     * 设置消息体数据。
-    *
-     * @param {Object} body - 指定需要设置的内容。
-     */
-
-
-    _createClass(CustomMessage, [{
-        key: 'setBody',
-        value: function setBody(body) {
-            this.body = body;
-        }
-
-        /**
-         * 返回消息体数据。
-         *
-         * @returns {Object} 返回自定义消息体内容。
-         */
-
-    }, {
-        key: 'getBody',
-        value: function getBody() {
-            return this.body;
-        }
-
-        /**
-         * 设置消息超期时间。
-         *
-            * @param {Number} expires 指定以秒为单位的消息超期时间。
-         */
-
-    }, {
-        key: 'setExpires',
-        value: function setExpires(expires) {
-            this.expires = expires;
-        }
-
-        /**
-            * 返回消息的超期时间。
-         *
-            * @returns {Number} 返回消息的超期时间（单位：秒）。
-            */
-
-    }, {
-        key: 'getExpires',
-        value: function getExpires() {
-            return this.expires;
-        }
-
-        // 消息转 JSON
-
-    }, {
-        key: 'toJSON',
-        value: function toJSON() {
-            var json = _MessageEntity2.MessageEntity.prototype.toJSON.call(this);
-
-            json.expires = this.expires;
-
-            // 消息体
-            if (null != this.body) {
-                json.body = this.body;
-            }
-
-            return json;
-        }
-    }], [{
-        key: 'parse',
-        value: function parse(json) {
-            // 创建消息实例
-            var msg = new CustomMessage(json.to.name);
-            msg.receiver.displayName = json.to.displayName;
-
-            msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
-
-            if (undefined !== json.group) {
-                msg.group = json.group;
-                msg.groupName = json.group.name;
-            }
-
-            msg.sendTime = json.time.send;
-            msg.receiveTime = json.time.receive;
-            msg.timestamp = json.time.timestamp;
-
-            msg.sn = json.sn;
-            msg.pulled = json.pulled;
-
-            if (undefined !== json.header) {
-                for (var key in json.header) {
-                    msg.setHeader(key, json.header[key]);
-                }
-            }
-
-            if (undefined !== json.body) {
-                msg.setBody(json.body);
-            }
-
-            msg.fromDevice = json.device;
-            msg.receivedDevices = json.pulledDevices;
-            // TODO
-            msg.receipted = json.receipted;
-
-            return msg;
-        }
-    }]);
-
-    return CustomMessage;
-}(_MessageEntity2.MessageEntity);
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.ReceiptMessage = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _MessageEntity2 = __webpack_require__(2);
-
-var _MessageType = __webpack_require__(1);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * ReceiptMessage.js
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
-/**
- * 回执消息。
- *
- * @class ReceiptMessage
- * @extends MessageEntity
- * @author Huang yuanliang
- */
-var ReceiptMessage = exports.ReceiptMessage = function (_MessageEntity) {
-    _inherits(ReceiptMessage, _MessageEntity);
-
-    /**
-     * @constructs ReceiptMessage
-     * @param {String||Array} sns - 回执的消息sn集合。
-     * @param {String} receiver - 接收者信息。
-     * @param {object} sender - 发送者信息。
-     * @param {String} 回执消息sn
-     */
-    function ReceiptMessage(receiver, sender, sn) {
-        _classCallCheck(this, ReceiptMessage);
-
-        var _this = _possibleConstructorReturn(this, (ReceiptMessage.__proto__ || Object.getPrototypeOf(ReceiptMessage)).call(this, _MessageType.MessageType.Receipt));
-
-        _this.receiver = { "name": receiver };
-        _this.sender = sender;
-        //回执消息默认不入库
-        _this.traceless = true;
-        if (null != sn) {
-            _this.sn = sn;
-        }
-        if (null != sender) {
-            _this.sender = sender;
-        }
-        return _this;
-    }
-
-    _createClass(ReceiptMessage, [{
-        key: 'toJSON',
-        value: function toJSON() {
-            var json = _MessageEntity2.MessageEntity.prototype.toJSON.call(this);
-            json.sns = this.sns;
-            return json;
-        }
-    }], [{
-        key: 'parse',
-        value: function parse(json) {
-            // 创建消息实例
-            var msg = new ReceiptMessage();
-            msg.receiver = { "name": json.to.name, "displayName": json.to.displayName };
-
-            msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
-
-            if (undefined !== json.group) {
-                msg.group = json.group;
-                msg.groupName = json.group.name;
-            }
-
-            msg.sendTime = json.time.send;
-            msg.receiveTime = json.time.receive;
-            msg.timestamp = json.time.timestamp;
-
-            msg.sn = json.sn;
-
-            msg.pulled = json.pulled;
-
-            msg.fromDevice = json.device ? json.device : "";
-            msg.receivedDevices = json.pulledDevices ? json.pulledDevices : "";
-            // TODO
-            msg.receipted = json.receipted;
-
-            return msg;
-        }
-    }]);
-
-    return ReceiptMessage;
-}(_MessageEntity2.MessageEntity);
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.ReplyMessage = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _MessageEntity2 = __webpack_require__(2);
-
-var _MessageType = __webpack_require__(1);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * ReplyMessage.js
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
-/**
- * 回复消息
- *
- * @class ReplyMessage
- * @extends MessageEntity
- * @author Huang Yuanliang
- */
-var ReplyMessage = exports.ReplyMessage = function (_MessageEntity) {
-    _inherits(ReplyMessage, _MessageEntity);
-
-    /**
-     * @constructs ReplyMessage
-     * @param {String} receiver - 指定对应消息的Cube号
-     * @param {MessageEntity} reply - 回复内容
-     * @param {MessageEntity} source - 原始内容
-     */
-    function ReplyMessage(receiver, reply, source) {
-        _classCallCheck(this, ReplyMessage);
-
-        var _this = _possibleConstructorReturn(this, (ReplyMessage.__proto__ || Object.getPrototypeOf(ReplyMessage)).call(this, _MessageType.MessageType.Reply));
-
-        _this.receiver = { "name": receiver };
-        if (null != reply) {
-            reply.sn = _this.sn;
-        }
-        _this.reply = reply;
-        _this.source = source;
-        return _this;
-    }
-
-    _createClass(ReplyMessage, [{
-        key: 'setSource',
-        value: function setSource(source) {
-            this.source = {
-                "type": source.type,
-                "content": source.content,
-                "from": source.sender,
-                "sn": source.sn,
-                "to": source.receiver,
-                "time": {
-                    "receive": source.receiveTime,
-                    "send": source.sendTime,
-                    "timestamp": source.timestamp
-                }
-            };
-            this.source = Object.assign(this.source, source);
-            if (null != source.tos) {
-                this.source.tos = source.tos;
-            }
-            if (null != source.group) {
-                this.source.group = source.group.name;
-            }
-            if (source.type == _MessageType.MessageType.Reply) {
-                this.source.content = source.reply.content;
-            }
-        }
-    }, {
-        key: 'toJSON',
-        value: function toJSON() {
-            if (null != this.reply) {
-                this.reply.sender = this.sender;
-            }
-            var json = _MessageEntity2.MessageEntity.prototype.toJSON.call(this);
-            json.source = this.source instanceof _MessageEntity2.MessageEntity ? this.source.toJSON() : this.source;
-            json.reply = this.reply instanceof _MessageEntity2.MessageEntity ? this.reply.toJSON() : this.reply;
-            return json;
-        }
-    }], [{
-        key: 'parse',
-        value: function parse(json) {
-            // 创建消息实例
-            var msg = new ReplyMessage(json.to.name, json.reply, json.source);
-            msg.receiver.displayName = json.to.displayName;
-
-            msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
-
-            if (undefined !== json.group) {
-                msg.group = json.group;
-                msg.groupName = json.group.name;
-            }
-
-            if (null != msg.reply) {
-                msg.reply.sn = json.sn;
-                msg.reply.from = json.from;
-                msg.reply.time = json.time;
-                msg.reply.sendTime = json.time.send;
-                msg.reply.receiveTime = json.time.receive;
-                msg.reply.timestamp = json.time.timestamp;
-            }
-            msg.sendTime = json.time.send;
-            msg.receiveTime = json.time.receive;
-            msg.timestamp = json.time.timestamp;
-
-            msg.sn = json.sn;
-
-            msg.pulled = json.pulled;
-
-            msg.fromDevice = json.device ? json.device : "";
-            msg.receivedDevices = json.pulledDevices ? json.pulledDevices : "";
-            // TODO
-            msg.receipted = json.receipted;
-
-            return msg;
-        }
-    }]);
-
-    return ReplyMessage;
-}(_MessageEntity2.MessageEntity);
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.WhiteboardMessage = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _MessageEntity2 = __webpack_require__(2);
-
-var _MessageType = __webpack_require__(1);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * WhiteboardMessage.js
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
-/**
- * 文本消息。
- *
- * @class WhiteboardMessage
- * @extends MessageEntity
- * @author Xu Jiangwei, Guan Yong
- */
-var WhiteboardMessage = exports.WhiteboardMessage = function (_MessageEntity) {
-	_inherits(WhiteboardMessage, _MessageEntity);
-
-	/**
-  * @constructs WhiteboardMessage
-  * @param {String} receiver - 指定消息接收人的 Cube 号。
-  */
-	function WhiteboardMessage(receiver) {
-		_classCallCheck(this, WhiteboardMessage);
-
-		var _this = _possibleConstructorReturn(this, (WhiteboardMessage.__proto__ || Object.getPrototypeOf(WhiteboardMessage)).call(this, _MessageType.MessageType.Whiteboard));
-
-		_this.receiver = { "name": receiver };
-		_this.content = null;
-		_this.domId = null;
-		_this.file = null;
-		_this.finish = null;
-		_this.completeCb = null;
-		return _this;
-	}
-
-	/**
-  * 填充消息内容。
-  *
-  * @param {Object} content - 白板的内容 JSON 数据。
-  */
-
-
-	_createClass(WhiteboardMessage, [{
-		key: 'fillContent',
-		value: function fillContent(content) {
-			this.content = JSON.stringify(content);
-			this.file = {
-				modified: 0,
-				name: Date.now() + ".cwb",
-				size: this.content.length
-			};
-		}
-	}, {
-		key: 'getFile',
-		value: function getFile() {
-			return this.file;
-		}
-
-		// 创建操作表单
-
-	}, {
-		key: '_buildForm',
-		value: function _buildForm() {
-			// 生成表单ID
-			this.domId = '_cube_wb_msg_' + this.customData;
-
-			var container = document.createElement('div');
-			container.id = this.domId;
-			container.style.display = 'none';
-			container.innerHTML = '<form id="_form' + this.domId + '" method="POST" enctype="multipart/form-data" action="' + this._getServerAction() + '" target="_frame' + this.domId + '">' + '<input type="hidden" name="filename" value="' + this.file.name + '"/>' + '<input type="hidden" name="receiver" value="' + this.receiver.name + '"/>' + '<input type="hidden" name="sender" value="' + this.sender.name + '"/>' + '<input type="hidden" name="sendTime" value="' + this.sendTime + '"/>' + '<input type="hidden" name="content" value=\'' + this.content + '\'/>' + '</form>' + '<iframe name="_frame' + this.domId + '"></iframe>';
-			document.body.appendChild(container);
-			return container;
-		}
-	}, {
-		key: '_postData',
-		value: function _postData() {
-			// 构建表单
-			var el = this._buildForm();
-
-			// 建立监听
-			var iframe = el.getElementsByTagName("iframe")[0];
-			var self = this;
-			iframe.onload = function () {
-				setTimeout(function () {
-					self.finish = true;
-					if (null != self.completeCb) {
-						self.completeCb(false, self.content.length, self.content.length);
-					}
-
-					self._clear();
-				}, 1000);
-			};
-
-			var form = document.getElementById('_form' + this.domId);
-			if (null != form) {
-				form.submit();
-			} else {
-				nucleus.getLogger().e('CubeWhiteboardMessage#_postData', 'Send content error');
-			}
-		}
-	}, {
-		key: '_notifyAck',
-		value: function _notifyAck(callback) {
-			if (this.finish) {
-				callback(false, this.content.length, this.content.length);
-			} else {
-				this.completeCb = complete;
-			}
-		}
-
-		// 从服务器请求白板数据内容。
-
-	}, {
-		key: '_fetchData',
-		value: function _fetchData(success, error) {
-			var p = cube.utils.isSecure ? "https" : "http";
-			// 查询进度
-			var url = p + '://' + _CUBE_DOMAIN + ':' + _CUBE_PORT + '/message/read/cwb/?receiver=' + this.receiver.name + '&sn=' + this.sn;
-
-			var self = this;
-			// 发送请求
-			Ajax.newRequest(url).method("GET").send(function (reponse) {
-				if (reponse.getStatus() == 200) {
-					self.content = reponse.getData().toString();
-					success.call(null, self);
-				} else {
-					error.call(null, self, reponse.getStatus());
-				}
-			});
-		}
-	}, {
-		key: '_getServerAction',
-		value: function _getServerAction() {
-			var protocol = window.location.protocol;
-			if (protocol.indexOf("http") != 0) {
-				protocol = "http:";
-			}
-			return protocol + '//' + _CUBE_DOMAIN + ':' + _CUBE_PORT + '/message/submit/';
-			//return "http://localhost:8080/live/submit/";
-		}
-	}, {
-		key: '_clear',
-		value: function _clear() {
-			this.completeCb = null;
-
-			if (null != this.domId) {
-				var container = document.getElementById(this.domId);
-				if (null != container) {
-					// 删除 iframe 元素以终止 Post 发送
-					document.body.removeChild(container);
-					return true;
-				}
-			}
-
-			return false;
-		}
-	}, {
-		key: 'toJSON',
-		value: function toJSON() {
-			var json = _MessageEntity2.MessageEntity.prototype.toJSON.call(this);
-			json.file = this.file;
-			return json;
-		}
-	}], [{
-		key: 'parse',
-		value: function parse(json) {
-			var msg = new WhiteboardMessage(json.to.name);
-			msg.receiver.displayName = json.to.displayName;
-
-			msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
-
-			if (undefined !== json.group) {
-				msg.group = json.group;
-				msg.groupName = json.group.name;
-			}
-
-			msg.sendTime = json.time.send;
-			msg.receiveTime = json.time.receive;
-			msg.timestamp = json.time.timestamp;
-
-			msg.file = undefined !== json.file ? json.file : null;
-
-			msg.sn = json.sn;
-
-			msg.pulled = json.pulled;
-
-			msg.fromDevice = json.device;
-			msg.receivedDevices = json.pulledDevices;
-			// TODO
-			msg.receipted = json.receipted;
-
-			return msg;
-		}
-	}]);
-
-	return WhiteboardMessage;
-}(_MessageEntity2.MessageEntity);
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-        value: true
-});
-exports.VideoMessage = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _FileMessage2 = __webpack_require__(6);
-
-var _MessageType = __webpack_require__(1);
-
-var _MessageEntity = __webpack_require__(2);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * VideoMessage.js
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
-/**
- * 短视频消息。
- *
- * @class VideoMessage
- * @extends FileMessage
- * @author Xu Jiangwei, Guan Yong
- */
-var VideoMessage = exports.VideoMessage = function (_FileMessage) {
-        _inherits(VideoMessage, _FileMessage);
-
-        /**
-         * @constructs VideoMessage
-         * @param {String} receiver - 指定消息接收人的 Cube 号。
-         */
-        function VideoMessage(receiver) {
-                _classCallCheck(this, VideoMessage);
-
-                var _this = _possibleConstructorReturn(this, (VideoMessage.__proto__ || Object.getPrototypeOf(VideoMessage)).call(this, receiver));
-
-                _this.type = _MessageType.MessageType.Video;
-                return _this;
-        }
-
-        /**
-         * 返回视频文件基本信息。
-        *
-        * @returns {VideoFileInfo} 视频文件信息对象。
-         */
-
-
-        _createClass(VideoMessage, [{
-                key: 'getFile',
-                value: function getFile() {
-                        return this.file;
-                }
-                /**
-                 * @typedef {Object} VideoFileInfo
-                 * @property {String} name - 文件名。
-                 * @property {Number} size - 文件的大小，单位：字节。
-                 * @property {Number} modified - 绝对时间形式的文件的最后修改时间。
-                 * @property {String} url - 文件的访问 URL 。
-                 * @property {Number} duration - 视频时长，单位：秒。
-                 * @property {Number} width - 视频的宽度。
-                 * @property {Number} height - 视频的高度。
-                 * @property {String} thumb - 视频静态缩略图 URL 。
-                 * @property {String} webm - 视频 WebM 格式文件的 URL 。
-                 */
-
-        }, {
-                key: 'toJSON',
-                value: function toJSON() {
-                        var json = _MessageEntity.MessageEntity.prototype.toJSON.call(this);
-                        json.file = this.file;
-                        return json;
-                }
-        }], [{
-                key: 'parse',
-                value: function parse(json) {
-                        var msg = new VideoMessage(json.to.name);
-                        msg.receiver.displayName = json.to.displayName;
-
-                        msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
-
-                        if (undefined !== json.group) {
-                                msg.group = json.group;
-                                msg.groupName = json.group.name;
-                        }
-
-                        msg.sendTime = json.time.send;
-                        msg.receiveTime = json.time.receive;
-                        msg.timestamp = json.time.timestamp;
-
-                        msg.file = undefined !== json.file ? json.file : null;
-
-                        msg.sn = json.sn;
-                        msg.pulled = json.pulled;
-
-                        msg.fromDevice = json.device;
-                        msg.receivedDevices = json.pulledDevices;
-                        // TODO
-                        msg.receipted = json.receipted;
-
-                        return msg;
-                }
-        }]);
-
-        return VideoMessage;
-}(_FileMessage2.FileMessage);
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.VoiceMessage = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _FileMessage2 = __webpack_require__(6);
-
-var _MessageType = __webpack_require__(1);
-
-var _MessageEntity = __webpack_require__(2);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * VoiceMessage.js
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Cube Engine
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright (c) 2015-2016 Cube Team. All rights reserved.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
-/**
- * 短语音消息。
- *
- * @class VoiceMessage
- * @extends FileMessage
- * @author Xu Jiangwei, Guan Yong
- */
-var VoiceMessage = exports.VoiceMessage = function (_FileMessage) {
-    _inherits(VoiceMessage, _FileMessage);
-
-    /**
-     * @constructs VoiceMessage
-     * @param {String} receiver - 指定消息接收人的 Cube 号。
-     */
-    function VoiceMessage(receiver) {
-        _classCallCheck(this, VoiceMessage);
-
-        var _this = _possibleConstructorReturn(this, (VoiceMessage.__proto__ || Object.getPrototypeOf(VoiceMessage)).call(this, receiver));
-
-        _this.type = _MessageType.MessageType.Voice;
-
-        _this.stopCallback = null;
-        return _this;
-    }
-
-    /**
-     * 返回语音文件基本信息。
-    *
-    * @returns {VoiceFileInfo} 语音文件信息对象。
-     */
-
-
-    _createClass(VoiceMessage, [{
-        key: 'getFile',
-        value: function getFile() {
-            return this.file;
-        }
-        /**
-         * @typedef {Object} VoiceFileInfo
-         * @property {String} name - 文件名。
-         * @property {Number} size - 文件的大小，单位：字节。
-         * @property {Number} modified - 绝对时间形式的文件的最后修改时间。
-         * @property {String} url - 文件的访问 URL 。
-         * @property {Number} duration - 语音时长，单位：秒。
-         * @property {String} mp3 - 语音 MP3 格式文件的 URL 。
-         * @property {String} ogg - 语音 OGG 格式文件的 URL 。
-         */
-
-        /**
-         * 开始录制
-         *
-         * @param callback {CubeBaseCallback} - 开始录制的回调
-         */
-
-    }, {
-        key: 'startRecord',
-        value: function startRecord(callback) {
-            var self = this;
-
-            cube.utils.getUserMedia(false, true, function (err, stream) {
-                if (err) {
-                    callback(err);
-                } else {
-                    self.recorder = new MediaRecorder(stream);
-                    self.audioTrack = stream.getAudioTracks()[0];
-                    var chunks = [],
-                        startTime = 0;
-                    self.recorder.ondataavailable = function (e) {
-                        chunks.push(e.data);
-                    };
-                    self.recorder.onstop = function (e) {
-                        var duration = (Date.now() - startTime) / 1000;
-                        if (!self.canceledRecord) {
-                            var file = new File(chunks, 'cube_clip_voice' + Date.now() + '.ogg', { 'type': 'audio/ogg; codecs=opus' });
-                            self.setFormFile(file, function () {
-                                self.file.duration = Math.round(duration);
-                                if (typeof self.stopCallback == 'function') {
-                                    self.stopCallback(file);
-                                }
-                            });
-                        }
-                        chunks = [];
-                        self.canceledRecord = false;
-                    };
-                    self.recorder.start();
-                    startTime = Date.now();
-
-                    callback();
-                }
-            });
-        }
-        /**
-         * This is a description of the callback function
-         * @callback CubeBaseCallback
-         * @param error {{Code: {Number}} | null} - 是否发生错误
-         */
-
-        /**
-         * 停止录制
-         */
-
-    }, {
-        key: 'stopRecord',
-        value: function stopRecord(callback) {
-            if (null != this.recorder && null != this.audioTrack) {
-                this.stopCallback = callback;
-                this.recorder.stop();
-                this.audioTrack.stop();
-                this.recorder = null;
-                this.audioTrack = null;
-            }
-        }
-
-        /**
-         * 取消录制
-         */
-
-    }, {
-        key: 'cancelRecord',
-        value: function cancelRecord() {
-            this.canceledRecord = true;
-            this.stopRecord();
-        }
-
-        /**
-         * 返回已经录制的语音文件对象
-         * @returns {File} - 文件对象
-         */
-
-    }, {
-        key: 'getVoiceFile',
-        value: function getVoiceFile() {
-            return this.formFile;
-        }
-    }, {
-        key: 'toJSON',
-        value: function toJSON() {
-            var json = _MessageEntity.MessageEntity.prototype.toJSON.call(this);
-            json.file = this.file;
-            return json;
-        }
-    }], [{
-        key: 'parse',
-        value: function parse(json) {
-            var msg = new VoiceMessage(json.to.name);
-            msg.receiver.displayName = json.to.displayName;
-
-            msg.sender = { "name": json.from.name, "displayName": json.from.displayName };
-
-            if (undefined !== json.group) {
-                msg.group = json.group;
-                msg.groupName = json.group.name;
-            }
-
-            msg.sendTime = json.time.send;
-            msg.receiveTime = json.time.receive;
-            msg.timestamp = json.time.timestamp;
-
-            msg.file = undefined !== json.file ? json.file : null;
-
-            msg.sn = json.sn;
-            msg.pulled = json.pulled;
-
-            msg.fromDevice = json.device;
-            msg.receivedDevices = json.pulledDevices;
-            // TODO
-            msg.receipted = json.receipted;
-
-            return msg;
-        }
-    }]);
-
-    return VoiceMessage;
-}(_FileMessage2.FileMessage);
-
-/***/ }),
-/* 32 */,
-/* 33 */,
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-(function (factory) {
-  if (( false ? "undefined" : _typeof(exports)) === "object") {
-    module.exports = factory();
-  } else if (true) {
-    !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
-				__WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-  } else {
-    var glob;try {
-      glob = window;
-    } catch (e) {
-      glob = self;
-    }glob.SparkMD5 = factory();
-  }
-})(function (undefined) {
-  "use strict";
-  var add32 = function add32(a, b) {
-    return a + b & 4294967295;
-  },
-      hex_chr = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];function cmn(q, a, b, x, s, t) {
-    a = add32(add32(a, q), add32(x, t));return add32(a << s | a >>> 32 - s, b);
-  }function md5cycle(x, k) {
-    var a = x[0],
-        b = x[1],
-        c = x[2],
-        d = x[3];a += (b & c | ~b & d) + k[0] - 680876936 | 0;a = (a << 7 | a >>> 25) + b | 0;d += (a & b | ~a & c) + k[1] - 389564586 | 0;d = (d << 12 | d >>> 20) + a | 0;c += (d & a | ~d & b) + k[2] + 606105819 | 0;c = (c << 17 | c >>> 15) + d | 0;b += (c & d | ~c & a) + k[3] - 1044525330 | 0;b = (b << 22 | b >>> 10) + c | 0;a += (b & c | ~b & d) + k[4] - 176418897 | 0;a = (a << 7 | a >>> 25) + b | 0;d += (a & b | ~a & c) + k[5] + 1200080426 | 0;d = (d << 12 | d >>> 20) + a | 0;c += (d & a | ~d & b) + k[6] - 1473231341 | 0;c = (c << 17 | c >>> 15) + d | 0;b += (c & d | ~c & a) + k[7] - 45705983 | 0;b = (b << 22 | b >>> 10) + c | 0;a += (b & c | ~b & d) + k[8] + 1770035416 | 0;a = (a << 7 | a >>> 25) + b | 0;d += (a & b | ~a & c) + k[9] - 1958414417 | 0;d = (d << 12 | d >>> 20) + a | 0;c += (d & a | ~d & b) + k[10] - 42063 | 0;c = (c << 17 | c >>> 15) + d | 0;b += (c & d | ~c & a) + k[11] - 1990404162 | 0;b = (b << 22 | b >>> 10) + c | 0;a += (b & c | ~b & d) + k[12] + 1804603682 | 0;a = (a << 7 | a >>> 25) + b | 0;d += (a & b | ~a & c) + k[13] - 40341101 | 0;d = (d << 12 | d >>> 20) + a | 0;c += (d & a | ~d & b) + k[14] - 1502002290 | 0;c = (c << 17 | c >>> 15) + d | 0;b += (c & d | ~c & a) + k[15] + 1236535329 | 0;b = (b << 22 | b >>> 10) + c | 0;a += (b & d | c & ~d) + k[1] - 165796510 | 0;a = (a << 5 | a >>> 27) + b | 0;d += (a & c | b & ~c) + k[6] - 1069501632 | 0;d = (d << 9 | d >>> 23) + a | 0;c += (d & b | a & ~b) + k[11] + 643717713 | 0;c = (c << 14 | c >>> 18) + d | 0;b += (c & a | d & ~a) + k[0] - 373897302 | 0;b = (b << 20 | b >>> 12) + c | 0;a += (b & d | c & ~d) + k[5] - 701558691 | 0;a = (a << 5 | a >>> 27) + b | 0;d += (a & c | b & ~c) + k[10] + 38016083 | 0;d = (d << 9 | d >>> 23) + a | 0;c += (d & b | a & ~b) + k[15] - 660478335 | 0;c = (c << 14 | c >>> 18) + d | 0;b += (c & a | d & ~a) + k[4] - 405537848 | 0;b = (b << 20 | b >>> 12) + c | 0;a += (b & d | c & ~d) + k[9] + 568446438 | 0;a = (a << 5 | a >>> 27) + b | 0;d += (a & c | b & ~c) + k[14] - 1019803690 | 0;d = (d << 9 | d >>> 23) + a | 0;c += (d & b | a & ~b) + k[3] - 187363961 | 0;c = (c << 14 | c >>> 18) + d | 0;b += (c & a | d & ~a) + k[8] + 1163531501 | 0;b = (b << 20 | b >>> 12) + c | 0;a += (b & d | c & ~d) + k[13] - 1444681467 | 0;a = (a << 5 | a >>> 27) + b | 0;d += (a & c | b & ~c) + k[2] - 51403784 | 0;d = (d << 9 | d >>> 23) + a | 0;c += (d & b | a & ~b) + k[7] + 1735328473 | 0;c = (c << 14 | c >>> 18) + d | 0;b += (c & a | d & ~a) + k[12] - 1926607734 | 0;b = (b << 20 | b >>> 12) + c | 0;a += (b ^ c ^ d) + k[5] - 378558 | 0;a = (a << 4 | a >>> 28) + b | 0;d += (a ^ b ^ c) + k[8] - 2022574463 | 0;d = (d << 11 | d >>> 21) + a | 0;c += (d ^ a ^ b) + k[11] + 1839030562 | 0;c = (c << 16 | c >>> 16) + d | 0;b += (c ^ d ^ a) + k[14] - 35309556 | 0;b = (b << 23 | b >>> 9) + c | 0;a += (b ^ c ^ d) + k[1] - 1530992060 | 0;a = (a << 4 | a >>> 28) + b | 0;d += (a ^ b ^ c) + k[4] + 1272893353 | 0;d = (d << 11 | d >>> 21) + a | 0;c += (d ^ a ^ b) + k[7] - 155497632 | 0;c = (c << 16 | c >>> 16) + d | 0;b += (c ^ d ^ a) + k[10] - 1094730640 | 0;b = (b << 23 | b >>> 9) + c | 0;a += (b ^ c ^ d) + k[13] + 681279174 | 0;a = (a << 4 | a >>> 28) + b | 0;d += (a ^ b ^ c) + k[0] - 358537222 | 0;d = (d << 11 | d >>> 21) + a | 0;c += (d ^ a ^ b) + k[3] - 722521979 | 0;c = (c << 16 | c >>> 16) + d | 0;b += (c ^ d ^ a) + k[6] + 76029189 | 0;b = (b << 23 | b >>> 9) + c | 0;a += (b ^ c ^ d) + k[9] - 640364487 | 0;a = (a << 4 | a >>> 28) + b | 0;d += (a ^ b ^ c) + k[12] - 421815835 | 0;d = (d << 11 | d >>> 21) + a | 0;c += (d ^ a ^ b) + k[15] + 530742520 | 0;c = (c << 16 | c >>> 16) + d | 0;b += (c ^ d ^ a) + k[2] - 995338651 | 0;b = (b << 23 | b >>> 9) + c | 0;a += (c ^ (b | ~d)) + k[0] - 198630844 | 0;a = (a << 6 | a >>> 26) + b | 0;d += (b ^ (a | ~c)) + k[7] + 1126891415 | 0;d = (d << 10 | d >>> 22) + a | 0;c += (a ^ (d | ~b)) + k[14] - 1416354905 | 0;c = (c << 15 | c >>> 17) + d | 0;b += (d ^ (c | ~a)) + k[5] - 57434055 | 0;b = (b << 21 | b >>> 11) + c | 0;a += (c ^ (b | ~d)) + k[12] + 1700485571 | 0;a = (a << 6 | a >>> 26) + b | 0;d += (b ^ (a | ~c)) + k[3] - 1894986606 | 0;d = (d << 10 | d >>> 22) + a | 0;c += (a ^ (d | ~b)) + k[10] - 1051523 | 0;c = (c << 15 | c >>> 17) + d | 0;b += (d ^ (c | ~a)) + k[1] - 2054922799 | 0;b = (b << 21 | b >>> 11) + c | 0;a += (c ^ (b | ~d)) + k[8] + 1873313359 | 0;a = (a << 6 | a >>> 26) + b | 0;d += (b ^ (a | ~c)) + k[15] - 30611744 | 0;d = (d << 10 | d >>> 22) + a | 0;c += (a ^ (d | ~b)) + k[6] - 1560198380 | 0;c = (c << 15 | c >>> 17) + d | 0;b += (d ^ (c | ~a)) + k[13] + 1309151649 | 0;b = (b << 21 | b >>> 11) + c | 0;a += (c ^ (b | ~d)) + k[4] - 145523070 | 0;a = (a << 6 | a >>> 26) + b | 0;d += (b ^ (a | ~c)) + k[11] - 1120210379 | 0;d = (d << 10 | d >>> 22) + a | 0;c += (a ^ (d | ~b)) + k[2] + 718787259 | 0;c = (c << 15 | c >>> 17) + d | 0;b += (d ^ (c | ~a)) + k[9] - 343485551 | 0;b = (b << 21 | b >>> 11) + c | 0;x[0] = a + x[0] | 0;x[1] = b + x[1] | 0;x[2] = c + x[2] | 0;x[3] = d + x[3] | 0;
-  }function md5blk(s) {
-    var md5blks = [],
-        i;for (i = 0; i < 64; i += 4) {
-      md5blks[i >> 2] = s.charCodeAt(i) + (s.charCodeAt(i + 1) << 8) + (s.charCodeAt(i + 2) << 16) + (s.charCodeAt(i + 3) << 24);
-    }return md5blks;
-  }function md5blk_array(a) {
-    var md5blks = [],
-        i;for (i = 0; i < 64; i += 4) {
-      md5blks[i >> 2] = a[i] + (a[i + 1] << 8) + (a[i + 2] << 16) + (a[i + 3] << 24);
-    }return md5blks;
-  }function md51(s) {
-    var n = s.length,
-        state = [1732584193, -271733879, -1732584194, 271733878],
-        i,
-        length,
-        tail,
-        tmp,
-        lo,
-        hi;for (i = 64; i <= n; i += 64) {
-      md5cycle(state, md5blk(s.substring(i - 64, i)));
-    }s = s.substring(i - 64);length = s.length;tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];for (i = 0; i < length; i += 1) {
-      tail[i >> 2] |= s.charCodeAt(i) << (i % 4 << 3);
-    }tail[i >> 2] |= 128 << (i % 4 << 3);if (i > 55) {
-      md5cycle(state, tail);for (i = 0; i < 16; i += 1) {
-        tail[i] = 0;
-      }
-    }tmp = n * 8;tmp = tmp.toString(16).match(/(.*?)(.{0,8})$/);lo = parseInt(tmp[2], 16);hi = parseInt(tmp[1], 16) || 0;tail[14] = lo;tail[15] = hi;md5cycle(state, tail);return state;
-  }function md51_array(a) {
-    var n = a.length,
-        state = [1732584193, -271733879, -1732584194, 271733878],
-        i,
-        length,
-        tail,
-        tmp,
-        lo,
-        hi;for (i = 64; i <= n; i += 64) {
-      md5cycle(state, md5blk_array(a.subarray(i - 64, i)));
-    }a = i - 64 < n ? a.subarray(i - 64) : new Uint8Array(0);length = a.length;tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];for (i = 0; i < length; i += 1) {
-      tail[i >> 2] |= a[i] << (i % 4 << 3);
-    }tail[i >> 2] |= 128 << (i % 4 << 3);if (i > 55) {
-      md5cycle(state, tail);for (i = 0; i < 16; i += 1) {
-        tail[i] = 0;
-      }
-    }tmp = n * 8;tmp = tmp.toString(16).match(/(.*?)(.{0,8})$/);lo = parseInt(tmp[2], 16);hi = parseInt(tmp[1], 16) || 0;tail[14] = lo;tail[15] = hi;md5cycle(state, tail);return state;
-  }function rhex(n) {
-    var s = "",
-        j;for (j = 0; j < 4; j += 1) {
-      s += hex_chr[n >> j * 8 + 4 & 15] + hex_chr[n >> j * 8 & 15];
-    }return s;
-  }function hex(x) {
-    var i;for (i = 0; i < x.length; i += 1) {
-      x[i] = rhex(x[i]);
-    }return x.join("");
-  }if (hex(md51("hello")) !== "5d41402abc4b2a76b9719d911017c592") {
-    add32 = function add32(x, y) {
-      var lsw = (x & 65535) + (y & 65535),
-          msw = (x >> 16) + (y >> 16) + (lsw >> 16);return msw << 16 | lsw & 65535;
-    };
-  }if (typeof ArrayBuffer !== "undefined" && !ArrayBuffer.prototype.slice) {
-    (function () {
-      function clamp(val, length) {
-        val = val | 0 || 0;if (val < 0) {
-          return Math.max(val + length, 0);
-        }return Math.min(val, length);
-      }ArrayBuffer.prototype.slice = function (from, to) {
-        var length = this.byteLength,
-            begin = clamp(from, length),
-            end = length,
-            num,
-            target,
-            targetArray,
-            sourceArray;if (to !== undefined) {
-          end = clamp(to, length);
-        }if (begin > end) {
-          return new ArrayBuffer(0);
-        }num = end - begin;target = new ArrayBuffer(num);targetArray = new Uint8Array(target);sourceArray = new Uint8Array(this, begin, num);targetArray.set(sourceArray);return target;
-      };
-    })();
-  }function toUtf8(str) {
-    if (/[\u0080-\uFFFF]/.test(str)) {
-      str = unescape(encodeURIComponent(str));
-    }return str;
-  }function utf8Str2ArrayBuffer(str, returnUInt8Array) {
-    var length = str.length,
-        buff = new ArrayBuffer(length),
-        arr = new Uint8Array(buff),
-        i;for (i = 0; i < length; i += 1) {
-      arr[i] = str.charCodeAt(i);
-    }return returnUInt8Array ? arr : buff;
-  }function arrayBuffer2Utf8Str(buff) {
-    return String.fromCharCode.apply(null, new Uint8Array(buff));
-  }function concatenateArrayBuffers(first, second, returnUInt8Array) {
-    var result = new Uint8Array(first.byteLength + second.byteLength);result.set(new Uint8Array(first));result.set(new Uint8Array(second), first.byteLength);return returnUInt8Array ? result : result.buffer;
-  }function hexToBinaryString(hex) {
-    var bytes = [],
-        length = hex.length,
-        x;for (x = 0; x < length - 1; x += 2) {
-      bytes.push(parseInt(hex.substr(x, 2), 16));
-    }return String.fromCharCode.apply(String, bytes);
-  }function SparkMD5() {
-    this.reset();
-  }SparkMD5.prototype.append = function (str) {
-    this.appendBinary(toUtf8(str));return this;
-  };SparkMD5.prototype.appendBinary = function (contents) {
-    this._buff += contents;this._length += contents.length;var length = this._buff.length,
-        i;for (i = 64; i <= length; i += 64) {
-      md5cycle(this._hash, md5blk(this._buff.substring(i - 64, i)));
-    }this._buff = this._buff.substring(i - 64);return this;
-  };SparkMD5.prototype.end = function (raw) {
-    var buff = this._buff,
-        length = buff.length,
-        i,
-        tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        ret;for (i = 0; i < length; i += 1) {
-      tail[i >> 2] |= buff.charCodeAt(i) << (i % 4 << 3);
-    }this._finish(tail, length);ret = hex(this._hash);if (raw) {
-      ret = hexToBinaryString(ret);
-    }this.reset();return ret;
-  };SparkMD5.prototype.reset = function () {
-    this._buff = "";this._length = 0;this._hash = [1732584193, -271733879, -1732584194, 271733878];return this;
-  };SparkMD5.prototype.getState = function () {
-    return { buff: this._buff, length: this._length, hash: this._hash };
-  };SparkMD5.prototype.setState = function (state) {
-    this._buff = state.buff;this._length = state.length;this._hash = state.hash;return this;
-  };SparkMD5.prototype.destroy = function () {
-    delete this._hash;delete this._buff;delete this._length;
-  };SparkMD5.prototype._finish = function (tail, length) {
-    var i = length,
-        tmp,
-        lo,
-        hi;tail[i >> 2] |= 128 << (i % 4 << 3);if (i > 55) {
-      md5cycle(this._hash, tail);for (i = 0; i < 16; i += 1) {
-        tail[i] = 0;
-      }
-    }tmp = this._length * 8;tmp = tmp.toString(16).match(/(.*?)(.{0,8})$/);lo = parseInt(tmp[2], 16);hi = parseInt(tmp[1], 16) || 0;tail[14] = lo;tail[15] = hi;md5cycle(this._hash, tail);
-  };SparkMD5.hash = function (str, raw) {
-    return SparkMD5.hashBinary(toUtf8(str), raw);
-  };SparkMD5.hashBinary = function (content, raw) {
-    var hash = md51(content),
-        ret = hex(hash);return raw ? hexToBinaryString(ret) : ret;
-  };SparkMD5.ArrayBuffer = function () {
-    this.reset();
-  };SparkMD5.ArrayBuffer.prototype.append = function (arr) {
-    var buff = concatenateArrayBuffers(this._buff.buffer, arr, true),
-        length = buff.length,
-        i;this._length += arr.byteLength;for (i = 64; i <= length; i += 64) {
-      md5cycle(this._hash, md5blk_array(buff.subarray(i - 64, i)));
-    }this._buff = i - 64 < length ? new Uint8Array(buff.buffer.slice(i - 64)) : new Uint8Array(0);return this;
-  };SparkMD5.ArrayBuffer.prototype.end = function (raw) {
-    var buff = this._buff,
-        length = buff.length,
-        tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        i,
-        ret;for (i = 0; i < length; i += 1) {
-      tail[i >> 2] |= buff[i] << (i % 4 << 3);
-    }this._finish(tail, length);ret = hex(this._hash);if (raw) {
-      ret = hexToBinaryString(ret);
-    }this.reset();return ret;
-  };SparkMD5.ArrayBuffer.prototype.reset = function () {
-    this._buff = new Uint8Array(0);this._length = 0;this._hash = [1732584193, -271733879, -1732584194, 271733878];return this;
-  };SparkMD5.ArrayBuffer.prototype.getState = function () {
-    var state = SparkMD5.prototype.getState.call(this);state.buff = arrayBuffer2Utf8Str(state.buff);return state;
-  };SparkMD5.ArrayBuffer.prototype.setState = function (state) {
-    state.buff = utf8Str2ArrayBuffer(state.buff, true);return SparkMD5.prototype.setState.call(this, state);
-  };SparkMD5.ArrayBuffer.prototype.destroy = SparkMD5.prototype.destroy;SparkMD5.ArrayBuffer.prototype._finish = SparkMD5.prototype._finish;SparkMD5.ArrayBuffer.hash = function (arr, raw) {
-    var hash = md51_array(new Uint8Array(arr)),
-        ret = hex(hash);return raw ? hexToBinaryString(ret) : ret;
-  };return SparkMD5;
-});
-
-/***/ }),
+/* 34 */,
 /* 35 */,
 /* 36 */,
 /* 37 */,
@@ -3927,7 +3925,7 @@ var _TextMessage = __webpack_require__(19);
 
 var _ImageMessage = __webpack_require__(20);
 
-var _MessageDirection = __webpack_require__(22);
+var _MessageDirection = __webpack_require__(21);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -4271,11 +4269,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _MessageService2 = __webpack_require__(135);
+var _MessageService2 = __webpack_require__(134);
 
 var _MessageListener = __webpack_require__(50);
 
-var _DBMessageService = __webpack_require__(136);
+var _DBMessageService = __webpack_require__(135);
 
 var _MessageStatus = __webpack_require__(71);
 
@@ -4289,11 +4287,11 @@ var _TextMessage = __webpack_require__(19);
 
 var _FileMessage = __webpack_require__(6);
 
-var _WhiteboardMessage = __webpack_require__(29);
+var _WhiteboardMessage = __webpack_require__(27);
 
-var _CustomMessage = __webpack_require__(26);
+var _CustomMessage = __webpack_require__(24);
 
-var _CardMessage = __webpack_require__(25);
+var _CardMessage = __webpack_require__(23);
 
 var _HistoryMessage = __webpack_require__(51);
 
@@ -4301,27 +4299,27 @@ var _LocationMessage = __webpack_require__(52);
 
 var _RichContentMessage = __webpack_require__(53);
 
-var _MessageDirection = __webpack_require__(22);
+var _MessageDirection = __webpack_require__(21);
 
 var _ImageMessage = __webpack_require__(20);
 
-var _VoiceMessage = __webpack_require__(31);
+var _VoiceMessage = __webpack_require__(29);
 
-var _VideoMessage = __webpack_require__(30);
+var _VideoMessage = __webpack_require__(28);
 
 var _FileAction = __webpack_require__(72);
 
-var _MessageAction = __webpack_require__(142);
+var _MessageAction = __webpack_require__(141);
 
-var _MessageQueue = __webpack_require__(140);
+var _MessageQueue = __webpack_require__(139);
 
 var _StateCode = __webpack_require__(3);
 
-var _ReplyMessage = __webpack_require__(28);
+var _ReplyMessage = __webpack_require__(26);
 
-var _ReceiptMessage = __webpack_require__(27);
+var _ReceiptMessage = __webpack_require__(25);
 
-var _FileHttp = __webpack_require__(21);
+var _FileHttp = __webpack_require__(33);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6253,8 +6251,7 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
 /* 130 */,
 /* 131 */,
 /* 132 */,
-/* 133 */,
-/* 134 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6266,21 +6263,21 @@ var _MessageListener = __webpack_require__(50);
 
 var _ImageMessage = __webpack_require__(20);
 
-var _VideoMessage = __webpack_require__(30);
+var _VideoMessage = __webpack_require__(28);
 
-var _VoiceMessage = __webpack_require__(31);
+var _VoiceMessage = __webpack_require__(29);
 
-var _CardMessage = __webpack_require__(25);
+var _CardMessage = __webpack_require__(23);
 
-var _CustomMessage = __webpack_require__(26);
+var _CustomMessage = __webpack_require__(24);
 
 var _FileMessage = __webpack_require__(6);
 
 var _TextMessage = __webpack_require__(19);
 
-var _ReplyMessage = __webpack_require__(28);
+var _ReplyMessage = __webpack_require__(26);
 
-var _WhiteboardMessage = __webpack_require__(29);
+var _WhiteboardMessage = __webpack_require__(27);
 
 var _HistoryMessage = __webpack_require__(51);
 
@@ -6290,7 +6287,7 @@ var _LocationMessage = __webpack_require__(52);
 
 var _MessageType = __webpack_require__(1);
 
-var _ReceiptMessage = __webpack_require__(27);
+var _ReceiptMessage = __webpack_require__(25);
 
 /**
  * 引导程序, 负责模块的初始化工作。
@@ -6326,7 +6323,7 @@ var _ReceiptMessage = __webpack_require__(27);
 })(window);
 
 /***/ }),
-/* 135 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6526,7 +6523,7 @@ var MessageService = exports.MessageService = function (_CubeService) {
 }(CubeService);
 
 /***/ }),
-/* 136 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6539,35 +6536,35 @@ exports.DBMessageService = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _DBMessage = __webpack_require__(137);
+var _DBMessage = __webpack_require__(136);
 
-var _DBSyncMessage = __webpack_require__(139);
+var _DBSyncMessage = __webpack_require__(138);
 
-var _DBReceiptMessage = __webpack_require__(138);
+var _DBReceiptMessage = __webpack_require__(137);
 
 var _MessageType = __webpack_require__(1);
 
-var _MessageDirection = __webpack_require__(22);
+var _MessageDirection = __webpack_require__(21);
 
 var _TextMessage = __webpack_require__(19);
 
 var _FileMessage = __webpack_require__(6);
 
-var _WhiteboardMessage = __webpack_require__(29);
+var _WhiteboardMessage = __webpack_require__(27);
 
 var _ImageMessage = __webpack_require__(20);
 
-var _VoiceMessage = __webpack_require__(31);
+var _VoiceMessage = __webpack_require__(29);
 
-var _VideoMessage = __webpack_require__(30);
+var _VideoMessage = __webpack_require__(28);
 
-var _CardMessage = __webpack_require__(25);
+var _CardMessage = __webpack_require__(23);
 
-var _CustomMessage = __webpack_require__(26);
+var _CustomMessage = __webpack_require__(24);
 
-var _ReplyMessage = __webpack_require__(28);
+var _ReplyMessage = __webpack_require__(26);
 
-var _ReceiptMessage = __webpack_require__(27);
+var _ReceiptMessage = __webpack_require__(25);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6987,7 +6984,7 @@ var DBMessageService = exports.DBMessageService = function () {
 }();
 
 /***/ }),
-/* 137 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7036,7 +7033,7 @@ var CubeDBMessage = exports.CubeDBMessage = function (_CubeDBEntity) {
 }(CubeDBEntity);
 
 /***/ }),
-/* 138 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7075,7 +7072,7 @@ var CubeDBReceiptMessage = exports.CubeDBReceiptMessage = function (_CubeDBEntit
 }(CubeDBEntity);
 
 /***/ }),
-/* 139 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7120,7 +7117,7 @@ var CubeDBSyncMessage = exports.CubeDBSyncMessage = function (_CubeDBEntity) {
 }(CubeDBEntity);
 
 /***/ }),
-/* 140 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7261,7 +7258,7 @@ var MessageQueue = exports.MessageQueue = function () {
 }();
 
 /***/ }),
-/* 141 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7468,7 +7465,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 142 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

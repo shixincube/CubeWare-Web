@@ -7,8 +7,10 @@
 			 :style="{height: height ? height : '30px',
 			 		  lineHeight: height ? height: '30px',
 			 		  fontSize: fontSize ? fontSize : '16px'}">
-			<img src="./../assets/img/user-face.jpg"
-				 v-if="userList && userList.length > 0">
+			<img v-if="userList && userList.length > 0"
+				 :name="item.cubeId"
+				 :src="dataCenter.getAvatarByCube(item.cubeId)"
+				 :onerror="'this.src='+'\''+ $store.state.userFace +'\''">
 			<span class="ml10 overflow"
 				  :style="{ color: fontColor }">{{ item.displayName != "" ? item.displayName : item.cubeId }}</span>
 			<img v-show="item.role == 'MASTER'" src="./../assets/img/group_master.png" style="width: 11px;height: 13px;border-radius: 0">

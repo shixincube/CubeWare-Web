@@ -149,7 +149,8 @@
 							}
 						});
 						console.log('createGroupList', groupList)
-						this.$store.commit('createGroupList', groupList);
+						this.$store.commit('createGroupList', groupList)
+						this.$store.commit('updateCurGroupInfo', groupList[0]);;
 						this.$router.push({name: 'message', query: { curUser: this.$store.state.curUser }});
 					}, function (code, desc) {
 					});

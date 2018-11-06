@@ -1,7 +1,10 @@
 <template>
 	<div class="cp-mt-file">
 		<div class="cp-mt-file-container" :class="{ 'myselfMessage': isMyself,'mzub-ac': isMyself}">
-			<img @click="$emit('openDialog',true)"  src="./../assets/img/user-face.jpg">
+			<img @click="$emit('openDialog',true)"
+				 :name="message.sender"
+				 :src="dataCenter.getAvatarByCube(message.sender)"
+				 :onerror="'this.src='+'\''+ $store.state.userFace +'\''">
 
 			<div class="file-container ml10 mr10"
 				 :class="{ myselfContainer: isMyself } ">

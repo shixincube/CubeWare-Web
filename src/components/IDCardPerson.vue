@@ -1,7 +1,7 @@
 <template>
 	<div class="cp-id-card-person">
 		<i-d-card-header :id-card-name="userInfo.displayName|| userInfo.cubeId"
-						 card-type="person" :id-card-group-id="userInfo.cubeId">
+						 card-type="person" :id-card-id="userInfo.cubeId">
 		</i-d-card-header>
 
 		<div class="cp-id-card-body">
@@ -50,12 +50,11 @@
 				userService: window.cube.getUserService()
 			}
 		},
+
 		props: {
 			userInfo: {
 				type: Object,
 				default: function () {
-//					let index = this.$store.state.userList[0].cubeId == this.$store.state.curUser ? 1 : 0;
-					console.log(this.$store.state.userList[0], this.$store.state.curUser,'=============')
 					return this.$store.state.userList[1]
 				}
 			},
@@ -65,7 +64,16 @@
 			}
 		},
 		computed: {},
-		watch: {},
+		watch: {
+			'$store.state.userList': function (userList) {
+				userList.map((user, index)=>{
+					if(user.cubeId == this.userInfo.cubeId){
+						this.userInfo = user;
+						return;
+					}
+				})
+			}
+		},
 		beforeMount() {
 			this.addAppListener();
 		},
@@ -98,7 +106,6 @@
 			logout() {
 				this.userService.logout();
 				this.$router.push({name: 'login'});
-				window.location.reload();
 			},
 			addAppListener() {
 //				this.$bus.on('checkUserInfo', user => {

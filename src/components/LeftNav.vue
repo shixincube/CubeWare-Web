@@ -3,7 +3,9 @@
 		<el-scrollbar class="cp-scroll">
 			<div class="user-face-box">
 				<img @click="openDialog()"
-					 src="./../assets/img/user-face.jpg">
+					 :name="$store.state.curUser"
+					 :src="'https://dev.download.shixincube.cn/file/avatar/' + $store.state.curUser"
+					 :onerror="'this.src='+'\''+ $store.state.userFace +'\''">
 			</div>
 			<el-menu
 				class="el-menu-vertical-demo"
@@ -231,9 +233,6 @@
 				this.showInvite();
 			},
 			receiveInviteWB(res){
-				console.log('left')
-				console.log(res)
-				console.log(cube.accName)
 				if(res.from.cubeId == cube.accName){
 					return false;
 				}

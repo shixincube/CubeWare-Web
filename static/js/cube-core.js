@@ -890,7 +890,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * Copyright (c) 2015-2016 Cube Team. All rights reserved.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
-var _Delegate = __webpack_require__(13);
+var _Delegate = __webpack_require__(14);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -992,9 +992,80 @@ var Service = exports.Service = function () {
 }();
 
 /***/ }),
-/* 10 */,
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/*
+ * Group.js
+ * Cube Engine
+ *
+ * Copyright (c) 2015-2016 Cube Team. All rights reserved.
+ */
+
+/**
+ * 用户对象。
+ *
+ * @class Group
+ * @author Li WenKai
+ */
+var User = exports.User = function () {
+    function User(cubeId) {
+        for (var _len = arguments.length, args = Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
+            args[_key - 3] = arguments[_key];
+        }
+
+        var displayName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+        var avatar = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+
+        _classCallCheck(this, User);
+
+        //用户ID
+        this.cubeId = cubeId;
+        //用户显示昵称
+        this.displayName = displayName;
+        //用户头像
+        this.avatar = avatar;
+
+        this.name = cubeId;
+
+        if (_typeof(arguments[0]) == 'object') {
+            this.set(arguments[0]);
+        }
+    }
+
+    _createClass(User, [{
+        key: 'set',
+        value: function set(args) {
+            for (var item in this) {
+                if (this.hasOwnProperty(item) && args.hasOwnProperty(item)) {
+                    this[item] = args[item];
+                } else {
+                    delete this[item];
+                }
+            }
+        }
+    }]);
+
+    return User;
+}();
+
+/***/ }),
 /* 11 */,
-/* 12 */
+/* 12 */,
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1024,7 +1095,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1158,7 +1229,7 @@ var Delegate = exports.Delegate = function () {
 }();
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1215,7 +1286,7 @@ var GroupConfig = exports.GroupConfig = function () {
 }();
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1228,9 +1299,9 @@ exports.Member = undefined;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _User2 = __webpack_require__(17);
+var _User2 = __webpack_require__(10);
 
-var _MemberRole = __webpack_require__(16);
+var _MemberRole = __webpack_require__(17);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1282,7 +1353,7 @@ var Member = exports.Member = function (_User) {
 }(_User2.User);
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1324,81 +1395,11 @@ var MemberRole = exports.MemberRole = {
 };
 
 /***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/*
- * Group.js
- * Cube Engine
- *
- * Copyright (c) 2015-2016 Cube Team. All rights reserved.
- */
-
-/**
- * 用户对象。
- *
- * @class Group
- * @author Li WenKai
- */
-var User = exports.User = function () {
-    function User(cubeId) {
-        for (var _len = arguments.length, args = Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
-            args[_key - 3] = arguments[_key];
-        }
-
-        var displayName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-        var avatar = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
-
-        _classCallCheck(this, User);
-
-        //用户ID
-        this.cubeId = cubeId;
-        //用户显示昵称
-        this.displayName = displayName;
-        //用户头像
-        this.avatar = avatar;
-
-        if (_typeof(arguments[0]) == 'object') {
-            this.set(arguments[0]);
-        }
-    }
-
-    _createClass(User, [{
-        key: 'set',
-        value: function set(args) {
-            for (var item in this) {
-                if (this.hasOwnProperty(item) && args.hasOwnProperty(item)) {
-                    this[item] = args[item];
-                } else {
-                    delete this[item];
-                }
-            }
-        }
-    }]);
-
-    return User;
-}();
-
-/***/ }),
 /* 18 */,
 /* 19 */,
 /* 20 */,
 /* 21 */,
-/* 22 */,
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1636,117 +1637,8 @@ var CubeConfig = exports.CubeConfig = function () {
 }();
 
 /***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * 通用会话请求类
- *
- * @class CubeRequest
- * @author Guan Yong, Xu Jiangwei
- *
- */
-var CubeRequest = exports.CubeRequest = function () {
-    /**
-     * @constructs
-     * @param domain {String} - 会话地址
-     */
-    function CubeRequest(domain) {
-        _classCallCheck(this, CubeRequest);
-
-        this.domain = domain;
-    }
-
-    _createClass(CubeRequest, [{
-        key: "send",
-        value: function send(action, data, callback) {
-            for (var item in data) {
-                if (_typeof(data[item]) === 'object') {
-                    data[item] = JSON.stringify(data[item]);
-                }
-            }
-            NucleusAjax.newRequest(this.domain + action).method("POST").content(data).send(function (response) {
-                var status = response.getStatus();
-                if (status === 200) {
-                    var rd = void 0;
-                    try {
-                        rd = JSON.parse(response.getData());
-                    } catch (e) {
-                        rd = response.getData();
-                    }
-                    callback(false, rd);
-                } else {
-                    callback({
-                        status: status
-                    });
-                }
-            });
-        }
-
-        /**
-         * 发送文件
-         * @param action {String} - 接口地址
-         * @param file {{name: {String}, value: {HTMLElement|Blob}} 需要发送的文件
-         * @param data {Object} 需要发送的其它数据
-         * @param callback {Function} 数据回调
-         */
-
-    }, {
-        key: "sendFile",
-        value: function sendFile(action, file, data, callback) {
-            if (window.FormData) {
-                var formData = new FormData();
-
-                for (var item in data) {
-                    formData.append(item, data[item]);
-                }
-
-                if (file.value instanceof HTMLElement) {
-                    var f = file.value.files[0];
-                    formData.append(file.name, f, f.name);
-                } else if (file.value instanceof Blob) {
-                    formData.append(file.name, file.value, file.value.name);
-                }
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("post", this.domain + action, true);
-                xhr.send(formData);
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        var rd = void 0;
-                        try {
-                            rd = JSON.parse(xhr.responseText);
-                        } catch (e) {
-                            rd = xhr.responseText;
-                        }
-                        callback(false, rd);
-                    } else {
-                        callback({
-                            status: xhr.status
-                        });
-                    }
-                };
-            }
-        }
-    }]);
-
-    return CubeRequest;
-}();
-
-/***/ }),
+/* 23 */,
+/* 24 */,
 /* 25 */,
 /* 26 */,
 /* 27 */,
@@ -1756,8 +1648,7 @@ var CubeRequest = exports.CubeRequest = function () {
 /* 31 */,
 /* 32 */,
 /* 33 */,
-/* 34 */,
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1797,7 +1688,7 @@ var CodecType = exports.CodecType = {
 };
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1851,7 +1742,7 @@ var CubeState = exports.CubeState = {
 };
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2089,7 +1980,7 @@ var Session = exports.Session = function () {
 }();
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2110,7 +2001,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
-var _GroupType = __webpack_require__(39);
+var _GroupType = __webpack_require__(38);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2289,7 +2180,7 @@ var Group = exports.Group = function () {
 }();
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2369,7 +2260,7 @@ var GroupType = exports.GroupType = {
 };
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2412,7 +2303,7 @@ var DisturbConfig = exports.DisturbConfig = function DisturbConfig() {
 };
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2456,6 +2347,117 @@ var NotifyConfig = exports.NotifyConfig = function NotifyConfig() {
     //更新配置时间
     this.updateTime = 0;
 };
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * 通用会话请求类
+ *
+ * @class CubeRequest
+ * @author Guan Yong, Xu Jiangwei
+ *
+ */
+var CubeRequest = exports.CubeRequest = function () {
+    /**
+     * @constructs
+     * @param domain {String} - 会话地址
+     */
+    function CubeRequest(domain) {
+        _classCallCheck(this, CubeRequest);
+
+        this.domain = domain;
+    }
+
+    _createClass(CubeRequest, [{
+        key: "send",
+        value: function send(action, data, callback) {
+            for (var item in data) {
+                if (_typeof(data[item]) === 'object') {
+                    data[item] = JSON.stringify(data[item]);
+                }
+            }
+            NucleusAjax.newRequest(this.domain + action).method("POST").content(data).send(function (response) {
+                var status = response.getStatus();
+                if (status === 200) {
+                    var rd = void 0;
+                    try {
+                        rd = JSON.parse(response.getData());
+                    } catch (e) {
+                        rd = response.getData();
+                    }
+                    callback(false, rd);
+                } else {
+                    callback({
+                        status: status
+                    });
+                }
+            });
+        }
+
+        /**
+         * 发送文件
+         * @param action {String} - 接口地址
+         * @param file {{name: {String}, value: {HTMLElement|Blob}} 需要发送的文件
+         * @param data {Object} 需要发送的其它数据
+         * @param callback {Function} 数据回调
+         */
+
+    }, {
+        key: "sendFile",
+        value: function sendFile(action, file, data, callback) {
+            if (window.FormData) {
+                var formData = new FormData();
+
+                for (var item in data) {
+                    formData.append(item, data[item]);
+                }
+
+                if (file.value instanceof HTMLElement) {
+                    var f = file.value.files[0];
+                    formData.append(file.name, f, f.name);
+                } else if (file.value instanceof Blob) {
+                    formData.append(file.name, file.value, file.value.name);
+                }
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", this.domain + action, true);
+                xhr.send(formData);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        var rd = void 0;
+                        try {
+                            rd = JSON.parse(xhr.responseText);
+                        } catch (e) {
+                            rd = xhr.responseText;
+                        }
+                        callback(false, rd);
+                    } else {
+                        callback({
+                            status: xhr.status
+                        });
+                    }
+                };
+            }
+        }
+    }]);
+
+    return CubeRequest;
+}();
 
 /***/ }),
 /* 42 */
@@ -4569,7 +4571,7 @@ var Utils = exports.Utils = {
     // 如果有jQuery，则同样扩展到jQuery
     if (window.jQuery) window.jQuery.LS = window.LS;
 })(window);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ }),
 /* 70 */,
@@ -4595,17 +4597,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * Copyright (c) 2015-2016 Cube Team. All rights reserved.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
-var _Session = __webpack_require__(37);
+var _Session = __webpack_require__(36);
 
-var _CubeConfig = __webpack_require__(23);
+var _CubeConfig = __webpack_require__(22);
 
 var _Utils = __webpack_require__(69);
 
-var _UserServiceWorker = __webpack_require__(121);
+var _UserServiceWorker = __webpack_require__(120);
 
-var _LicenseServiceWorker = __webpack_require__(119);
+var _LicenseServiceWorker = __webpack_require__(118);
 
-var _GroupServiceWorker = __webpack_require__(118);
+var _GroupServiceWorker = __webpack_require__(117);
 
 var _NetworkListener = __webpack_require__(68);
 
@@ -4617,19 +4619,19 @@ var _CELLET = __webpack_require__(4);
 
 var _Responder = __webpack_require__(107);
 
-var _Delegate = __webpack_require__(13);
+var _Delegate = __webpack_require__(14);
 
-var _CubeEngineListener = __webpack_require__(112);
+var _CubeEngineListener = __webpack_require__(111);
 
-var _CubeState = __webpack_require__(36);
+var _CubeState = __webpack_require__(35);
 
 var _CubeServer = __webpack_require__(66);
 
-var _CodecType = __webpack_require__(35);
+var _CodecType = __webpack_require__(34);
 
 var _ConnectionServiceWorker = __webpack_require__(65);
 
-var _SettingServiceWorker = __webpack_require__(120);
+var _SettingServiceWorker = __webpack_require__(119);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -4821,7 +4823,7 @@ var CubeEngine = exports.CubeEngine = function () {
                     // nucleus.talkService.addListener(new NetworkListener(this));
                     // 加载license模块
                     _this.loadLicense();
-                    // 加载账号模块
+                    // 加载账号模块z
                     _this.loadUser();
                     // 加载群组模块
                     _this.loadGroup();
@@ -5874,9 +5876,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Setting = undefined;
 
-var _NotifyConfig = __webpack_require__(41);
+var _NotifyConfig = __webpack_require__(40);
 
-var _DisturbConfig = __webpack_require__(40);
+var _DisturbConfig = __webpack_require__(39);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } /*
                                                                                                                                                            * Setting .js
@@ -6116,7 +6118,7 @@ var _DBManager = __webpack_require__(77);
 
 var _CubeConst = __webpack_require__(5);
 
-var _CubeRequest = __webpack_require__(24);
+var _CubeRequest = __webpack_require__(41);
 
 var _CubeError = __webpack_require__(0);
 
@@ -6124,11 +6126,11 @@ var _CELLET = __webpack_require__(4);
 
 var _StateCode = __webpack_require__(3);
 
-var _Delegate = __webpack_require__(13);
+var _Delegate = __webpack_require__(14);
 
 var _Peer = __webpack_require__(78);
 
-var _Session = __webpack_require__(37);
+var _Session = __webpack_require__(36);
 
 var _UserListener = __webpack_require__(45);
 
@@ -6142,29 +6144,29 @@ var _GroupListener = __webpack_require__(43);
 
 var _DeviceListener = __webpack_require__(42);
 
-var _CubeState = __webpack_require__(36);
+var _CubeState = __webpack_require__(35);
 
-var _CubeConfig = __webpack_require__(23);
+var _CubeConfig = __webpack_require__(22);
 
-var _CodecType = __webpack_require__(35);
+var _CodecType = __webpack_require__(34);
 
-var _Group = __webpack_require__(38);
+var _Group = __webpack_require__(37);
 
-var _GroupType = __webpack_require__(39);
+var _GroupType = __webpack_require__(38);
 
-var _Member = __webpack_require__(15);
+var _Member = __webpack_require__(16);
 
-var _MemberRole = __webpack_require__(16);
+var _MemberRole = __webpack_require__(17);
 
-var _User = __webpack_require__(17);
+var _User = __webpack_require__(10);
 
-var _GroupConfig = __webpack_require__(14);
+var _GroupConfig = __webpack_require__(15);
 
 var _SettingListener = __webpack_require__(44);
 
-var _NotifyConfig = __webpack_require__(41);
+var _NotifyConfig = __webpack_require__(40);
 
-var _DisturbConfig = __webpack_require__(40);
+var _DisturbConfig = __webpack_require__(39);
 
 var _Setting = __webpack_require__(80);
 
@@ -7347,118 +7349,6 @@ var ICEServer = exports.ICEServer = function () {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.LicenseManager = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * LicenseManager.js
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Cube Engine
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Copyright (c) 2015-2016 Cube Team. All rights reserved.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
-var _CubeRequest = __webpack_require__(24);
-
-var _CubeError = __webpack_require__(0);
-
-var _StateCode = __webpack_require__(3);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * 授权文件管理类
- */
-var LicenseManager = exports.LicenseManager = function () {
-    function LicenseManager(engine, token, appid) {
-        _classCallCheck(this, LicenseManager);
-
-        this.storageKey = 'CUBE_LICENSE_KEY_' + appid;
-        this.address = 'http://license.getcube.cn/auth/license/get';
-        this.engine = engine;
-        this.token = token;
-        this.appid = appid;
-        this.maxUsers = 0;
-        this.beginDate = 0;
-        this.endDate = 0;
-        this.cubeServer = null;
-        this.cubeHttpServer = null;
-        this.conference = null;
-        this.iceServers = null;
-        this.permissions = null;
-        this.company = null;
-        this.createTime = 0;
-        this.updateTime = 0;
-        this.nodeId = 0;
-
-        var license = localStorage.getItem(this.storageKey);
-        this.appLicense = license ? JSON.parse(license) : null;
-    }
-
-    _createClass(LicenseManager, [{
-        key: "checkAndUpdate",
-        value: function checkAndUpdate(address, callback) {
-            var _this = this;
-
-            var server = new _CubeRequest.CubeRequest('');
-            var postData = {
-                token: this.token,
-                appid: this.appid,
-                version: this.engine.version,
-                type: 'json'
-            };
-            if (this.appLicense) {
-                postData.lastUpdateTime = this.appLicense.UpdateTime;
-            }
-            server.send(address ? address : this.address, postData, function (err, data) {
-                if (err) {
-                    callback(new _CubeError.CubeError(_StateCode.StateCode.LoadLicenseFailed, 'Network error.'));
-
-                    return;
-                }
-
-                if (data.state === 200) {
-                    /** @type {object} */
-                    var license = data.data.license;
-                    /* license.CubeServer.Host = '182.150.24.10';
-                     license.CubeServer.HTTPPort = 11070;*/
-                    var version = parseFloat(license.Version);
-
-                    if (version < 1.8 || version > 3.0) {
-                        callback(new _CubeError.CubeError(_StateCode.StateCode.LoadLicenseFailed, 'License version version is too old!'));
-
-                        return;
-                    }
-
-                    if (Date.now() > license.EndDate) {
-                        callback(new _CubeError.CubeError(_StateCode.StateCode.LoadLicenseFailed, 'License has expired!'));
-
-                        return;
-                    }
-
-                    localStorage.setItem(_this.storageKey, JSON.stringify(license));
-                    _this.engine.server.update(license);
-                    callback(false, true, license);
-                } else if (data.state === 201) {
-                    callback(false, false, _this.appLicense);
-                } else {
-                    callback(new _CubeError.CubeError(data.state, 'Incorrect access.'));
-                }
-            });
-        }
-    }]);
-
-    return LicenseManager;
-}();
-
-/***/ }),
-/* 112 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.CubeEngineListener = undefined;
@@ -7526,7 +7416,7 @@ var CubeEngineListener = exports.CubeEngineListener = function (_Listener) {
 }(_Listener2.Listener);
 
 /***/ }),
-/* 113 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7739,7 +7629,7 @@ var GroupService = exports.GroupService = function (_Service) {
 }(_Service2.Service);
 
 /***/ }),
-/* 114 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7789,7 +7679,7 @@ var LicenseListener = exports.LicenseListener = function () {
 }();
 
 /***/ }),
-/* 115 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7896,7 +7786,7 @@ var LicenseService = exports.LicenseService = function (_Service) {
 }(_Service2.Service);
 
 /***/ }),
-/* 116 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8032,7 +7922,7 @@ var SettingService = exports.SettingService = function (_Service) {
 }(_Service2.Service);
 
 /***/ }),
-/* 117 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8130,7 +8020,7 @@ var UserService = exports.UserService = function (_Service) {
 }(_Service2.Service);
 
 /***/ }),
-/* 118 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8143,7 +8033,7 @@ exports.GroupServiceWorker = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _GroupService2 = __webpack_require__(113);
+var _GroupService2 = __webpack_require__(112);
 
 var _GroupListener = __webpack_require__(43);
 
@@ -8151,9 +8041,9 @@ var _CubeConst = __webpack_require__(5);
 
 var _CELLET = __webpack_require__(4);
 
-var _Group = __webpack_require__(38);
+var _Group = __webpack_require__(37);
 
-var _Member = __webpack_require__(15);
+var _Member = __webpack_require__(16);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8599,7 +8489,7 @@ var GroupServiceWorker = exports.GroupServiceWorker = function (_GroupService) {
 }(_GroupService2.GroupService);
 
 /***/ }),
-/* 119 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8616,7 +8506,7 @@ var _CubeConst = __webpack_require__(5);
 
 var _CELLET = __webpack_require__(4);
 
-var _LicenseService2 = __webpack_require__(115);
+var _LicenseService2 = __webpack_require__(114);
 
 var _CubeHttpServer = __webpack_require__(109);
 
@@ -8624,9 +8514,9 @@ var _CubeServer = __webpack_require__(66);
 
 var _ICEServer = __webpack_require__(110);
 
-var _LicenseListener = __webpack_require__(114);
+var _LicenseListener = __webpack_require__(113);
 
-var _CubeConfig = __webpack_require__(23);
+var _CubeConfig = __webpack_require__(22);
 
 var _RegistrationState = __webpack_require__(7);
 
@@ -8916,7 +8806,7 @@ var LicenseServiceWorker = exports.LicenseServiceWorker = function (_LicenseServ
 }(_LicenseService2.LicenseService);
 
 /***/ }),
-/* 120 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8929,7 +8819,7 @@ exports.SettingServiceWorker = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _SettingService2 = __webpack_require__(116);
+var _SettingService2 = __webpack_require__(115);
 
 var _SettingListener = __webpack_require__(44);
 
@@ -9218,7 +9108,7 @@ var SettingServiceWorker = exports.SettingServiceWorker = function (_SettingServ
 }(_SettingService2.SettingService);
 
 /***/ }),
-/* 121 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9231,7 +9121,7 @@ exports.UserServiceWorker = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _UserService2 = __webpack_require__(117);
+var _UserService2 = __webpack_require__(116);
 
 var _UserListener = __webpack_require__(45);
 
@@ -9241,7 +9131,7 @@ var _RegistrationState = __webpack_require__(7);
 
 var _CubeConst = __webpack_require__(5);
 
-var _CubeRequest = __webpack_require__(24);
+var _CubeRequest = __webpack_require__(41);
 
 var _CubeError = __webpack_require__(0);
 
@@ -9249,11 +9139,11 @@ var _StateCode = __webpack_require__(3);
 
 var _DeviceListener = __webpack_require__(42);
 
-var _Delegate = __webpack_require__(13);
-
-var _LicenseManager = __webpack_require__(111);
+var _Delegate = __webpack_require__(14);
 
 var _NetworkListener = __webpack_require__(68);
+
+var _User = __webpack_require__(10);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -9418,9 +9308,68 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
 
             return false;
         }
+
+        /**
+         * 更新用户信息
+         *
+         * @param {user} user - 用户对象。
+         */
+
     }, {
         key: 'update',
-        value: function update(user) {}
+        value: function update(user) {
+            if (!user) {
+                return false;
+            }
+            var param = {
+                user: new _User.User(user),
+                token: this.engine.accToken
+            };
+            this.engine.connect.send(_CELLET.CELLET.User, _CubeConst.CubeConst.ActionUpdate, param);
+        }
+
+        /**
+         * 上传用户头像
+         *
+         * @param {user} user - 用户对象。
+         */
+
+    }, {
+        key: 'uploadAvatar',
+        value: function uploadAvatar() {
+            var _this3 = this;
+
+            var fn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
+            var update = arguments[1];
+
+            var url = 'http://125.208.1.67:6011/v3/file/uploadAvatar';
+            if (CubeFileMessage) {
+                var file = new CubeFileMessage();
+                file.accept = 'image/*';
+                file.chooseFile(function (File, md5) {
+                    var param = {
+                        token: _this3.engine.accToken,
+                        isOverride: true,
+                        md5: md5
+                    };
+                    var server = new _CubeRequest.CubeRequest('');
+                    server.sendFile(url, {
+                        name: 'file',
+                        value: File
+                    }, param, function (err, nData) {
+                        if (typeof fn == 'function') {
+                            if (update) {
+                                var user = new _User.User(_this3.engine.accName, _this3.engine.accDisplayName, nData.data.url);
+                                _this3.update(user);
+                            } else {
+                                fn(err, nData);
+                            }
+                        }
+                        if (err) throw err;
+                    });
+                });
+            }
+        }
 
         /**
          * 添加设备上下线监听器。
@@ -9503,7 +9452,7 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
     }, {
         key: '_handleRegister',
         value: function _handleRegister(cubeId, displayName, token, requests) {
-            var _this3 = this;
+            var _this4 = this;
 
             if (this.engine.isLicenseLoaded) {
                 this.engine.isBeingRegister = true;
@@ -9511,7 +9460,7 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
                 if (requests < 20) {
                     if (!nucleus.talkService.isCalled(_CELLET.CELLET.User)) {
                         setTimeout(function () {
-                            _this3._handleRegister(cubeId, displayName, token, requests++);
+                            _this4._handleRegister(cubeId, displayName, token, requests++);
                         }, 500);
                         return true;
                     }
@@ -9543,8 +9492,8 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
 
                 // 如果 5 秒后未登陆成功, 则尝试再次登陆
                 setTimeout(function () {
-                    if (_this3.engine.isBeingRegister) {
-                        _this3._handleRegister(cubeId, displayName, token, requests += 5);
+                    if (_this4.engine.isBeingRegister) {
+                        _this4._handleRegister(cubeId, displayName, token, requests += 5);
                     }
                 }, 5000);
             }
@@ -9569,16 +9518,16 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
     }, {
         key: 'loadLicense',
         value: function loadLicense(token, callback) {
-            var _this4 = this;
+            var _this5 = this;
 
             this.licenseService.checkLicenseUpdate(null, token, this.engine.config.appid, function (err, update, license) {
                 if (err) {
                     callback(err);
                 } else {
-                    _this4.engine._appLicense = license;
-                    _this4.engine.isLicenseLoaded = true;
-                    _this4.engine.server.update(license);
-                    _this4.engine.connect.connect(_CUBE_DOMAIN, _CUBE_PORT, _VALID_CELLETS, new _NetworkListener.NetworkListener(_this4.engine));
+                    _this5.engine._appLicense = license;
+                    _this5.engine.isLicenseLoaded = true;
+                    _this5.engine.server.update(license);
+                    _this5.engine.connect.connect(_CUBE_DOMAIN, _CUBE_PORT, _VALID_CELLETS, new _NetworkListener.NetworkListener(_this5.engine));
                     // this.engine.hostAddress = new InetAddress(_CUBE_DOMAIN, _CUBE_PORT);
                     // nucleus.talkService.call(_VALID_CELLETS, this.engine.hostAddress, this.engine.config.socketEnabled);
                     callback(false, license);
@@ -9663,10 +9612,10 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
         key: '_processLoginAck',
         value: function _processLoginAck(dialect) {
             this.engine.isBeingRegister = false;
-
+            var data = dialect.getParamAsString("data");
             var state = dialect.getParamAsString("state");
             if (state.code === 200) {
-                var token = dialect.getParamAsString("token");
+                var token = data.msgToken;
                 if (null != token && undefined !== token) {
                     this.engine._cube_token = token.toString();
                 }
@@ -9675,6 +9624,12 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
                 if (null != iceServers) {
                     _CUBE_ICE_SERVERS = iceServers;
                     _CUBE_STUN_SERVERS = this.engine._parseICEServers(iceServers);
+                }
+
+                var user = data.user;
+                if (null != user) {
+                    this.engine.accDisplayName = user.displayName;
+                    this.engine.accAvatar = user.avatar;
                 }
 
                 this._fireRegistrationState(_RegistrationState.RegistrationState.Ok);
@@ -9703,9 +9658,9 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
         key: '_processUpdate',
         value: function _processUpdate(dialect) {
             var state = dialect.getParamAsString("state");
-            var user = dialect.getParamAsString("user");
+            var data = dialect.getParamAsString("data");
             if (state.code === 200) {
-                this.delegate.onUserUpdated(user);
+                this.delegate.onUserUpdated(data);
             } else {
                 nucleus.getLogger().w("CubeEngine", "update user failed");
             }
@@ -9746,7 +9701,7 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
     }, {
         key: '_processLicense',
         value: function _processLicense(dialect) {
-            var _this5 = this;
+            var _this6 = this;
 
             var data = dialect.getParamAsString("data");
             if (data) {
@@ -9762,20 +9717,20 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
                         }
                         if (d.state === 200) {
                             var license = d.data;
-                            _this5.engine.server.update(license);
-                            _this5._updateLicense(license, true);
+                            _this6.engine.server.update(license);
+                            _this6._updateLicense(license, true);
                         }
                     });
                 } else {
                     // wait 毫秒后更新授权信息
                     setTimeout(function () {
-                        _this5.licenseService.checkAndUpdate(data.server, null, _this5.engine.config.appid, function (err, update, license) {
+                        _this6.licenseService.checkAndUpdate(data.server, null, _this6.engine.config.appid, function (err, update, license) {
                             if (err) {
                                 nucleus.getLogger().w('CubeEngine', 'Update license Failed! ' + err.message);
                                 return;
                             }
-                            _this5.engine.server.update(license);
-                            _this5._updateLicense(license, update);
+                            _this6.engine.server.update(license);
+                            _this6._updateLicense(license, update);
                         });
                     }, 5000);
                 }
