@@ -101,7 +101,9 @@
 					return false;
 				}
 				this.$emit('inviteList', this.selectList);
-				this.selectList = [];
+				setTimeout(() => {
+					this.selectList = [];
+				}, 2000)
 			},
 			closeDialog() {
 				let exsist = this.$store.state.shareScreen || this.$store.state.whiteboard || this.$store.state.audioCall || this.$store.state.groupVideo;

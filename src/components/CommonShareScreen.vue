@@ -105,10 +105,19 @@
 				}
 				this.maxNumber = this.$store.state.messagePeer.includes('g') ? 9 : 2;
 				let conferenceConfig = new CubeConferenceConfig();
-				conferenceConfig.displayName = this.displayName;
-				// conferenceConfig.invites = this.inviteList;
+				if(this.$store.state.curGroup) {
+					for(let i = 0 ; i < this.$store.state.groupList.length ; i++) {
+						if(this.$store.state.curGroup == this.$store.state.groupList[i].groupId) {
+							conferenceConfig.displayName = this.$store.state.groupList[i].displayName;
+							conferenceConfig.bindGroupId = this.$store.state.curGroup;
+						}
+					}
+				} else {
+					conferenceConfig.displayName = '共享桌面';
+					conferenceConfig.bindGroupId = '';
+				}
 				conferenceConfig.type = 'share-screen';
-				conferenceConfig.bindGroupId = this.$store.state.curGroup || '';
+				conferenceConfig.autoNotify = false;
 				conferenceConfig.maxNumber = this.maxNumber;
 				this.$bus.on('onShareCreated', this.onShareCreated)
 				this.shareScreenService.create(conferenceConfig);
