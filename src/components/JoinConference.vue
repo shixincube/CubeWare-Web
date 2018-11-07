@@ -54,19 +54,25 @@
         mounted() {
 
         },
+		beforeDestroy() {
+        	this.$bus.off('onShareJoined', this.setEnable);
+		},
         methods: {
 			joinConference() {
 				this.$emit('conferenceJoined');
 				switch (this.conferenceInfo.type) {
 					case 'share-screen': {
+						this.$bus.on('onShareJoined', this.setEnable);
 						window.cube.getConferenceService().join(this.conferenceInfo.conferenceId);
-						window.cube.getConferenceService().setVideoEnabled(this.conferenceInfo.conferenceId, true);
 						this.$store.commit('updateShareScreen', this.conferenceInfo);
 						this.$store.commit('openEngineElement', 'showCRemoteVideo');
 						this.$store.commit('updateInviteType', 'shareScreen');
 						break;
 					}
 				}
+			},
+			setEnable(conferenceInfo) {
+				window.cube.getConferenceService().setVideoEnabled(this.conferenceInfo.conferenceId, true);
 			}
 		},
         components: {}
@@ -110,6 +116,7 @@
 		}
 		.cp-jc-members {
 			.cp-jc-member-list {
+				display: inline-block;
 				width: 50px;
 				text-align: center;
 				overflow: hidden;

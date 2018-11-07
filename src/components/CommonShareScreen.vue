@@ -124,10 +124,11 @@
 			},
 			onShareCreated(res){
 				this.shareScreen = res;
-				this.inviteConferenceMember(this.selectList);
+				// this.inviteConferenceMember(this.selectList);
 				this.joinConference();
 			},
 			destroyShareScreen() {
+        		debugger;
         		this.destroyed = true;
 				new Promise((resolve) => {
 					this.$bus.on('onShareQuited', () => {
@@ -179,8 +180,6 @@
 			},
 			inviteConferenceMember(inviteList) {
 				this.shareScreenService.inviteMembers(this.shareScreen.conferenceId, inviteList);
-				console.log('inviteList', this.inviteList);
-				// this.inviteList = [];
 				for(let i = 0 ; i < inviteList.length ; i++) {
 					let cubeId = inviteList[i].cubeId ? inviteList[i].cubeId : inviteList[i]
 					let displayName = this.dataCenter.getNameByCube(cubeId)
@@ -219,6 +218,7 @@
 				if(res.from.cubeId != res.conference.founder) {
 					this.changeJoined(res.conference);
 				} else {
+					this.inviteConferenceMember(this.selectList);
 					let displayName = this.dataCenter.getNameByCube(res.from.cubeId)
 					this.joinedList.push({
 						cubeId: res.from.cubeId,
@@ -269,7 +269,7 @@
 		},
 		beforeDestroy() {
         	this.removeAppListener();
-        	if(!this.destroyed) {
+        	if(!this.destroyed && this.$store.state.shareScreen) {
 				this.destroyShareScreen();
 			}
 		},
