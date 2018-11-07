@@ -1,7 +1,9 @@
 <template>
 	<div class="cp-message-bottom-fixed">
 		<div class="cp-mbf-header">
-			<img :src="dataCenter.getAvatarByCube(conferenceNotify.name)"/>
+			<img 
+			:src="'https://dev.download.shixincube.cn/file/avatar/' + conferenceNotify.name"
+				 :onerror="'this.src='+'\''+ $store.state.userFace +'\''"/>
 			<div class="cp-mbf-header-right">
 				<p>{{ dataCenter.getNameByCube(conferenceNotify.name) }}</p>
 				<p>邀请您参加 {{ getTypeName(conferenceNotify.inviteType) }}</p>

@@ -134,9 +134,12 @@
 							}
 							//vueMessages.push(this.praeMessage(message));
 						}
-						this.messages = vueMessages.concat(this.messages);
+						
+						this.$store.state.messagePeer == cubeId ? this.messages = vueMessages.concat(this.messages): ''
 						this.nowPage++;
 						toBottom ? this.toBottom() : "";
+						console.log('99999999999999999999')
+						console.log(this.messages)
 					}
 				})
 			},
@@ -147,6 +150,7 @@
 					this.messages = [];
 					this.showMore = true;
 					this.queryHistory(this.$store.state.messagePeer, true);
+					
 				}
 			},
 			moreMessage() {
