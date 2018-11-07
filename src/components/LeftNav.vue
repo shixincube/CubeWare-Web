@@ -280,6 +280,9 @@
 				}
 			},
 			onConferenceFailed(res){
+				if(res.error.code == 1514) {
+					return false;
+				}
 				console.log('会议出错', res);
 				let nameMap = {};
 				nameMap[CubeGroupType.VOICE_CALL] = '多人语音';
