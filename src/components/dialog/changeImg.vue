@@ -16,7 +16,6 @@ export default {
   beforeMount() {},
   mounted() {
     this.$nextTick(() => {
-      console.log(this.$refs);
       this.drag(this.$refs.drag);
     });
   },
@@ -68,7 +67,7 @@ export default {
           e.preventDefault();
           document.onmousemove = null;
           document.onmouseup = null;
-         
+
           return false;
         };
       };

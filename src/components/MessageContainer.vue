@@ -5,7 +5,7 @@
 				{{curInfo && curInfo.displayName ? curInfo.displayName : $store.state.messagePeer}}
 			</div>
 		</div>
- 
+
 		<div class="chat-left" :class="isGroup?'group':''" style="height: 94%; overflow: hidden;">
 			<el-scrollbar class="message-area">
 				<div class="cp-scan-more">
@@ -36,7 +36,7 @@
 
 		<person-info-dialog :userInfo="curInfo" :personShow.sync="personShow"></person-info-dialog>
 		<group-info-dialog @groupItemInfo='groupItemInfo' :groupInfo="curInfo" :groupShow.sync="groupShow"></group-info-dialog>
-		
+
 	</div>
 </template>
 
@@ -45,15 +45,15 @@
 	import MessageSent from './../components/MessageSent';
 	import PersonInfoDialog from './dialog/PersonInfoDialog';
 	import GroupInfoDialog from "./dialog/GroupInfoDialog";
-	
-	
+
+
 	import GroupList from "./GroupList"
 
 	export default {
 		name: "MessageContainer",
 		data() {
 			return {
-				
+
 				personShow: false,
 				groupShow: false,
 				messages: [],
@@ -134,12 +134,10 @@
 							}
 							//vueMessages.push(this.praeMessage(message));
 						}
-						
+
 						this.$store.state.messagePeer == cubeId ? this.messages = vueMessages.concat(this.messages): ''
 						this.nowPage++;
 						toBottom ? this.toBottom() : "";
-						console.log('99999999999999999999')
-						console.log(this.messages)
 					}
 				})
 			},
@@ -150,7 +148,7 @@
 					this.messages = [];
 					this.showMore = true;
 					this.queryHistory(this.$store.state.messagePeer, true);
-					
+
 				}
 			},
 			moreMessage() {

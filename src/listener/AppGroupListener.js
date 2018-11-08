@@ -31,7 +31,6 @@ export class AppGroupListener {
 	 * @param {GroupContext} groupContext - 群组上下文对象。
 	 */
 	onGroupDestroyed(groupContext) {
-		console.log('onGroupDestoryed');
 		this.vue.$store.commit('removeGroupList', groupContext);
 		this.vue.$bus.emit('onGroupDestroyed',groupContext);
 
