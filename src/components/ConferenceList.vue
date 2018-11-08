@@ -59,7 +59,7 @@
 				</el-input-number>
 			</div>
 			<group-join-member :memberList="inviteList"></group-join-member>
-			<el-button class="cp-create-conference-btn" :class="{'active':time&&date&&duration&&conferenceTopic}"
+			<el-button class="cp-create-conference-btn active" :disabled='!time || !date || !duration || !conferenceTopic'
 					   @click="createConference">
 				创建会议
 			</el-button>
