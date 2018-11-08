@@ -5064,8 +5064,9 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
         value: function _processMsgPullAck(dialect) {
             var state = dialect.getParamAsString("state");
             var data = dialect.getParamAsString("data");
+
+            var queryTime = data && data.timestamp;
             if (state.code == 200) {
-                var queryTime = data.timestamp;
                 //查询历史消息的回调处理，查询历史消息会带上本地时间戳来做回调，因此根据pullack是否有时间戳来区分
                 if (null != queryTime) {
                     var messages = [];
@@ -5165,6 +5166,9 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
                     this.syncMessageNumber--;
                 }
             } else {
+                if (null != queryTime) {
+                    this._historyCallback(queryTime);
+                }
                 if (this.syncMessageNumber > 0) {
                     this.syncMessageNumber--;
                 }
@@ -5184,7 +5188,7 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
             var data = dialect.getParamAsString("data");
             if (state.code != 200) {
                 //queryPage.cubeCallback([]);
-                this._historyCallback([]);
+                this._historyCallback(data.timestamp);
                 return;
             }
             var querySns = data.sns.map(function (message) {
