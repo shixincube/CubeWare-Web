@@ -113,8 +113,10 @@
 						this.conferenceService.join(conference.conferenceId);
 					}
 				});
-				this.$bus.on('onVoiceCreatedConnected', () => {
-					this.conferenceService.inviteMembers(this.conference.conferenceId, this.fInviteList);
+				this.$bus.on('onVoiceCreatedConnected', (conference) => {
+					if(conference.founder == this.$store.state.curUser){
+						this.conferenceService.inviteMembers(this.conference.conferenceId, this.fInviteList);
+					}
 				});
 				this.$bus.on('onVoiceJoined',(res) =>{
 					this.$store.commit('updateAudioCall', res.conference)

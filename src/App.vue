@@ -67,7 +67,11 @@
 		props: {},
 		computed: {},
 		watch: {
-			'$route'() {
+			'$route'(to, from) {
+				if(to.name == "login" && from.name !== null){
+					// 从其他页面跳转到登录页 需重置history 并保证证数据完整性
+					window.location.reload();
+				}
 				if (window._czc) {
 					// 友盟统计
 					let location = window.location;
