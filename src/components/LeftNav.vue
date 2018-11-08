@@ -233,6 +233,7 @@
 				this.showInvite();
 			},
 			receiveInviteWB(res){
+				console.log('res', res);
 				if(res.from.cubeId == cube.accName){
 					return false;
 				}
@@ -246,6 +247,7 @@
 					inviteType: res.whiteboard.type,
 					inviteList: inviteList
 				}
+				this.$store.commit('updateWhiteboard', res.whiteboard);
 				this.showInvite();
 			},
 			showInvite(){

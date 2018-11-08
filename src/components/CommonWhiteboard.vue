@@ -163,7 +163,7 @@
 						displayName: invite.displayName
 					})
 				}
-				this.whiteboardService.invite(this.whiteboard.whiteboardId, inviteIds);
+				this.whiteboardService.invite(this.$store.state.whiteboard.whiteboardId, inviteIds);
 			},
 			rejectWhiteboard() {
 				this.whiteboardService.rejectInvite(this.whiteboard.whiteboardId, this.$store.state.curUser);
