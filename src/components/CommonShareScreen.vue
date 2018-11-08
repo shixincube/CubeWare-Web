@@ -217,7 +217,6 @@
 				if(res.from.cubeId != res.conference.founder) {
 					this.changeJoined(res.conference);
 				} else {
-					this.inviteConferenceMember(this.selectList);
 					let displayName = this.dataCenter.getNameByCube(res.from.cubeId)
 					this.joinedList.push({
 						cubeId: res.from.cubeId,
@@ -228,6 +227,14 @@
 				this.showInviteDialog = true;
 				this.videoJoinConference();
 			},
+
+			onShareScreenConnected(conference){
+				this.shareScreen = conference;
+				if(this.$store.state.curUser == conference.founder) {
+					this.inviteConferenceMember(this.selectList);
+				}
+			},
+
 			onShareInvited(res){
         		if(this.inviteList.length == 0) {
 					for(let i = 0 ; i < res.inviters.length ; i++) {
@@ -252,12 +259,14 @@
 			},
 			addAppListener(){
 				this.$bus.on('onShareJoined', this.onShareJoined);
+				this.$bus.on('onShareScreenConnected', this.onShareScreenConnected);
 				this.$bus.on('onShareInvited', this.onShareInvited);
 				this.$bus.on('onShareQuited', this.onShareQuited)
 			},
 			removeAppListener() {
 				this.$bus.off('onShareCreated', this.onShareCreated);
 				this.$bus.off('onShareJoined', this.onShareJoined);
+				this.$bus.off('onShareScreenConnected', this.onShareScreenConnected);
 				this.$bus.off('onShareQuited', this.onShareQuited);
 				this.$bus.off('onShareInvited', this.onShareInvited);
 			},

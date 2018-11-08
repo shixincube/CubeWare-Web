@@ -316,10 +316,22 @@ export class AppConferenceListener {
 	 * @param {Conference} conference 会议对象实例
 	 */
 	onConferenceConnected(conference) {
-		console.log('=========================================================')
-		this.vue.$bus.emit('onConferenceConnected', {
-			conference: conference
-		});
+		if(conference.type == CubeGroupType.VIDEO_CONFERENCE){
+			this.vue.$bus.emit('onVideoCreatedConnected', conference);
+			return;
+		}
+		if(conference.type == CubeGroupType.VIDEO_CALL){
+			this.vue.$bus.emit('onGroupVideoCreatedConnected', conference);
+			return;
+		}
+		if(conference.type == CubeGroupType.VOICE_CALL){
+			this.vue.$bus.emit('onVoiceCreatedConnected', conference);
+			return;
+		}
+		if(conference.type == 'share-screen'){
+			this.vue.$bus.emit('onShareScreenConnected', conference);
+			return;
+		}
 	 }
 
 	/**
