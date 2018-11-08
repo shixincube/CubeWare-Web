@@ -74,7 +74,7 @@
 			},
 			'$store.state.groupList': function (groups) {
 				groups.map(group => {
-					if (this.curInfo.groupId == group.groupId) {
+					if (this.curInfo && this.curInfo.groupId == group.groupId) {
 						this.curInfo = group;
 					}
 				});

@@ -40,7 +40,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="version">v1.0.4</div>
+		<div class="version">v1.0.6</div>
 	</section>
 </template>
 

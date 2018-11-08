@@ -132,7 +132,7 @@
 					console.log('消息同步结束');
 					setTimeout(() => {
 						this.closeLoading();
-					}, 1000);
+					}, 2000);
 				});
 			}
 		},

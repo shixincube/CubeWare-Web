@@ -62,9 +62,10 @@
 				this.sessionId = peer;
 			}
 		},
-		beforeMount() {},
-		mounted() {
+		beforeMount() {
 			this.addAppListener();
+		},
+		mounted() {
 			this.queryRecent();
 		},
 		methods: {
@@ -234,7 +235,7 @@
 			destroyAppListener() {
 				this.$bus.off('onRecentSessionAdded');
 				this.$bus.off('onRecentSessionChanged');
-				this.$bus.off('onMessageSyncEnd');
+//				this.$bus.off('onMessageSyncEnd');
 				this.$bus.off('onQuitGroup');
 			}
 		},
