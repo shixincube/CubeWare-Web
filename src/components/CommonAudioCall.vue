@@ -101,6 +101,11 @@
 				this.conferenceService.inviteMembers(this.conference.conferenceId, cubeIds);
 			},
 			addAppListener(){
+				this.$bus.on('onConferenceRejectInvited',(res) =>{
+					console.log("拒绝会议====>onConferenceQuited", res);
+					this.changeJoined(res.conference);
+					
+				})
 				this.$bus.on('onVoiceCreated',(conference, from) =>{
 					if(from.cubeId == cube.accName){
 						this.conferenceService.join(conference.conferenceId);
@@ -154,7 +159,8 @@
 				this.$bus.off('onVoiceCreated');
 				this.$bus.off('onVoiceJoined');
 				this.$bus.off('onVoiceQuited');
-				this.$bus.off('onVoiceInvited');
+				this.$bus.off('rejectInvite');
+				// this.$bus.off('onVoiceInvited');
 			},
 			closeDialog(){
 				this.$store.commit('changeLeftHoverNav', '');

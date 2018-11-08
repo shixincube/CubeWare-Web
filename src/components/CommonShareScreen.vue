@@ -128,7 +128,6 @@
 				this.joinConference();
 			},
 			destroyShareScreen() {
-        		debugger;
         		this.destroyed = true;
 				new Promise((resolve) => {
 					this.$bus.on('onShareQuited', () => {

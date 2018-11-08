@@ -178,7 +178,13 @@ export class AppConferenceListener {
 	 * @param {CubeUser} from
 	 * @param {CubeUser} rejectMember
 	 */
-	onConferenceRejectInvited(conference, from, rejectMember){}
+	onConferenceRejectInvited(conference, from, rejectMember){
+		this.vue.$bus.emit('onConferenceRejectInvited', {
+			conference,
+			from,
+			rejectMember
+		});
+	}
 
 	/**
 	 * 同账号在其他设备拒绝邀请

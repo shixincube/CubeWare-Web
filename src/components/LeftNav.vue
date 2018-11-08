@@ -311,7 +311,7 @@
 					1502: typeName + "失败",
 					1702: "未检测到设备",
 					1510: "没有找到" + typeName,
-					1520: '太早进入' + typeName ,
+					1520: typeName + '未开始' ,
 				};
 
 				let errMsg = errMsgMap[res.error.code]
@@ -424,8 +424,10 @@
 				this.hasInvite = false;
 			},
 			rejectInvite(obj){
+				console.log('*************7777777777777')
+				console.log(obj)
 				if(obj.inviteType != 'share-wb'){
-					this.conferenceService.quit(obj.id);
+					this.conferenceService.rejectInvite(obj.id,obj.name);
 				}else{
 					this.whiteboardService.rejectInvite(obj.id,obj.name);
 				}
