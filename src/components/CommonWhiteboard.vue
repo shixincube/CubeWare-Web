@@ -147,7 +147,7 @@
 			},
 			inviteWhiteboard(list) {
 				let inviteIds = [];
-				
+
 				for(let invite of this.inviteList){
 					inviteIds.push(invite.cubeId);
 				}
@@ -260,11 +260,11 @@
 							resolve();
 						});
 						this.whiteboardService.quit(this.$store.state.whiteboard.whiteboardId);
-						
+
 					}).then(() => {
 						this.whiteboard = '';
 						this.inviteList = [];
-						
+
 						this.$store.commit('changeLeftHoverNav','')
 						this.$store.commit('updateInviteType', '');
 						// this.cleanWhiteboard();
@@ -302,13 +302,12 @@
 					}
 				});
 				 this.$bus.on('onWhiteboardJoined', (res) => {
-                    console.log('监听加入白板人员')
                     this.$store.commit('updateWhiteboard', res.whiteboard);
                     this.$store.commit('openEngineElement', 'showWBCanvas');
                     if(res.whiteboard.masters[0].cubeId == this.$store.state.curUser) {
                         this.whiteboardService.zoom(1.2);
 						this.whiteboardService.zoom(1.0);
-					
+
 						let iList = this.inviteList;
 						console.log(this.inviteList)
 						console.log(res.whiteboard.members)
@@ -373,7 +372,6 @@
 					this.$message.error(res.error);
 				});
 				this.$bus.on('onWhiteboardRejectInvited', (res) => {
-					console.log('监听了拒绝了邀请')
 					this.inviteList = [];
                     this.joinedList = [];
                     for(let i = 0; i < res.whiteboard.invites.length; i++) {
@@ -407,7 +405,7 @@
                             });
                         };
                     };
-                    
+
                     if(res.whiteboard.whiteboard.members.length > 0) {
                         for(let i = 0; i < res.whiteboard.whiteboard.members.length; i++) {
                             this.joinedList.push({
@@ -416,10 +414,9 @@
                             });
                         };
                     }
-                    console.log(123)
 
                 });
-				
+
 			},
 			removeWhiteboardListener() {
 				this.cleanWhiteboard();
