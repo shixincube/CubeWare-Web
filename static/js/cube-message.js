@@ -5184,6 +5184,7 @@ var MessageServiceWorker = exports.MessageServiceWorker = function (_MessageServ
             var data = dialect.getParamAsString("data");
             if (state.code != 200) {
                 //queryPage.cubeCallback([]);
+                this._historyCallback([]);
                 return;
             }
             var querySns = data.sns.map(function (message) {

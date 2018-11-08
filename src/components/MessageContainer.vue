@@ -124,6 +124,7 @@
 							return;
 						}
 						let vueMessages = [];
+						let customs = 0;
 						let hasSns = {};
 						for(let m of this.messages){
 							hasSns[m.sn] = true;
@@ -132,10 +133,15 @@
 							if(!hasSns[message.sn]){
 								vueMessages.push(this.praeMessage(message));
 							}
+							if(message.type == "custom"){
+								customs ++;
+							}
 							//vueMessages.push(this.praeMessage(message));
 						}
-
-						this.$store.state.messagePeer == cubeId ? this.messages = vueMessages.concat(this.messages): ''
+						this.$store.state.messagePeer == cubeId ? this.messages =  vueMessages.concat(this.messages): '';
+						if(customs > 7){
+							this.queryHistory(cubeId, toBottom);
+						}
 						this.nowPage++;
 						toBottom ? this.toBottom() : "";
 					}

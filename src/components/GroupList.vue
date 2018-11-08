@@ -7,7 +7,7 @@
 				<!--<i class="pointer cb-add-friend"></i>-->
 			</p>
 		</div>
-		<el-scrollbar class="cb-scroll"  v-show="groupList && groupList.members && groupList.members.length > 0">
+		<el-scrollbar class="cb-scroll"  v-show="groupList && groupList.members && (groupList.masters.length + groupList.members.length )> 0">
 			<div class="group-list-items">
 				<member-inline @select = "selectUser" :userList="groupList.masters.concat(groupList.members)"></member-inline>
 			</div>

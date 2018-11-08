@@ -9342,7 +9342,7 @@ var UserServiceWorker = exports.UserServiceWorker = function (_UserService) {
             var fn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
             var update = arguments[1];
 
-            var url = 'http://125.208.1.67:6011/v3/file/uploadAvatar';
+            var url = 'https://dev.upload.shixincube.cn/v3/file/uploadAvatar';
             if (CubeFileMessage) {
                 var file = new CubeFileMessage();
                 file.accept = 'image/*';
