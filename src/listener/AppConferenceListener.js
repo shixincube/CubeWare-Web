@@ -315,7 +315,12 @@ export class AppConferenceListener {
 	 * 当自己加入会议,会议音视频流连接成功时回调
 	 * @param {Conference} conference 会议对象实例
 	 */
-	onConferenceConnected(conference) { }
+	onConferenceConnected(conference) {
+		console.log('=========================================================')
+		this.vue.$bus.emit('onConferenceConnected', {
+			conference: conference
+		});
+	 }
 
 	/**
 	 * 当sip监听end时发生。
