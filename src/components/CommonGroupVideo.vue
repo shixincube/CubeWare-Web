@@ -50,7 +50,8 @@
 				conference: {},
 				inviteList: [],
 				joinedList: [],
-				waitingList: []
+				waitingList: [],
+				fInviteList: []
 			}
 		},
 		props: {},
@@ -73,7 +74,8 @@
 				for(let invite of inviteMembers){
 					invites.push(invite.cubeId);
 				}
-				coferenceConfig.invites = invites;
+				this.fInviteList = invites;
+				coferenceConfig.invites = [];
 				coferenceConfig.type = CubeGroupType.VIDEO_CALL;
 				coferenceConfig.autoNotify = false;
 				this.conferenceService.create(coferenceConfig);
@@ -115,11 +117,17 @@
 				}
 				this.conferenceService.inviteMembers(this.conference.conferenceId, cubeIds);
 			},
+			onConferenceConnected(conference) {
+				if(this.$store.state.curUser == conference.founder) {
+					this.conferenceService.inviteMembers(this.conference.conferenceId, this.fInviteList);
+				}
+			},
 			addAppListener(){
 				this.$bus.on('onGroupVideoCreated', this.onGroupVideoCreated);
 				this.$bus.on('onGroupVideoJoined', this.onGroupVideoJoined);
 				this.$bus.on('onGroupVideoQuited', this.onGroupVideoQuited);
 				this.$bus.on('onGroupVideoInvited', this.onGroupVideoInvited);
+				this.$bus.on('onGroupVideoCreatedConnected', this.onConferenceConnected);
 			},
 			changeJoined(conference){
 				this.joinedList = [];
@@ -154,6 +162,7 @@
 				this.$bus.off('onGroupVideoJoined', this.onGroupVideoJoined);
 				this.$bus.off('onGroupVideoQuited', this.onGroupVideoQuited);
 				this.$bus.off('onGroupVideoInvited', this.onGroupVideoInvited);
+				this.$bus.off('onGroupVideoCreatedConnected', this.onConferenceConnected);
 			},
 			closeDialog(){
 				this.$store.commit('updateInviteType', '');
