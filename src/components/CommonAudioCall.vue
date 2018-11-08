@@ -53,7 +53,8 @@
 				conference: {},
 				inviteList: [],
 				joinedList: [],
-				waitingList: []
+				waitingList: [],
+				fInviteList: []
 			}
 		},
 		props: {},
@@ -79,9 +80,10 @@
 				for(let invite of inviteMembers){
 					invites.push(invite.cubeId);
 				}
-				coferenceConfig.invites = invites;
+				coferenceConfig.invites = [];
 				coferenceConfig.type = CubeGroupType.VOICE_CALL;
 				coferenceConfig.autoNotify = false;
+				this.fInviteList = invites;
 				this.conferenceService.create(coferenceConfig);
 				this.inviteList= [];
 			},
@@ -104,12 +106,15 @@
 				this.$bus.on('onConferenceRejectInvited',(res) =>{
 					console.log("拒绝会议====>onConferenceQuited", res);
 					this.changeJoined(res.conference);
-					
-				})
+
+				});
 				this.$bus.on('onVoiceCreated',(conference, from) =>{
 					if(from.cubeId == cube.accName){
 						this.conferenceService.join(conference.conferenceId);
 					}
+				});
+				this.$bus.on('onVoiceCreatedConnected', () => {
+					this.conferenceService.inviteMembers(this.conference.conferenceId, this.fInviteList);
 				});
 				this.$bus.on('onVoiceJoined',(res) =>{
 					this.$store.commit('updateAudioCall', res.conference)
@@ -161,6 +166,7 @@
 				this.$bus.off('onVoiceQuited');
 				this.$bus.off('rejectInvite');
 				// this.$bus.off('onVoiceInvited');
+				this.$bus.off('onVoiceCreatedConnected');
 			},
 			closeDialog(){
 				this.$store.commit('changeLeftHoverNav', '');
