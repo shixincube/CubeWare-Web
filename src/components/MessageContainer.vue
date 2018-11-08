@@ -115,12 +115,6 @@
 					cubeCallback: (messages) => {
 						if (messages.length == 0) {
 							this.showMore = false;
-							this.$message({
-								showClose: true,
-								message: '没有更多消息了',
-								type: 'info',
-								duration: 1000
-							});
 							return;
 						}
 						let vueMessages = [];

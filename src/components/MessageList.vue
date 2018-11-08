@@ -206,7 +206,7 @@
 					this.recentList.map((list, index) => {
 						if (list.sessionId == rencet.sessionId) {
 							recents.splice(index, 1, rencet);
-							this.sessionId == list.sessionId ? this.receiptMessage(list) : '';
+							this.sessionId == list.sessionId ? this.receiptMessage(rencet) : '';
 						}
 					});
 					this.recentList = recents;
