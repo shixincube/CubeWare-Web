@@ -279,6 +279,9 @@
 					this.hasInvite = false;
 				}
 			},
+			onCallEnded(){
+				this.$store.commit('updateInviteType', '');
+			},
 			onConferenceFailed(res){
 				if(res.error.code == 1514) {
 					return false;
@@ -337,6 +340,8 @@
 				}
 			},
 			onVoiceQuited(res){
+				console.log('55555555555555555555500')
+				console.log(res)
 				if(res.quitMember.cubeId == res.conference.masters[0].cubeId && res.conference.members.length == 0){
 					console.log('监听发起者退出多人语音');
 					this.hasInvite = false;
@@ -361,6 +366,7 @@
 				this.$bus.on('onVoiceQuited',this.onVoiceQuited);
 				this.$bus.on('onShareQuited',this.onVoiceQuited);
 				this.$bus.on('onGroupVideoQuited',this.onVoiceQuited);
+				this.$bus.on('onCallEnded',this.onCallEnded);
 			},
 			destroyAppListener() {
 				this.$bus.off('onLogout');
@@ -377,6 +383,7 @@
 				this.$bus.off('onVoiceQuited',this.onVoiceQuited);
 				this.$bus.off('onShareQuited',this.onVoiceQuited);
 				this.$bus.off('onGroupVideoQuited',this.onVoiceQuited);
+				this.$bus.off('onCallEnded',this.onCallEnded);
 
 			},
 			conferenceDestroyed() {
@@ -424,8 +431,6 @@
 				this.hasInvite = false;
 			},
 			rejectInvite(obj){
-				console.log('*************7777777777777')
-				console.log(obj)
 				if(obj.inviteType != 'share-wb'){
 					this.conferenceService.rejectInvite(obj.id,obj.name);
 				}else{
