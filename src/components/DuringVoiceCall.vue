@@ -2,7 +2,7 @@
     <div class="cp-during-voice-call">
 		<p>语音通话</p>
 		<div class="voice-call-box">
-			<p>正在进行语音通话<dot>...</dot></p>
+			<p>正在进行语音通话<span>...</span></p>
 			
 		</div>
 		<div class="quit-button">
@@ -63,7 +63,7 @@ export default {
       color: #c0c0c0;
 	  left: 0;
 	  right: 0;
-	  > dot {
+	  > span {
       display: inline-block;
       height: 1em;
       line-height: 1;
