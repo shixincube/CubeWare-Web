@@ -41,7 +41,7 @@
 					 >
 
 					<i v-show="isMaster"
-					   @click="removeMember(item)"
+					   @click.stop="removeMember(item)"
 					   class="el-icon-remove remove-member-btn"></i>
 					<img :name="item.cubeId"
 						 :src="dataCenter.getAvatarByCube(item.cubeId)"

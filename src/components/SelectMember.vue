@@ -92,7 +92,11 @@
 //			}
 		},
 		mounted() {
-
+			this.$nextTick(function(){
+				this.vueXInviteList = this.$store.state.inviteList,
+				this.vueXUserList = this.$store.state.userList
+			})
+			
 		},
 		methods: {
 			select() {

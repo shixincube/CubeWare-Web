@@ -342,8 +342,6 @@
 				}
 			},
 			onVoiceQuited(res){
-				console.log('55555555555555555555500')
-				console.log(res)
 				if(res.quitMember.cubeId == res.conference.masters[0].cubeId && res.conference.members.length == 0){
 					console.log('监听发起者退出多人语音');
 					this.hasInvite = false;
