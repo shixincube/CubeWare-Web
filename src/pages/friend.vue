@@ -26,12 +26,15 @@
 		<div class="cb-friends-id-container">
 			<i-d-card-person :userInfo="userInfo" v-show="activeName == 'friends'"
 							 class="cb-friends-id-group"></i-d-card-person>
-			<i-d-card-group :groupInfo = "curGroupInfo" v-show="activeName == 'groups'" class="cb-friends-id-group"></i-d-card-group>
+			<i-d-card-group @groupItemInfo='groupItemInfo' :groupInfo = "curGroupInfo" v-show="activeName == 'groups'" class="cb-friends-id-group"></i-d-card-group>
 		</div>
+		<person-info-dialog :userInfo="curInfo" :personShow.sync="personShow"></person-info-dialog>
+	
 	</section>
 </template>
 
 <script>
+	import PersonInfoDialog from './../components/Dialog/PersonInfoDialog';
 	import AddFriendOrGroup from './../components/AddFriendOrGroup';
 	import MemberInline from './../components/MemberInline';
 	import GroupInline from './../components/GroupInline';
@@ -42,6 +45,8 @@
 		name: "friends",
 		data() {
 			return {
+				curInfo:null,
+				personShow:false,
 				activeName: 'friends',
 				userInfo: this.$store.state.userList[0],
 				curGroupInfo:this.$store.state.groupList[0],
@@ -70,6 +75,11 @@
 
 		},
 		methods: {
+			groupItemInfo(item){
+				this.curInfo = item;
+				this.personShow = true;
+				this.$emit('groupItemInfo',false)
+			},
 			handleClick(tab, event) {
 			},
 			handleFriendList() {
@@ -88,7 +98,8 @@
 			MemberInline,
 			GroupInline,
 			IDCardPerson,
-			IDCardGroup
+			IDCardGroup,
+			PersonInfoDialog
 		}
 	}
 </script>
