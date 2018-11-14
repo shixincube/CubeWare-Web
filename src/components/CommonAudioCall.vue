@@ -104,7 +104,7 @@
 			},
 			addAppListener(){
 				this.$bus.on('onConferenceRejectInvited',(res) =>{
-					console.log("拒绝屏幕分享====>onShareDesktopRejectInvited", res);
+					console.log("拒绝多人语音====>onConferenceRejectInvited", res);
 					this.changeJoined(res.conference);
 
 				});
