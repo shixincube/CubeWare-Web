@@ -257,7 +257,13 @@
 				}
 				this.changeJoined(res.conference);
 			},
+			onConferenceRejectInvited(res){
+				console.log("拒绝屏幕分享====>onShareDesktopRejectInvited", res);
+				this.changeJoined(res.conference);
+
+			},
 			addAppListener(){
+				this.$bus.on('onConferenceRejectInvited',this.onConferenceRejectInvited);
 				this.$bus.on('onShareJoined', this.onShareJoined);
 				this.$bus.on('onShareScreenConnected', this.onShareScreenConnected);
 				this.$bus.on('onShareInvited', this.onShareInvited);
@@ -269,6 +275,7 @@
 				this.$bus.off('onShareScreenConnected', this.onShareScreenConnected);
 				this.$bus.off('onShareQuited', this.onShareQuited);
 				this.$bus.off('onShareInvited', this.onShareInvited);
+				this.$bus.off('onConferenceRejectInvited',this.onConferenceRejectInvited);
 			},
 			closeDialog(){
 				this.$store.commit('changeLeftHoverNav', '');

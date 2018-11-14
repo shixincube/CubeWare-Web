@@ -104,7 +104,7 @@
 			},
 			addAppListener(){
 				this.$bus.on('onConferenceRejectInvited',(res) =>{
-					console.log("拒绝会议====>onConferenceQuited", res);
+					console.log("拒绝屏幕分享====>onShareDesktopRejectInvited", res);
 					this.changeJoined(res.conference);
 
 				});
@@ -166,7 +166,7 @@
 				this.$bus.off('onVoiceCreated');
 				this.$bus.off('onVoiceJoined');
 				this.$bus.off('onVoiceQuited');
-				this.$bus.off('rejectInvite');
+				this.$bus.off('onConferenceRejectInvited');
 				// this.$bus.off('onVoiceInvited');
 				this.$bus.off('onVoiceCreatedConnected');
 			},
