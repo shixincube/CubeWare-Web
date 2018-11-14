@@ -34,7 +34,7 @@
 </template>
 
 <script>
-	import PersonInfoDialog from './../components/Dialog/PersonInfoDialog';
+	import PersonInfoDialog from './../components/dialog/PersonInfoDialog';
 	import AddFriendOrGroup from './../components/AddFriendOrGroup';
 	import MemberInline from './../components/MemberInline';
 	import GroupInline from './../components/GroupInline';
