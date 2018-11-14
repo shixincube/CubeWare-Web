@@ -1,5 +1,6 @@
 <template>
 	<div class="cp-message-container">
+		<template v-if="!noRecentList">
 		<div class="chat-header">
 			<div class="chat-title-bar" @click="openDialog()">
 				{{curInfo && curInfo.displayName ? curInfo.displayName : $store.state.messagePeer}}
@@ -36,7 +37,8 @@
 
 		<person-info-dialog :userInfo="curInfo" :personShow.sync="personShow"></person-info-dialog>
 		<group-info-dialog @groupItemInfo='groupItemInfo' :groupInfo="curInfo" :groupShow.sync="groupShow"></group-info-dialog>
-
+		</template>
+		<div v-if="noRecentList" class="no-recent-list"></div>
 	</div>
 </template>
 
@@ -53,7 +55,7 @@
 		name: "MessageContainer",
 		data() {
 			return {
-
+				noRecentList:true,
 				personShow: false,
 				groupShow: false,
 				messages: [],
@@ -148,7 +150,7 @@
 					this.messages = [];
 					this.showMore = true;
 					this.queryHistory(this.$store.state.messagePeer, true);
-
+					this.noRecentList = false;
 				}
 			},
 			moreMessage() {
@@ -295,6 +297,18 @@
 			.message-more {
 				display: inline-block;
 			}
+		}
+		.no-recent-list{
+				width: 100%;
+				height: 100%;
+				background-color: #ffffff;
+				position: absolute;
+				left: 340px;
+				right: 0;
+				background-repeat: no-repeat;
+				background-image:url(../assets/img/no-message@2x.png);
+				background-position: left 33% top 40%;
+				display: flex;
 		}
 		.chat-header {
 			position: relative;

@@ -2,12 +2,14 @@
 	<div class="cp-message-list">
 		<add-friend-or-group class="tac"></add-friend-or-group>
 		<el-scrollbar
-			class="el-menu-vertical-demo">
+			class="el-menu-vertical-demo"
+			v-if="!noRecentList"
+			>
 			<el-menu
 				:default-active="sessionId"
 				@select="handleSelect"
 			>
-				<el-menu-item
+				<el-menu-item 
 					style="padding-left: 10px;"
 					v-if="item.sessionId != $store.state.curUser"
 					v-for="item in recentList"
@@ -18,6 +20,7 @@
 				</el-menu-item>
 			</el-menu>
 		</el-scrollbar>
+		<p v-if="noRecentList" class="no-recent-list">暂时没有会话</p>
 		<join-conference v-if="showJoin"
 						 :conference-info="curConferenceInfo"
 						 @conferenceJoined="conferenceJoined"></join-conference>
@@ -35,6 +38,7 @@
 			return {
 				recentService: cube.getRecentSessionService(),
 				recentList: [],
+				noRecentList:true,
 				message: {
 					src: "./../assets/img/user-face.jpg",
 					title: 'test',
@@ -119,7 +123,9 @@
 				if (this.$store.state.curUser) {
 					this.recentService.queryRecentSessions((err, data) => {
 						console.log('最近会话列表', data);
+						
 						this.recentList = data || [];
+						this.recentList.length > 0 ? this.noRecentList = false : this.noRecentList = true
 						this.sortRecent();
 						if ('' == this.$store.state.messagePeer && data != null) {
 							this.$store.commit('updateMessagePeer', data[0].sessionId);
@@ -160,6 +166,7 @@
 				// 检测当前会话是否有效
 				checkCurSession || this.$store.commit('updateMessagePeer', recentList[0].sessionId);
 				this.recentList = recentList;
+				this.recentList.length > 0 ? this.noRecentList = false : this.noRecentList = true
 				// 获取总的未读数
 				this.getAllUnread(this.recentList);
 			},
@@ -196,6 +203,7 @@
 					}
 					recents.unshift(rencet);
 					this.recentList = recents;
+					this.recentList.length > 0 ? this.noRecentList = false : this.noRecentList = true
 					this.sortRecent();
 					console.log('当前的列表', this.recentList);
 				});
@@ -210,6 +218,7 @@
 						}
 					});
 					this.recentList = recents;
+					this.recentList.length > 0 ? this.noRecentList = false : this.noRecentList = true
 					this.sortRecent();
 				});
 
@@ -258,6 +267,12 @@
 		width: 250px;
 		height: 100%;
 		border-right: 1px solid #dddddd;
+		.no-recent-list{
+			text-align: center;
+			color: rgb(38, 37, 42);
+   			opacity: 0.2;
+			padding-top: 100px;
+		}
 		.el-menu {
 			border-right: none;
 		}
