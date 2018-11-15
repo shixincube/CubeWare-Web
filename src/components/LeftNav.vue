@@ -315,6 +315,7 @@
 					1501: typeName + "人数超过上限",
 					1502: typeName + "被其它终端拒绝",
 					1503: "已在其他设备操作",
+					1505: '用户正忙',
 					1507: "拒绝失败",
 					1508: typeName + "已结束",
 					1510: typeName + '已结束',
@@ -334,6 +335,9 @@
 					type: 'error',
 					duration: 3000
 				});
+				if('1505' == res.error.code){
+					return;
+				}
 				this.$store.commit('updateShareScreen', '');
 				this.$store.commit('updateAudioCall', '');
 				this.$store.commit('updateGroupVideo', '');
