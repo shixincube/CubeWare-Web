@@ -6,10 +6,12 @@ import store from '../store/index'
 // 环境的切换
 if (process.env.NODE_ENV == 'development') {
 	axios.defaults.baseURL = 'https://dev.user.shixincube.cn';
+	window.cubeLicenseServer = 'https://dev.license.shixincube.cn/auth/license/get';
 } else if (process.env.NODE_ENV == 'debug') {
 	axios.defaults.baseURL = '';
 } else if (process.env.NODE_ENV == 'production') {
-	axios.defaults.baseURL = 'https://dev.user.shixincube.cn';
+	axios.defaults.baseURL = 'https://user.shixincube.com';
+	window.cubeLicenseServer = 'https://license.getcube.cn/auth/license/get';
 }
 
 // 请求超时时间

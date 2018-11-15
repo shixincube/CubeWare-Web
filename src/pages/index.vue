@@ -69,7 +69,7 @@ export default {
       };
       window.cube.setCubeConfig({
         appid: appId,
-        licenseServer: "https://dev.license.shixincube.cn/auth/license/get"
+        licenseServer: cubeLicenseServer
       });
 
       login({

@@ -3250,7 +3250,7 @@ var ConnectionServiceWorker = exports.ConnectionServiceWorker = function (_Conne
                 if (window.wsServer) {
                     var address = new InetAddress(wsServer.host, wsServer.port);
                 } else {
-                    var address = new InetAddress('dev.engine.shixincube.cn', port);
+                    var address = new InetAddress(_CUBE_DOMAIN, _CUBE_PORT);
                     // var address = new InetAddress( "192.168.1.19", 7000);
                 }
                 return nucleus.talkService.call(services, address, true);
@@ -4823,7 +4823,7 @@ var CubeEngine = exports.CubeEngine = function () {
                     // nucleus.talkService.addListener(new NetworkListener(this));
                     // 加载license模块
                     _this.loadLicense();
-                    // 加载账号模块z
+                    // 加载账号模块
                     _this.loadUser();
                     // 加载群组模块
                     _this.loadGroup();
