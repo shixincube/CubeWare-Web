@@ -129,6 +129,7 @@
 			},
 			destroyShareScreen() {
         		this.destroyed = true;
+				this.$store.commit('updateShowInvite', false);
 				new Promise((resolve) => {
 					this.$bus.on('onShareQuited', () => {
 						resolve();

@@ -31,4 +31,5 @@ export default {
 	allUnread: 0,
 	loadingMsg: null,
 	messageBottomFixed: true,
+	showInvite: false
 }

@@ -205,6 +205,9 @@
 				this.$store.commit('updateInviteType', '');
 			},
 			handleShowSelectDialog(type,index) {
+				if(type == 'shareScreen') {
+					this.$store.commit('updateShowInvite', true);
+				}
 				this.$store.commit('updateInviteType', type );
 				this.$store.commit('changeLeftHoverNav',index)
 			},

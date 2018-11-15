@@ -105,6 +105,10 @@ export default {
 		state.inviteTypeInComing = type;
 	},
 
+	updateShowInvite(state, boolean) {
+		state.showInvite = boolean;
+	},
+
 	resetState(state) {
 		state.appId = '';
 		state.appKey = '';

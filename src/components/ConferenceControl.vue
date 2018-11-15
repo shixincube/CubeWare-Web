@@ -77,7 +77,7 @@
 		},
         computed: {
         	btnStatus: function () {
-				return this.showAddMemberBtn;
+				return this.showAddMemberBtn || this.$store.state.showInvite;
 			}
 		},
         watch: {
@@ -139,6 +139,7 @@
 			},
 			closeDialog(){
 				this.showAddMember = false;
+				this.$store.commit('updateShowInvite', false);
 			}
 		},
         components: {
