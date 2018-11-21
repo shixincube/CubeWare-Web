@@ -119,7 +119,9 @@
 			},
 			onConferenceConnected(conference) {
 				if(this.$store.state.curUser == conference.founder) {
+					if(this.fInviteList.length > 0){
 					this.conferenceService.inviteMembers(this.conference.conferenceId, this.fInviteList);
+					}
 				}
 			},
 			addAppListener(){

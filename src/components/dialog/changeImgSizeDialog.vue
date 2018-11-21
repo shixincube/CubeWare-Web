@@ -67,11 +67,7 @@ export default {
     },
     addSize(e) {
       var delta = this.delta;
-      if (delta < 0) {
-        this.delta = 1;
-      } else {
-        this.delta = ++delta;
-      }
+      delta < 0 ? this.delta = 1 : this.delta = ++delta;
       delta = this.delta;
       this.imgWidth = Math.max(
         50,
@@ -81,11 +77,7 @@ export default {
     },
     smallSize() {
       var delta = this.delta;
-      if (delta < 0) {
-        this.delta = --delta;
-      } else {
-        this.delta = -1;
-      }
+      delta < 0 ? this.delta = --delta:this.delta = -1;
       delta = this.delta;
       this.imgWidth = Math.max(
         50,

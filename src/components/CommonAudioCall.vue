@@ -100,7 +100,7 @@
 				for(let invite of invites){
 					cubeIds.push(invite.cubeId);
 				}
-				this.conferenceService.inviteMembers(this.conference.conferenceId, cubeIds);
+					this.conferenceService.inviteMembers(this.conference.conferenceId, cubeIds);
 			},
 			addAppListener(){
 				this.$bus.on('onConferenceRejectInvited',(res) =>{
@@ -115,7 +115,10 @@
 				});
 				this.$bus.on('onVoiceCreatedConnected', (conference) => {
 					if(conference.founder == this.$store.state.curUser){
-						this.conferenceService.inviteMembers(this.conference.conferenceId, this.fInviteList);
+						if(this.fInviteList.length > 0){
+							this.conferenceService.inviteMembers(this.conference.conferenceId, this.fInviteList);
+						}
+						
 					}
 				});
 				this.$bus.on('onVoiceJoined',(res) =>{
