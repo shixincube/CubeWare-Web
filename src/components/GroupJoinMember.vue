@@ -67,15 +67,19 @@
 					}
 					list.push(item);
 				}
-				this.addName(list)
+				this.addName(list);
+				// debugger;
+				// this.addList = [];
 				return list
 			}
 		},
         watch: {
         	"memberList": function (newVal, oldVal) {
-				if(null == newVal || newVal.length == 0){
-					this.addList = [];
-				}
+				//切换会议时，参会人员显示错误
+				this.addList = [];
+				// if(null == newVal || newVal.length == 0){
+				// 	this.addList = [];
+				// }
 			}
 		},
         beforeMount() {
