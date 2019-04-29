@@ -25,7 +25,7 @@ export default {
 	inviteType: '',
 	inviteTypeInComing: '',
 	groupFace: "./../assets/img/group-face.jpg",
-	userFace: "https://dev.cubeware.shixincube.cn/static/img/user-face.jpg",
+	userFace: "https://aws-storage-download.shixincube.com/file/download/91c822e8-a0b4-47e3-bbb9-824e40989e4b.jpg?imageView2/2/h/200",
 	leftHoverNav: '0',
 	joinedList: [],
 	allUnread: 0,

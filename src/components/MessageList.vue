@@ -93,16 +93,18 @@
 
 			queryConference(groupId) {
 				let conference = window.cube.getConferenceService();
-				conference.queryConference(groupId, (res) => {
+				conference.queryConferences([groupId], (res) => {
 					let members = [];
-					for (let i = 0; i < res.members.length; i++) {
-						members.push(res.members[i].cubeId);
+					if(res.members){
+						for (let i = 0; i < res.members.length; i++) {
+							members.push(res.members[i].cubeId);
+						}
+						if (!members.includes(this.$store.state.curUser)) {
+							this.showJoin = true;
+						}
+						this.curConferenceInfo = res;
 					}
-					if (!members.includes(this.$store.state.curUser)) {
-						this.showJoin = true;
-					}
-					this.curConferenceInfo = res;
-				})
+				});
 			},
 
 			conferenceJoined() {

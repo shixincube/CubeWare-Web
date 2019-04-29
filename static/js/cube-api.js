@@ -1151,6 +1151,15 @@ export class CallService extends CubeService {
      * @param deviceId {String}
      */
 	changeMediaDevice (deviceId) { }
+
+
+    /**
+     * 是否禁止外放。
+     *
+     * @param {Boolean} isMute - 是否禁止外放。
+     */
+    muteAudio(isMute){
+	}
 }
 /*
  * Boot.js
@@ -1662,6 +1671,22 @@ export class ConferenceListener extends CubeListener {
     onConferenceSipEnd(conference) { }
 
     /**
+     * 当自己所在的会议视频流增加时。
+     *
+     * @param {Conference} conference - 会议对象实例
+     * @param {stream} stream - 音视频流对象。
+     */
+    onConferenceAddStream(conference,stream){ }
+
+    /**
+     * 当自己所在的会议视频流移除时。
+     *
+     * @param {Conference} conference - 会议对象实例
+     * @param {stream} stream - 音视频流对象。
+     */
+    onConferenceRemoveStream(conference,stream){ }
+
+    /**
      * 会议音视频流连接失败
      * @param {Conference} conference 会议对象实例
      */
@@ -1883,6 +1908,22 @@ export class ConferenceService extends CubeService {
 	*/
 	getRemoteView(){}
 
+    /**
+     * 根据条件查询会议
+     *
+     * @param {Array} condtion 群组id集合 || 会议类型集合 || 会议id集合  只支持单个集合查询
+     * @return {Function}callback  成功回调
+     * @return {Function}errorCallback  错误回调
+     * */
+    queryConferences(condition, callback , errorCallback){}
+
+    /**
+     * 查询所有会议
+     *
+     * @return {Function}callback 回调
+     * */
+    queryAllConference(callback){}
+
 }
 /*
  * Boot.js
@@ -1892,6 +1933,7 @@ export class ConferenceService extends CubeService {
  */
 
 import {SIPServiceWorker} from './service/impl/SIPServiceWorker.js'
+import {ErizoServiceWorker} from "./service/impl/ErizoServiceWorker";
 import {ConferenceListener} from './conference/service/ConferenceListener.js'
 import {ConferenceType} from './conference/service/entity/ConferenceType.js'
 import {ConferenceServiceWorker} from './conference/service/impl/ConferenceServiceWorker.js'
@@ -1905,206 +1947,12 @@ import {ConferenceConfig} from './conference/service/entity/ConferenceConfig.js'
 (function (global) {
     // 提供全局的接口类
     global.CubeSIPServiceWorker = SIPServiceWorker;
+    global.CubeErizoServiceWorker = ErizoServiceWorker;
     global.CubeConferenceServiceWorker = ConferenceServiceWorker;
     global.CubeConferenceListener = ConferenceListener;
     global.CubeConferenceType = ConferenceType;
     global.CubeConferenceConfig = ConferenceConfig;
 
-
-    window.getScreenId = function(callback, custom_parameter) {
-        if(navigator.userAgent.indexOf('Edge') !== -1 && (!!navigator.msSaveOrOpenBlob || !!navigator.msSaveBlob)) {
-            // microsoft edge => navigator.getDisplayMedia(screen_constraints).then(onSuccess, onFailure);
-            callback({
-                video: true
-            });
-            return;
-        }
-
-        // for Firefox:
-        // sourceId == 'firefox'
-        // screen_constraints = {...}
-        if (!!navigator.mozGetUserMedia) {
-            callback(null, 'firefox', {
-                video: {
-                    mozMediaSource: 'window',
-                    mediaSource: 'window'
-                }
-            });
-            return;
-        }
-
-        window.addEventListener('message', onIFrameCallback);
-
-        function onIFrameCallback(event) {
-            if (!event.data) return;
-
-            if (event.data.chromeMediaSourceId) {
-                if (event.data.chromeMediaSourceId === 'PermissionDeniedError') {
-                    callback('permission-denied');
-                } else {
-                    callback(null, event.data.chromeMediaSourceId, getScreenConstraints(null, event.data.chromeMediaSourceId, event.data.canRequestAudioTrack));
-                }
-
-                // this event listener is no more needed
-                window.removeEventListener('message', onIFrameCallback);
-            }
-
-            if (event.data.chromeExtensionStatus) {
-                callback(event.data.chromeExtensionStatus, null, getScreenConstraints(event.data.chromeExtensionStatus));
-
-                // this event listener is no more needed
-                window.removeEventListener('message', onIFrameCallback);
-            }
-        }
-
-        if(!custom_parameter) {
-            setTimeout(postGetSourceIdMessage, 100);
-        }
-        else {
-            setTimeout(function() {
-                postGetSourceIdMessage(custom_parameter);
-            }, 100);
-        }
-    };
-
-    function getScreenConstraints(error, sourceId, canRequestAudioTrack) {
-        var screen_constraints = {
-            audio: false,
-            video: {
-                mandatory: {
-                    chromeMediaSource: error ? 'screen' : 'desktop',
-                    maxWidth: window.screen.width > 1920 ? window.screen.width : 1920,
-                    maxHeight: window.screen.height > 1080 ? window.screen.height : 1080
-                },
-                optional: []
-            }
-        };
-
-        if(!!canRequestAudioTrack) {
-            screen_constraints.audio = {
-                mandatory: {
-                    chromeMediaSource: error ? 'screen' : 'desktop',
-                    // echoCancellation: true
-                },
-                optional: []
-            };
-        }
-
-        if (sourceId) {
-            screen_constraints.video.mandatory.chromeMediaSourceId = sourceId;
-
-            if(screen_constraints.audio && screen_constraints.audio.mandatory) {
-                screen_constraints.audio.mandatory.chromeMediaSourceId = sourceId;
-            }
-        }
-
-        return screen_constraints;
-    }
-
-    function postGetSourceIdMessage(custom_parameter) {
-        if (!iframe) {
-            loadIFrame(function() {
-                postGetSourceIdMessage(custom_parameter);
-            });
-            return;
-        }
-
-        if (!iframe.isLoaded) {
-            setTimeout(function() {
-                postGetSourceIdMessage(custom_parameter);
-            }, 100);
-            return;
-        }
-
-        if(!custom_parameter) {
-            iframe.contentWindow.postMessage({
-                captureSourceId: true
-            }, '*');
-        }
-        else if(!!custom_parameter.forEach) {
-            iframe.contentWindow.postMessage({
-                captureCustomSourceId: custom_parameter
-            }, '*');
-        }
-        else {
-            iframe.contentWindow.postMessage({
-                captureSourceIdWithAudio: true
-            }, '*');
-        }
-    }
-
-    var iframe;
-
-    // this function is used in RTCMultiConnection v3
-    window.getScreenConstraints = function(callback) {
-        loadIFrame(function() {
-            getScreenId(function(error, sourceId, screen_constraints) {
-                if(!screen_constraints) {
-                    screen_constraints = {
-                        video: true
-                    };
-                }
-
-                callback(error, screen_constraints.video);
-            });
-        });
-    };
-
-    function loadIFrame(loadCallback) {
-        if (iframe) {
-            loadCallback();
-            return;
-        }
-
-        iframe = document.createElement('iframe');
-        iframe.onload = function() {
-            iframe.isLoaded = true;
-
-            loadCallback();
-        };
-        iframe.src = 'https://www.webrtc-experiment.com/getSourceId/'; // https://wwww.yourdomain.com/getScreenId.html
-        iframe.style.display = 'none';
-        (document.body || document.documentElement).appendChild(iframe);
-    }
-
-    window.getChromeExtensionStatus = function(callback) {
-        // for Firefox:
-        if (!!navigator.mozGetUserMedia) {
-            callback('installed-enabled');
-            return;
-        }
-
-        window.addEventListener('message', onIFrameCallback);
-
-        function onIFrameCallback(event) {
-            if (!event.data) return;
-
-            if (event.data.chromeExtensionStatus) {
-                callback(event.data.chromeExtensionStatus);
-
-                // this event listener is no more needed
-                window.removeEventListener('message', onIFrameCallback);
-            }
-        }
-
-        setTimeout(postGetChromeExtensionStatusMessage, 100);
-    };
-
-    function postGetChromeExtensionStatusMessage() {
-        if (!iframe) {
-            loadIFrame(postGetChromeExtensionStatusMessage);
-            return;
-        }
-
-        if (!iframe.isLoaded) {
-            setTimeout(postGetChromeExtensionStatusMessage, 100);
-            return;
-        }
-
-        iframe.contentWindow.postMessage({
-            getChromeExtensionStatus: true
-        }, '*');
-    }
 })(window);/*
  * DeviceListener.js
  * Cube Engine
@@ -2362,6 +2210,15 @@ export class GroupListener extends Listener {
     onGroupApplyJoined(group, from, applier) {
     };
 
+    /**
+     * 退出群组时回调
+     *
+     * @param group 群组实体
+     * @param from  退出者
+     */
+    onGroupQuited(group, from){
+    };
+
 
     /**
      * 收到邀请回调(仅邀请者自己和被邀请者回调)
@@ -2609,6 +2466,12 @@ export class UserListener extends Listener {
      * @param {onlineDevices} 在线设备信息
      */
     onDeviceOffline(logoutDevice,onlineDevices) { }
+
+    /**
+     * 用户更新回调
+     * @param user
+     */
+    onUserUpdated(user){}
 
 
     onFailed(error, ...args) { }
